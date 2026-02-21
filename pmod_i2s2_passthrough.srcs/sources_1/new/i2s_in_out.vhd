@@ -38,7 +38,7 @@ entity i2s_in_out is
             sclk : out std_logic;
             mclk : out std_logic;
             lrclk : out std_logic;
-            data: out std_logic;
+            data: in std_logic;
             r_sclk: out std_logic;
             r_mclk: out std_logic;
             r_lrclk: out std_logic;
@@ -168,21 +168,21 @@ BM : blk_mem_gen_0 port map (
                 elsif shift_cnt >= 32 then 
                     ena_s <= '1';
                     shift_cnt <= 0;
-                    address <= address + 1;
-                    addra_s <= std_logic_vector(to_unsigned(address, 5));
-                    shift_Reg_load <= douta_s; --assine new sample to register
-                    if address >= 32 then  -- loop the block memory for output
-                        address <= 0;
-                    end if;
+                    --address <= address + 1;
+                    --addra_s <= std_logic_vector(to_unsigned(address, 5));
+                    --shift_Reg_load <= douta_s; --assine new sample to register
+                    --if address >= 32 then  -- loop the block memory for output
+                    --    address <= 0;
+                
                     -- added for shift reg 
                     if lrclk_s = '1' then 
                         left_reg_output <= left_reg;
                         right_reg_shift <= right_reg_output;-- assinment to hold for an extra 32 sclk
-                    else if lrclk_s = '0' then
+                    elsif lrclk_s = '0' then
                         right_reg_output <= right_reg;
                         left_reg_shift <= left_reg_output; -- assinment to hold for an extra 32 sclk
                     end if; -- why does else if also need a end if statment?
-                    end if;
+                    --end if;
                     
                     --new code-------------------------------------------------------------
                     
@@ -224,28 +224,30 @@ BM : blk_mem_gen_0 port map (
                             end if;
                             
                             
-
                     end case;
+                    end if;
                     -- end of new code -----------------------------------------------------------------------------
                 --shift data bit's out (in is how I am looking at it while programing the dac)
                 if sclk_fall_pulse = '1' then 
                     sclk_fall_pulse <= '0';
-                    data <= shift_Reg_load(31 - shift_cnt);
-                    shift_cnt <= shift_cnt +1;
+                    --data <= shift_Reg_load(31 - shift_cnt);
+                    
                     --add data_in register to hold data
                     if lrclk_s = '0' then
-                        left_reg(31 - shift_cnt) <= shift_Reg_load(31 - shift_cnt);
-                    else if lrclk_s = '1' then
-                        right_reg(31 - shift_cnt) <= shift_Reg_load(31 - shift_cnt);
+                        left_reg(31 - shift_cnt) <= data; --shift_Reg_load(31 - shift_cnt);
+                        shift_cnt <= shift_cnt +1;
+                    elsif lrclk_s = '1' then
+                        right_reg(31 - shift_cnt) <= data; --shift_Reg_load(31 - shift_cnt);
+                        shift_cnt <= shift_cnt +1;
                     end if;
-                end if;
+                    --end if;
                     
                     
                     
                 end if;
                 
             end if;
-            end if; -- idk where this was missed
+            --end if;-- idk where this was missed
     end process;
 
 end Behavioral;

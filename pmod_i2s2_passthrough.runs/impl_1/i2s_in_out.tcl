@@ -106,34 +106,13 @@ set rc [catch {
   create_msg_db init_design.pb
   set_param chipscope.maxJobs 4
   set_param runs.launchOptions { -jobs 8  }
-OPTRACE "create in-memory project" START { }
-  create_project -in_memory -part xc7a35tcpg236-1
-  set_property board_part_repo_paths {C:/Users/20bbe/AppData/Roaming/Xilinx/Vivado/2024.1/xhub/board_store/xilinx_board_store} [current_project]
-  set_property board_part digilentinc.com:basys3:part0:1.2 [current_project]
-  set_property design_mode GateLvl [current_fileset]
-  set_param project.singleFileAddWarning.threshold 0
-OPTRACE "create in-memory project" END { }
-OPTRACE "set parameters" START { }
+  reset_param project.defaultXPMLibraries 
+  open_checkpoint E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.runs/impl_1/i2s_in_out.dcp
   set_property webtalk.parent_dir E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.cache/wt [current_project]
   set_property parent.project_path E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.xpr [current_project]
   set_property ip_output_repo E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.cache/ip [current_project]
   set_property ip_cache_permissions {read write} [current_project]
   set_property XPM_LIBRARIES XPM_MEMORY [current_project]
-OPTRACE "set parameters" END { }
-OPTRACE "add files" START { }
-  add_files -quiet E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.runs/synth_1/i2s_in_out.dcp
-  read_ip -quiet E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci
-OPTRACE "read constraints: implementation" START { }
-  read_xdc E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/constrs_1/new/Constraints.xdc
-OPTRACE "read constraints: implementation" END { }
-OPTRACE "read constraints: implementation_pre" START { }
-OPTRACE "read constraints: implementation_pre" END { }
-OPTRACE "add files" END { }
-OPTRACE "link_design" START { }
-  link_design -top i2s_in_out -part xc7a35tcpg236-1 
-OPTRACE "link_design" END { }
-OPTRACE "gray box cells" START { }
-OPTRACE "gray box cells" END { }
 OPTRACE "init_design_reports" START { REPORT }
 OPTRACE "init_design_reports" END { }
 OPTRACE "init_design_write_hwdef" START { }
