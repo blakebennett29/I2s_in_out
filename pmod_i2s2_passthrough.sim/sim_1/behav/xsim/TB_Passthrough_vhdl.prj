@@ -1,0 +1,8 @@
+# compile vhdl design source files
+vhdl xil_defaultlib  \
+"../../../../pmod_i2s2_passthrough.gen/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0_sim_netlist.vhdl" \
+"../../../../pmod_i2s2_passthrough.srcs/sources_1/new/i2s_in_out.vhd" \
+"../../../../pmod_i2s2_passthrough.srcs/sim_1/new/TB_Passthrough.vhd" \
+
+# Do not sort compile order
+nosort

@@ -1,0 +1,88 @@
+# -----------------------------
+# VHDL / HDL build artifacts
+# -----------------------------
+*.cf
+*.vcd
+*.wlf
+*.ghw
+*.asdb
+*.lxt
+*.fst
+*.log
+*.jou
+
+# -----------------------------
+# Vivado project noise (ignore)
+# -----------------------------
+# Project files (optional to ignore if you use TCL builds)
+*.xpr
+*.xpr.user
+*.xcworkspace
+*.wcfg
+
+# Runs / generated outputs
+*.bit
+*.bin
+*.mcs
+*.prm
+*.ltx
+*.dcp
+*.rpt
+*.pb
+*.str
+*.xsa
+
+# Vivado folders
+/.Xil/
+/.vivado/
+*/.Xil/
+*/.Xil_*   # sometimes Vivado creates variant names
+
+# Common Vivado outputs
+/ip_user_files/
+/srcs/sources_1/ip/
+/srcs/sources_1/bd/*/ip/
+/srcs/sources_1/bd/*/hdl/
+/srcs/sources_1/bd/*/synth/
+/srcs/sources_1/bd/*/sim/
+/srcs/sources_1/bd/*/*.bd
+*.hw
+*.hwdef
+*.sysdef
+
+# Runs directories
+/runs/
+/.sim/
+/.cache/
+/.gen/
+/.ipcache/
+/.tmp/
+/NA/
+*.run
+*.cache
+
+# Reports and logs directories (if they exist)
+reports/
+logs/
+vivado*.log
+vivado*.jou
+
+# -----------------------------
+# Keep "source-of-truth" tracked
+# -----------------------------
+!*.vhd
+!*.vhdl
+!*.xdc
+!*.tcl
+!*.xci        # keep IP config stubs if you want reproducible IP
+!*.bd         # only if you intentionally version BD (optional)
+
+# -----------------------------
+# OS / editor noise
+# -----------------------------
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*~

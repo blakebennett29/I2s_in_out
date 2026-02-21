@@ -1,0 +1,5 @@
+vhdl xil_defaultlib  \
+"../../../../pmod_i2s2_passthrough.gen/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0_sim_netlist.vhdl" \
+
+# Do not sort compile order
+nosort

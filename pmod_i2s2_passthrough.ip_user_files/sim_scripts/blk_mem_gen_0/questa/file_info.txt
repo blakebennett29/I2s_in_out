@@ -1,0 +1,4 @@
+xpm_memory.sv,systemverilog,xpm,../../../../../../3610_digital_systems/Vivado/2024.1/data/ip/xpm/xpm_memory/hdl/xpm_memory.sv,
+xpm_VCOMP.vhd,vhdl,xpm,../../../../../../3610_digital_systems/Vivado/2024.1/data/ip/xpm/xpm_VCOMP.vhd,
+blk_mem_gen_0_sim_netlist.vhdl,vhdl,xil_defaultlib,../../../../pmod_i2s2_passthrough.gen/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0_sim_netlist.vhdl,
+glbl.v,Verilog,xil_defaultlib,glbl.v

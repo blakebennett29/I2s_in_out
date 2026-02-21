@@ -1,0 +1,7 @@
+0.7
+2020.2
+May 22 2024
+19:03:11
+E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.gen/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0_sim_netlist.vhdl,1771346198,vhdl,,,,blk_mem_gen_0;blk_mem_gen_0_blk_mem_gen_generic_cstr;blk_mem_gen_0_blk_mem_gen_prim_width;blk_mem_gen_0_blk_mem_gen_prim_wrapper_init;blk_mem_gen_0_blk_mem_gen_top;blk_mem_gen_0_blk_mem_gen_v8_4_8;blk_mem_gen_0_blk_mem_gen_v8_4_8_synth,,,,,,,,
+E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sim_1/new/TB_Passthrough.vhd,1771343329,vhdl,,,,tb_passthrough,,,,,,,,
+E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/i2s_in_out.vhd,1771633819,vhdl,E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sim_1/new/TB_Passthrough.vhd,,,i2s_in_out,,,,,,,,
