@@ -4,4 +4,10 @@ May 22 2024
 19:03:11
 E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.gen/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0_sim_netlist.vhdl,1771346198,vhdl,,,,blk_mem_gen_0;blk_mem_gen_0_blk_mem_gen_generic_cstr;blk_mem_gen_0_blk_mem_gen_prim_width;blk_mem_gen_0_blk_mem_gen_prim_wrapper_init;blk_mem_gen_0_blk_mem_gen_top;blk_mem_gen_0_blk_mem_gen_v8_4_8;blk_mem_gen_0_blk_mem_gen_v8_4_8_synth,,,,,,,,
 E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sim_1/new/TB_Passthrough.vhd,1771343329,vhdl,,,,tb_passthrough,,,,,,,,
-E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/i2s_in_out.vhd,1771633819,vhdl,E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sim_1/new/TB_Passthrough.vhd,,,i2s_in_out,,,,,,,,
+E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sim_1/new/tb_I2S_in.vhd,1772141455,vhdl,,,,tb_i2s_in,,,,,,,,
+E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sim_1/new/tb_TOP.vhd,1772150893,vhdl,,,,tb_top,,,,,,,,
+E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/Down_Up_sampling.vhd,1771963248,vhdl,,,,down_up_sampling,,,,,,,,
+E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/I2S_in.vhd,1772145681,vhdl,E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sim_1/new/tb_I2S_in.vhd,,,i2s_in,,,,,,,,
+E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/I2S_out.vhd,1772144439,vhdl,,,,i2s_out,,,,,,,,
+E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/TOP.vhd,1772151180,vhdl,E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sim_1/new/tb_TOP.vhd,,,top,,,,,,,,
+E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/i2s_in_out.vhd,1771969409,vhdl,E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sim_1/new/TB_Passthrough.vhd,,,i2s_in_out,,,,,,,,

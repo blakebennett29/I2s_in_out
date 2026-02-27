@@ -1,86 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GenRun Id="impl_1" LaunchPart="xc7a35tcpg236-1" LaunchTime="1771637430">
-  <File Type="OPT-HWDEF" Name="i2s_in_out.hwdef"/>
-  <File Type="ROUTE-BUS-SKEW" Name="i2s_in_out_bus_skew_routed.rpt"/>
-  <File Type="PA-DCP" Name="i2s_in_out.dcp"/>
-  <File Type="ROUTE-PWR" Name="i2s_in_out_power_routed.rpt"/>
+  <File Type="ROUTE-PWR" Name="I2S_in_power_routed.rpt"/>
   <File Type="PA-TCL" Name="i2s_in_out.tcl"/>
-  <File Type="OPT-METHODOLOGY-DRC" Name="i2s_in_out_methodology_drc_opted.rpt"/>
-  <File Type="INIT-TIMING" Name="i2s_in_out_timing_summary_init.rpt"/>
-  <File Type="ROUTE-PWR-SUM" Name="i2s_in_out_power_summary_routed.pb"/>
-  <File Type="OPT-RQA-PB" Name="i2s_in_out_rqa_opted.pb"/>
+  <File Type="ROUTE-PWR-SUM" Name="I2S_in_power_summary_routed.pb"/>
   <File Type="REPORTS-TCL" Name="i2s_in_out_reports.tcl"/>
-  <File Type="OPT-TIMING" Name="i2s_in_out_timing_summary_opted.rpt"/>
-  <File Type="OPT-DCP" Name="i2s_in_out_opt.dcp"/>
-  <File Type="OPT-DRC" Name="i2s_in_out_drc_opted.rpt"/>
-  <File Type="PWROPT-DCP" Name="i2s_in_out_pwropt.dcp"/>
-  <File Type="PWROPT-DRC" Name="i2s_in_out_drc_pwropted.rpt"/>
-  <File Type="PWROPT-TIMING" Name="i2s_in_out_timing_summary_pwropted.rpt"/>
-  <File Type="PLACE-DCP" Name="i2s_in_out_placed.dcp"/>
-  <File Type="PLACE-IO" Name="i2s_in_out_io_placed.rpt"/>
-  <File Type="PLACE-CLK" Name="i2s_in_out_clock_utilization_placed.rpt"/>
-  <File Type="PLACE-UTIL" Name="i2s_in_out_utilization_placed.rpt"/>
-  <File Type="PLACE-UTIL-PB" Name="i2s_in_out_utilization_placed.pb"/>
-  <File Type="PLACE-CTRL" Name="i2s_in_out_control_sets_placed.rpt"/>
-  <File Type="PLACE-SIMILARITY" Name="i2s_in_out_incremental_reuse_placed.rpt"/>
-  <File Type="PLACE-PRE-SIMILARITY" Name="i2s_in_out_incremental_reuse_pre_placed.rpt"/>
-  <File Type="BG-BIN" Name="i2s_in_out.bin"/>
-  <File Type="PLACE-TIMING" Name="i2s_in_out_timing_summary_placed.rpt"/>
-  <File Type="ROUTE-PWR-RPX" Name="i2s_in_out_power_routed.rpx"/>
-  <File Type="PLACE-RQA-PB" Name="i2s_in_out_rqa_placed.pb"/>
-  <File Type="POSTPLACE-PWROPT-DCP" Name="i2s_in_out_postplace_pwropt.dcp"/>
   <File Type="BITSTR-MSK" Name="i2s_in_out.msk"/>
-  <File Type="POSTPLACE-PWROPT-TIMING" Name="i2s_in_out_timing_summary_postplace_pwropted.rpt"/>
-  <File Type="PHYSOPT-DCP" Name="i2s_in_out_physopt.dcp"/>
-  <File Type="PHYSOPT-DRC" Name="i2s_in_out_drc_physopted.rpt"/>
-  <File Type="BITSTR-RBT" Name="i2s_in_out.rbt"/>
-  <File Type="PHYSOPT-TIMING" Name="i2s_in_out_timing_summary_physopted.rpt"/>
-  <File Type="ROUTE-ERROR-DCP" Name="i2s_in_out_routed_error.dcp"/>
-  <File Type="ROUTE-DCP" Name="i2s_in_out_routed.dcp"/>
-  <File Type="ROUTE-BLACKBOX-DCP" Name="i2s_in_out_routed_bb.dcp"/>
-  <File Type="ROUTE-DRC" Name="i2s_in_out_drc_routed.rpt"/>
-  <File Type="ROUTE-DRC-PB" Name="i2s_in_out_drc_routed.pb"/>
-  <File Type="ROUTE-DRC-RPX" Name="i2s_in_out_drc_routed.rpx"/>
-  <File Type="ROUTE-METHODOLOGY-DRC" Name="i2s_in_out_methodology_drc_routed.rpt"/>
-  <File Type="ROUTE-METHODOLOGY-DRC-RPX" Name="i2s_in_out_methodology_drc_routed.rpx"/>
-  <File Type="ROUTE-METHODOLOGY-DRC-PB" Name="i2s_in_out_methodology_drc_routed.pb"/>
-  <File Type="ROUTE-RQS-PB" Name="i2s_in_out_rqs_routed.pb"/>
-  <File Type="ROUTE-STATUS" Name="i2s_in_out_route_status.rpt"/>
-  <File Type="ROUTE-STATUS-PB" Name="i2s_in_out_route_status.pb"/>
-  <File Type="ROUTE-TIMINGSUMMARY" Name="i2s_in_out_timing_summary_routed.rpt"/>
-  <File Type="ROUTE-TIMING-PB" Name="i2s_in_out_timing_summary_routed.pb"/>
-  <File Type="ROUTE-TIMING-RPX" Name="i2s_in_out_timing_summary_routed.rpx"/>
-  <File Type="ROUTE-SIMILARITY" Name="i2s_in_out_incremental_reuse_routed.rpt"/>
-  <File Type="ROUTE-CLK" Name="i2s_in_out_clock_utilization_routed.rpt"/>
-  <File Type="ROUTE-BUS-SKEW-PB" Name="i2s_in_out_bus_skew_routed.pb"/>
-  <File Type="ROUTE-BUS-SKEW-RPX" Name="i2s_in_out_bus_skew_routed.rpx"/>
-  <File Type="POSTROUTE-PHYSOPT-DCP" Name="i2s_in_out_postroute_physopt.dcp"/>
-  <File Type="POSTROUTE-PHYSOPT-BLACKBOX-DCP" Name="i2s_in_out_postroute_physopt_bb.dcp"/>
-  <File Type="POSTROUTE-PHYSOPT-TIMING" Name="i2s_in_out_timing_summary_postroute_physopted.rpt"/>
-  <File Type="POSTROUTE-PHYSOPT-TIMING-PB" Name="i2s_in_out_timing_summary_postroute_physopted.pb"/>
-  <File Type="POSTROUTE-PHYSOPT-TIMING-RPX" Name="i2s_in_out_timing_summary_postroute_physopted.rpx"/>
-  <File Type="POSTROUTE-PHYSOPT-BUS-SKEW" Name="i2s_in_out_bus_skew_postroute_physopted.rpt"/>
+  <File Type="ROUTE-CLK" Name="I2S_in_clock_utilization_routed.rpt"/>
+  <File Type="RDI-RDI" Name="i2s_in_out.vdi"/>
+  <File Type="ROUTE-BUS-SKEW" Name="I2S_in_bus_skew_routed.rpt"/>
+  <File Type="PA-DCP" Name="i2s_in_out.dcp"/>
+  <File Type="POSTROUTE-PHYSOPT-BUS-SKEW-PB" Name="I2S_in_bus_skew_postroute_physopted.pb"/>
   <File Type="BG-BIT" Name="i2s_in_out.bit"/>
-  <File Type="POSTROUTE-PHYSOPT-BUS-SKEW-PB" Name="i2s_in_out_bus_skew_postroute_physopted.pb"/>
-  <File Type="POSTROUTE-PHYSOPT-BUS-SKEW-RPX" Name="i2s_in_out_bus_skew_postroute_physopted.rpx"/>
+  <File Type="BG-DRC" Name="i2s_in_out.drc"/>
+  <File Type="BG-BGN" Name="i2s_in_out.bgn"/>
+  <File Type="BG-BIN" Name="i2s_in_out.bin"/>
+  <File Type="BITSTR-RBT" Name="i2s_in_out.rbt"/>
   <File Type="BITSTR-NKY" Name="i2s_in_out.nky"/>
   <File Type="BITSTR-BMM" Name="i2s_in_out_bd.bmm"/>
   <File Type="BITSTR-MMI" Name="i2s_in_out.mmi"/>
-  <File Type="PDI-FILE" Name="i2s_in_out.pdi"/>
+  <File Type="ROUTE-METHODOLOGY-DRC" Name="I2S_in_methodology_drc_routed.rpt"/>
+  <File Type="BITSTR-SYSDEF" Name="i2s_in_out.sysdef"/>
+  <File Type="ROUTE-METHODOLOGY-DRC-PB" Name="I2S_in_methodology_drc_routed.pb"/>
+  <File Type="BITSTR-LTX" Name="debug_nets.ltx"/>
+  <File Type="BITSTR-LTX" Name="i2s_in_out.ltx"/>
   <File Type="BOOT-PDI-FILE" Name="i2s_in_out_boot.pdi"/>
+  <File Type="WBT-USG" Name="usage_statistics_webtalk.html"/>
+  <File Type="NPI_FILE" Name="i2s_in_out.npi"/>
+  <File Type="OPT-DRC" Name="I2S_in_drc_opted.rpt"/>
+  <File Type="OPT-HWDEF" Name="i2s_in_out.hwdef"/>
+  <File Type="PLACE-IO" Name="I2S_in_io_placed.rpt"/>
+  <File Type="PLACE-UTIL" Name="I2S_in_utilization_placed.rpt"/>
+  <File Type="PLACE-UTIL-PB" Name="I2S_in_utilization_placed.pb"/>
+  <File Type="PLACE-CTRL" Name="I2S_in_control_sets_placed.rpt"/>
+  <File Type="PLACE-PRE-SIMILARITY" Name="i2s_in_out_incremental_reuse_pre_placed.rpt"/>
+  <File Type="ROUTE-DRC" Name="I2S_in_drc_routed.rpt"/>
+  <File Type="ROUTE-DRC-PB" Name="I2S_in_drc_routed.pb"/>
+  <File Type="ROUTE-PWR-RPX" Name="I2S_in_power_routed.rpx"/>
+  <File Type="ROUTE-STATUS" Name="I2S_in_route_status.rpt"/>
+  <File Type="ROUTE-STATUS-PB" Name="I2S_in_route_status.pb"/>
+  <File Type="ROUTE-DCP" Name="i2s_in_out_routed.dcp"/>
+  <File Type="ROUTE-ERROR-DCP" Name="i2s_in_out_routed_error.dcp"/>
+  <File Type="ROUTE-BLACKBOX-DCP" Name="i2s_in_out_routed_bb.dcp"/>
+  <File Type="ROUTE-TIMINGSUMMARY" Name="I2S_in_timing_summary_routed.rpt"/>
+  <File Type="ROUTE-TIMING-PB" Name="i2s_in_out_timing_summary_routed.pb"/>
+  <File Type="ROUTE-TIMING-RPX" Name="I2S_in_timing_summary_routed.rpx"/>
+  <File Type="ROUTE-SIMILARITY" Name="I2S_in_incremental_reuse_routed.rpt"/>
+  <File Type="ROUTE-BUS-SKEW-PB" Name="I2S_in_bus_skew_routed.pb"/>
+  <File Type="ROUTE-BUS-SKEW-RPX" Name="I2S_in_bus_skew_routed.rpx"/>
+  <File Type="OPT-DCP" Name="i2s_in_out_opt.dcp"/>
+  <File Type="PLACE-DCP" Name="i2s_in_out_placed.dcp"/>
+  <File Type="PWROPT-DCP" Name="i2s_in_out_pwropt.dcp"/>
+  <File Type="POSTPLACE-PWROPT-DCP" Name="i2s_in_out_postplace_pwropt.dcp"/>
+  <File Type="PHYSOPT-DCP" Name="i2s_in_out_physopt.dcp"/>
+  <File Type="POSTROUTE-PHYSOPT-DCP" Name="i2s_in_out_postroute_physopt.dcp"/>
+  <File Type="POSTROUTE-PHYSOPT-BLACKBOX-DCP" Name="i2s_in_out_postroute_physopt_bb.dcp"/>
+  <File Type="POSTROUTE-PHYSOPT-TIMING" Name="I2S_in_timing_summary_postroute_physopted.rpt"/>
+  <File Type="POSTROUTE-PHYSOPT-TIMING-PB" Name="I2S_in_timing_summary_postroute_physopted.pb"/>
+  <File Type="POSTROUTE-PHYSOPT-TIMING-RPX" Name="I2S_in_timing_summary_postroute_physopted.rpx"/>
+  <File Type="POSTROUTE-PHYSOPT-BUS-SKEW" Name="I2S_in_bus_skew_postroute_physopted.rpt"/>
+  <File Type="POSTROUTE-PHYSOPT-BUS-SKEW-RPX" Name="I2S_in_bus_skew_postroute_physopted.rpx"/>
+  <File Type="ROUTE-DRC-RPX" Name="I2S_in_drc_routed.rpx"/>
+  <File Type="ROUTE-METHODOLOGY-DRC-RPX" Name="I2S_in_methodology_drc_routed.rpx"/>
+  <File Type="PDI-FILE" Name="i2s_in_out.pdi"/>
   <File Type="PL-PDI-FILE" Name="i2s_in_out_pld.pdi"/>
   <File Type="RCFI_FILE" Name="i2s_in_out.rcfi"/>
   <File Type="CFI_FILE" Name="i2s_in_out.cfi"/>
   <File Type="RNPI_FILE" Name="i2s_in_out.rnpi"/>
-  <File Type="NPI_FILE" Name="i2s_in_out.npi"/>
   <File Type="RBD_FILE" Name="i2s_in_out.rbd"/>
-  <File Type="BITSTR-LTX" Name="debug_nets.ltx"/>
-  <File Type="BITSTR-LTX" Name="i2s_in_out.ltx"/>
-  <File Type="BITSTR-SYSDEF" Name="i2s_in_out.sysdef"/>
-  <File Type="BG-BGN" Name="i2s_in_out.bgn"/>
-  <File Type="BG-DRC" Name="i2s_in_out.drc"/>
-  <File Type="RDI-RDI" Name="i2s_in_out.vdi"/>
-  <File Type="WBT-USG" Name="usage_statistics_webtalk.html"/>
   <File Type="ROUTE-RQS" Name="i2s_in_out_routed.rqs"/>
   <File Type="POSTROUTE-PHYSOPT-RQS" Name="i2s_in_out_postroute_physopted.rqs"/>
   <File Type="ROUTE-RQS-RPT" Name="route_report_qor_suggestions_0.rpt"/>
@@ -143,6 +129,7 @@
     <Step Id="route_design"/>
     <Step Id="post_route_phys_opt_design"/>
     <Step Id="write_bitstream"/>
+    <Step Id="write_device_image"/>
   </Strategy>
   <BlockFileSet Type="BlockSrcs" Name="blk_mem_gen_0"/>
 </GenRun>
