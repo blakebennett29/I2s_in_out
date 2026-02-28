@@ -39,7 +39,9 @@ entity I2S_in is
             r_lrclk: out std_logic;
             r_data: out std_logic;
             left_reg_output : out std_logic_vector(23 downto 0);
-            right_reg_output : out std_logic_vector(23 downto 0)
+            right_reg_output : out std_logic_vector(23 downto 0);
+            left_valid : out std_logic;
+            right_valid : out std_logic
             );
 end I2S_in;
 
@@ -89,38 +91,9 @@ signal right_reg_shift_c : std_logic_vector(23 downto 0) := (others =>'0');-- sh
 -- state machine for l and R channel output
 type LR_State is (Idle, Right, Left);
 signal state, next_state : LR_State;
--- ============================================================
--- Signals for Down_Up_sampling instance (all *_s)
--- ============================================================
---signal reset_s     : std_logic;
 
-signal fs96_tick_s : std_logic;
-signal fs48_tick_s : std_logic;
-signal fs24_tick_s : std_logic;
-
-signal ds48_left_s  : std_logic_vector(31 downto 0);
-signal ds48_right_s : std_logic_vector(31 downto 0);
-signal ds48_valid_s : std_logic;
-
-signal ds24_left_s  : std_logic_vector(31 downto 0);
-signal ds24_right_s : std_logic_vector(31 downto 0);
-signal ds24_valid_s : std_logic;
-
-signal us96_left_s  : std_logic_vector(31 downto 0)  := (others => '0');
-signal us96_right_s : std_logic_vector(31 downto 0)  := (others => '0');
-signal us96_valid_s : std_logic := '0';
--- ============================================================
--- Signals for lrclk rising and falling detection 
--- ============================================================
-signal sample_left_48khz_cnt : integer := 0;
-signal sample_right_48khz_cnt : integer := 0;
-signal sample_left_96khz_cnt : integer := 0;
-signal sample_right_96khz_cnt : integer := 0;
---down sampling signials
-signal left_sample_48khz : std_logic_vector(23 downto 0) := (others => '0');
-signal right_sample_48khz : std_logic_vector(23 downto 0):= (others => '0');
-signal left_sample_96khz : std_logic_vector(23 downto 0) := (others => '0');
-signal right_sample_96khz : std_logic_vector(23 downto 0) := (others => '0');
+signal left_valid_s : std_logic;
+signal right_valid_s : std_logic;
 begin
 
 BM1 : blk_mem_gen_0 port map (
@@ -161,6 +134,8 @@ BM1 : blk_mem_gen_0 port map (
                 shift_cnt <= 0;
                 state <= Idle;
                 next_state <= Idle;
+                left_valid_s <= '0';
+                right_valid_s <= '0';
             elsif rising_edge(clk) then 
                 state <= next_state; -- continue if reset isn't high
             --------------------------------------------------------------------
@@ -216,10 +191,14 @@ BM1 : blk_mem_gen_0 port map (
                         address <= 0;
                     end if;
                     -- added for shift reg 
-                    if lrclk_s = '1' then 
+                    if lrclk_s = '1' then
+                        right_valid <= '0';
+                        left_valid <= '1';
                         left_reg_output_s <= left_reg;
                         --right_reg_shift <= right_reg_output_s;-- assinment to hold for an extra 32 sclk
                     else if lrclk_s = '0' then
+                        left_valid <= '0';
+                        right_valid <= '1';
                         right_reg_output_s <= right_reg;
                         --left_reg_shift <= left_reg_output_s; -- assinment to hold for an extra 32 sclk
                     end if; -- why does else if also need a end if statment?

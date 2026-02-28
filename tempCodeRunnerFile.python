@@ -1,0 +1,161 @@
+"""
+Design a lowpass FIR @ 96 kHz, quantize coefficients to signed 24-bit fixed-point (Q1.23),
+and write a Xilinx/AMD .COE file for FPGA FIR Compiler / BRAM init.
+
+- Coeff format: signed 24-bit, Q1.23 (range approx [-1.0, +0.99999988])
+- .coe output: radix=16 by default (easy to paste into Vivado)
+"""
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+# ----------------------------
+# User parameters (edit these)
+# ----------------------------
+FS = 96_000.0
+FC = 8_000.0
+NUM_TAPS = 127
+WINDOW = "hamming"          # "hamming", "hann", "blackman", "rect"
+COE_PATH = "fir_lp_q1_23.coe"
+RADIX = 16                  # 10 or 16
+
+
+# ----------------------------
+# FIR design helpers
+# ----------------------------
+def window_fn(name: str, n: int) -> np.ndarray:
+    name = name.lower()
+    if name == "hamming":
+        return np.hamming(n)
+    if name == "hann":
+        return np.hanning(n)
+    if name == "blackman":
+        return np.blackman(n)
+    if name == "rect":
+        return np.ones(n)
+    raise ValueError(f"Unknown window: {name}")
+
+def design_lowpass_fir(fs: float, fc: float, num_taps: int, window: str = "hamming") -> np.ndarray:
+    if not (0 < fc < fs / 2):
+        raise ValueError("Cutoff must be between 0 and Nyquist.")
+    if num_taps < 2:
+        raise ValueError("num_taps must be >= 2.")
+
+    n = np.arange(num_taps)
+    m = (num_taps - 1) / 2.0
+    fc_norm = fc / fs  # cycles/sample
+
+    # ideal lowpass: 2*fc_norm * sinc(2*fc_norm*(n-m))
+    h_ideal = 2.0 * fc_norm * np.sinc(2.0 * fc_norm * (n - m))
+    h = h_ideal * window_fn(window, num_taps)
+
+    # normalize DC gain to 1.0 so passband ~0 dB at DC
+    h /= np.sum(h)
+    return h
+
+def freq_response(h: np.ndarray, fs: float, nfft: int = 16384):
+    H = np.fft.rfft(h, n=nfft)
+    f = np.fft.rfftfreq(nfft, d=1.0/fs)
+    return f, H
+
+
+# ----------------------------
+# Fixed-point quantization (Q1.23, signed 24-bit)
+# ----------------------------
+def quantize_q1_23(h: np.ndarray) -> np.ndarray:
+    """
+    Q1.23: integer = round(h * 2^23)
+    stored as signed 24-bit two's complement.
+    """
+    frac_bits = 23
+    scale = 2**frac_bits
+
+    q = np.round(h * scale).astype(np.int64)
+
+    # clamp to signed 24-bit range
+    minv = -(2**23)
+    maxv = (2**23) - 1
+    q = np.clip(q, minv, maxv).astype(np.int64)
+    return q
+
+def int_to_twos_hex(v: int, bits: int = 24) -> str:
+    """
+    Convert signed int to fixed-width two's complement hex string (no 0x).
+    """
+    if v < 0:
+        v = (1 << bits) + v
+    return f"{v:0{bits//4}X}"  # 24 bits -> 6 hex chars
+
+def write_coe(coeff_q: np.ndarray, path: str, radix: int = 16):
+    """
+    Write Vivado .coe:
+      memory_initialization_radix=16;
+      memory_initialization_vector=
+      <c0>,
+      <c1>,
+      ...
+      <cN>;
+    """
+    if radix not in (10, 16):
+        raise ValueError("RADIX must be 10 or 16 for this writer.")
+
+    lines = []
+    lines.append(f"memory_initialization_radix={radix};")
+    lines.append("memory_initialization_vector=")
+
+    for i, v in enumerate(coeff_q):
+        if radix == 10:
+            s = str(int(v))
+        else:
+            s = int_to_twos_hex(int(v), bits=24)
+
+        # comma for all but last, semicolon for last
+        end = "," if i != len(coeff_q) - 1 else ";"
+        lines.append(f"{s}{end}")
+
+    with open(path, "w", newline="\n") as f:
+        f.write("\n".join(lines))
+
+    print(f"Wrote {path} ({len(coeff_q)} taps, Q1.23 signed 24-bit, radix={radix})")
+
+
+# ----------------------------
+# Main: design -> quantize -> plot -> write .coe
+# ----------------------------
+h = design_lowpass_fir(FS, FC, NUM_TAPS, WINDOW)
+h_q = quantize_q1_23(h)
+
+# Quick sanity: show quantization error and response
+f, H = freq_response(h, FS)
+mag_db = 20*np.log10(np.maximum(np.abs(H), 1e-12))
+
+h_q_float = h_q.astype(np.float64) / (2**23)
+f2, H2 = freq_response(h_q_float, FS)
+mag_db_q = 20*np.log10(np.maximum(np.abs(H2), 1e-12))
+
+plt.figure()
+plt.title(f"Coefficients: float vs Q1.23 (24-bit)  | taps={NUM_TAPS}")
+plt.stem(h, basefmt=" ", markerfmt=" ", linefmt="-", label="float")
+plt.stem(h_q_float, basefmt=" ", markerfmt=" ", linefmt="--", label="Q1.23")
+plt.xlabel("Tap n")
+plt.ylabel("h[n]")
+plt.grid(True)
+plt.legend()
+
+plt.figure()
+plt.title(f"Lowpass FIR Magnitude @ fs={FS/1000:.1f} kHz (fc={FC/1000:.2f} kHz)")
+plt.plot(f, mag_db, label="float")
+plt.plot(f2, mag_db_q, label="Q1.23")
+plt.axvline(FC, linestyle="--", label="cutoff")
+plt.xlim(0, FS/2)
+plt.ylim(-140, 5)
+plt.xlabel("Frequency (Hz)")
+plt.ylabel("Magnitude (dB)")
+plt.grid(True)
+plt.legend()
+
+plt.show()
+
+# Write .coe for FPGA
+write_coe(h_q, COE_PATH, radix=RADIX)

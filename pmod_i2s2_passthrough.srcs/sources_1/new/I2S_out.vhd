@@ -36,9 +36,10 @@ entity I2S_out is
             right_reg_shift : in std_logic_vector(23 downto 0);
             left_reg_shift : in std_logic_vector(23 downto 0);
             
-            t_sclk: out std_logic;
-            t_mclk: out std_logic;
-            t_lrclk: out std_logic;
+            
+            t_sclk: in std_logic;
+            t_mclk: in std_logic;
+            t_lrclk: in std_logic;
             t_data: out std_logic
             );
 end I2S_out;
@@ -54,16 +55,11 @@ signal sclk_s : std_logic := '0';
 signal lrclk_s : std_logic :='0';
 signal reset_s : std_logic := '0';
 --blk memory signials
-signal ena_s : std_logic := '1';
-signal wea_s : std_logic_vector(0 downto 0) := "0";
-signal addra_s : std_logic_vector(4 downto 0) :="00000";
-signal dina_s : std_logic_vector(31 downto 0) := x"00000000";
-signal douta_s : std_logic_vector(31 downto 0) := (others => '0');
+
 --shift register data
 signal shift_Reg_load: std_logic_vector(31 downto 0) := (others => '0');
 signal shift_cnt : integer := 0;
 signal shift_cnt_out : integer := 0;
-signal address : integer :=0;
 signal sclk_fall_pulse : std_logic := '0';
 signal lrclk_fall_pulse : std_logic := '0';
 signal lrclk_rise_pulse : std_logic := '0';
@@ -71,52 +67,20 @@ signal lrclk_rise_pulse : std_logic := '0';
 -- additional registers for reciver side
 signal right_reg : std_logic_vector(31 downto 0) := (others =>'0');
 signal left_reg : std_logic_vector(31 downto 0) := (others =>'0');
-signal right_reg_output : std_logic_vector(31 downto 0) := (others =>'0');--hold for sample period
-signal left_reg_output : std_logic_vector(31 downto 0) := (others =>'0');--hold for sample period
+
 signal left_reg_shift_s : std_logic_vector(31 downto 0) := (others =>'0');--shift to output dac
 signal right_reg_shift_s : std_logic_vector(31 downto 0) := (others =>'0');-- shift to ouput dac
 -- state machine for l and R channel output
 type LR_State is (Idle, Right, Left);
 signal state, next_state : LR_State;
--- ============================================================
--- Signals for Down_Up_sampling instance (all *_s)
--- ============================================================
---signal reset_s     : std_logic;
 
-signal fs96_tick_s : std_logic;
-signal fs48_tick_s : std_logic;
-signal fs24_tick_s : std_logic;
-
-signal ds48_left_s  : std_logic_vector(31 downto 0);
-signal ds48_right_s : std_logic_vector(31 downto 0);
-signal ds48_valid_s : std_logic;
-
-signal ds24_left_s  : std_logic_vector(31 downto 0);
-signal ds24_right_s : std_logic_vector(31 downto 0);
-signal ds24_valid_s : std_logic;
-
-signal us96_left_s  : std_logic_vector(31 downto 0)  := (others => '0');
-signal us96_right_s : std_logic_vector(31 downto 0)  := (others => '0');
-signal us96_valid_s : std_logic := '0';
--- ============================================================
--- Signals for lrclk rising and falling detection 
--- ============================================================
-signal sample_left_48khz_cnt : integer := 0;
-signal sample_right_48khz_cnt : integer := 0;
-signal sample_left_96khz_cnt : integer := 0;
-signal sample_right_96khz_cnt : integer := 0;
---down sampling signials
-signal left_sample_48khz : std_logic_vector(23 downto 0) := (others => '0');
-signal right_sample_48khz : std_logic_vector(23 downto 0):= (others => '0');
-signal left_sample_96khz : std_logic_vector(23 downto 0) := (others => '0');
-signal right_sample_96khz : std_logic_vector(23 downto 0) := (others => '0');
 begin
 
 --transmitter clks (all counting off of source clk 100mhz)
     reset_s <= reset;
-    t_mclk <= mclk_s;
-    t_sclk <= sclk_s;
-    t_lrclk <= lrclk_s;
+--    t_mclk <= mclk_s;
+--    t_sclk <= sclk_s;
+--    t_lrclk <= lrclk_s;
     right_reg_shift_s <= right_reg_shift(23 downto 0) & (7 downto 0 => '0');
     left_reg_shift_s <= left_reg_shift(23 downto 0) & (7 downto 0 => '0');
     process(clk)
@@ -178,8 +142,7 @@ begin
                     shift_Reg_load <= (others => '0');
                     shift_cnt <= 0;
                     
-                elsif shift_cnt >= 32 then 
-                    ena_s <= '1';
+                elsif shift_cnt >= 32 then
                     shift_cnt <= 0;
 --                    address <= address + 1;
 --                    addra_s <= std_logic_vector(to_unsigned(address, 5));

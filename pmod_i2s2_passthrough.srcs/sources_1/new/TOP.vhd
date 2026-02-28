@@ -48,71 +48,24 @@ entity TOP is
 end TOP;
 
 architecture Behavioral of TOP is
-signal mcnt : integer := 0;
-signal scnt : integer :=0;
-signal lrcnt : integer :=0;
+
 signal mclk_s : std_logic := '0';
 signal sclk_s : std_logic := '0';
 signal lrclk_s : std_logic :='0';
 signal reset_s : std_logic := '0';
---blk memory signials
-signal ena_s : std_logic := '1';
-signal wea_s : std_logic_vector(0 downto 0) := "0";
-signal addra_s : std_logic_vector(4 downto 0) :="00000";
-signal dina_s : std_logic_vector(31 downto 0) := x"00000000";
-signal douta_s : std_logic_vector(31 downto 0) := (others => '0');
---shift register data
-signal shift_Reg_load: std_logic_vector(31 downto 0) := (others => '0');
-signal shift_cnt : integer := 0;
-signal shift_cnt_out : integer := 0;
-signal address : integer :=0;
-signal sclk_fall_pulse : std_logic := '0';
-signal lrclk_fall_pulse : std_logic := '0';
-signal lrclk_rise_pulse : std_logic := '0';
-
 -- additional registers for reciver side
-signal right_reg : std_logic_vector(31 downto 0) := (others =>'0');
-signal left_reg : std_logic_vector(31 downto 0) := (others =>'0');
-signal right_reg_output_s : std_logic_vector(31 downto 0) := (others =>'0');--hold for sample period
-signal left_reg_output_s : std_logic_vector(31 downto 0) := (others =>'0');--hold for sample period
 signal left_reg_shift_c : std_logic_vector(23 downto 0) := (others =>'0');--shift to output dac
 signal right_reg_shift_c : std_logic_vector(23 downto 0) := (others =>'0');-- shift to ouput dac
--- state machine for l and R channel output
-type LR_State is (Idle, Right, Left);
-signal state, next_state : LR_State;
 -- ============================================================
--- Signals for Down_Up_sampling instance (all *_s)
+-- ADDED (_s) signals for FIR + I2S valid/data routing
 -- ============================================================
---signal reset_s     : std_logic;
-
-signal fs96_tick_s : std_logic;
-signal fs48_tick_s : std_logic;
-signal fs24_tick_s : std_logic;
-
-signal ds48_left_s  : std_logic_vector(31 downto 0);
-signal ds48_right_s : std_logic_vector(31 downto 0);
-signal ds48_valid_s : std_logic;
-
-signal ds24_left_s  : std_logic_vector(31 downto 0);
-signal ds24_right_s : std_logic_vector(31 downto 0);
-signal ds24_valid_s : std_logic;
-
-signal us96_left_s  : std_logic_vector(31 downto 0)  := (others => '0');
-signal us96_right_s : std_logic_vector(31 downto 0)  := (others => '0');
-signal us96_valid_s : std_logic := '0';
--- ============================================================
--- Signals for lrclk rising and falling detection 
--- ============================================================
-signal sample_left_48khz_cnt : integer := 0;
-signal sample_right_48khz_cnt : integer := 0;
-signal sample_left_96khz_cnt : integer := 0;
-signal sample_right_96khz_cnt : integer := 0;
---down sampling signials
-signal left_sample_48khz : std_logic_vector(23 downto 0) := (others => '0');
-signal right_sample_48khz : std_logic_vector(23 downto 0):= (others => '0');
-signal left_sample_96khz : std_logic_vector(23 downto 0) := (others => '0');
-signal right_sample_96khz : std_logic_vector(23 downto 0) := (others => '0');
-
+signal fir_left_valid_in_s  : std_logic := '1';
+signal fir_right_valid_in_s : std_logic := '1';
+-- assined from fir to output port
+signal fir_out_data_right_s : std_logic_vector(23 downto 0);
+signal fir_out_data_left_s : std_logic_vector(23 downto 0);
+signal left_valid_s : std_logic := '0';
+signal right_valid_s : std_logic := '0';
 component I2S_in is
   Port (    clk : in std_logic;
             reset : in std_logic;
@@ -121,6 +74,8 @@ component I2S_in is
             r_mclk: out std_logic;
             r_lrclk: out std_logic;
             r_data: out std_logic;
+            left_valid : out std_logic;
+            right_valid : out std_logic;
             left_reg_output : out std_logic_vector(23 downto 0);
             right_reg_output : out std_logic_vector(23 downto 0)
             );
@@ -132,15 +87,34 @@ component I2S_out is
             right_reg_shift : in std_logic_vector(23 downto 0);
             left_reg_shift : in std_logic_vector(23 downto 0);
             
-            t_sclk: out std_logic;
-            t_mclk: out std_logic;
-            t_lrclk: out std_logic;
+            t_sclk: in std_logic;
+            t_mclk: in std_logic;
+            t_lrclk: in std_logic;
             t_data: out std_logic
             );
 end component;
 
+component FIR is
+  Port (    clk : in std_logic;
+            left_valid_in : in std_logic;
+            right_valid_in : in std_logic;
+            left_reg_input : in std_logic_vector(23 downto 0);
+            right_reg_input : in std_logic_vector(23 downto 0);
+            
+            out_data_left : out std_logic_vector(23 downto 0);
+            out_data_right : out std_logic_vector(23 downto 0)
+            );
+end component;
 begin
+-- assnments make these avalible to see on top level module
 reset_s <= reset;
+r_sclk  <= sclk_s;
+r_mclk  <= mclk_s;
+r_lrclk <= lrclk_s;
+
+t_sclk  <= sclk_s;
+t_mclk  <= mclk_s;
+t_lrclk <= lrclk_s;
 --assinments for I2S_in
 
 --assinments for I2S_out
@@ -149,8 +123,8 @@ reset_s <= reset;
 I2s_o : I2S_out port map (
     clk => clk,
     reset => reset_s,
-    right_reg_shift => right_reg_shift_c,
-    left_reg_shift => left_reg_shift_c,
+    right_reg_shift => fir_out_data_right_s,--for right out data
+    left_reg_shift => fir_out_data_left_s,--for left out data
     
     t_sclk => sclk_s,
     t_mclk => mclk_s,
@@ -161,13 +135,24 @@ I2s_i : I2S_in port map (
     clk => clk,--assined to top clk
     reset => reset, --assined to top reset
     
-    r_sclk => r_sclk,
-    r_mclk => r_mclk,
-    r_lrclk => r_lrclk,
+    r_sclk => sclk_s,
+    r_mclk => mclk_s,
+    r_lrclk => lrclk_s,
     r_data => r_data, --update in I2S in to take serial data in instead of blk_mem
+    left_valid => left_valid_s,
+    right_valid => right_valid_s,
     
-    left_reg_output => left_reg_shift_c,
+    left_reg_output => left_reg_shift_c, --maps to FIR core inputs
     right_reg_output => right_reg_shift_c
 );
+FIR_0: FIR port map(
+    clk             => clk,
+    left_valid_in   => left_valid_s,
+    right_valid_in  => right_valid_s,
+    left_reg_input  => left_reg_shift_c,--this is an input to the fir core  -- data in fir core
+    right_reg_input => right_reg_shift_c,--this is an input to the fir core
 
+    out_data_left => fir_out_data_left_s,
+    out_data_right => fir_out_data_right_s
+);
 end Behavioral;
