@@ -257,9 +257,9 @@ BM1 : blk_mem_gen_0 port map (
                     shift_cnt <= shift_cnt +1;
                     --add data_in register to hold data
                     if lrclk_s = '0' then
-                        left_reg(31 - shift_cnt) <= shift_Reg_load(31 - shift_cnt); --r_data
+                        left_reg(31 - shift_cnt) <= shift_Reg_load(31 - shift_cnt); --r_data;
                     elsif lrclk_s = '1' then
-                        right_reg(31 - shift_cnt) <= shift_Reg_load(31 - shift_cnt); --r_data
+                        right_reg(31 - shift_cnt) <= shift_Reg_load(31 - shift_cnt); --r_data;
                     else
                         null;
                     end if;

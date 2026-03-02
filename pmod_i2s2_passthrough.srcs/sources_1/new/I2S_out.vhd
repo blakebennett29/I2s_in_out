@@ -74,6 +74,8 @@ signal right_reg_shift_s : std_logic_vector(31 downto 0) := (others =>'0');-- sh
 type LR_State is (Idle, Right, Left);
 signal state, next_state : LR_State;
 
+signal right_reg_shift_t : std_logic_vector(31 downto 0) := (others =>'0');
+signal left_reg_shift_t : std_logic_vector(31 downto 0) := (others =>'0');
 begin
 
 --transmitter clks (all counting off of source clk 100mhz)
@@ -150,15 +152,15 @@ begin
 --                  if address >= 32 then  -- loop the block memory for output
 --                        address <= 0;
 --                    end if;
-                    -- added for shift reg 
---                    if lrclk_s = '1' then 
---                        left_reg_output <= left_reg;
---                        right_reg_shift <= right_reg_output;-- assinment to hold for an extra 32 sclk
---                    else if lrclk_s = '0' then
---                        right_reg_output <= right_reg;
---                        left_reg_shift <= left_reg_output; -- assinment to hold for an extra 32 sclk
---                    end if; -- why does else if also need a end if statment?
---                    end if;
+                     --added for shift reg 
+                    if lrclk_ss = '1' then 
+                        --left_reg_output <= left_reg;
+                        right_reg_shift_t <= right_reg_shift_s;-- assinment to hold for an extra 32 sclk
+                    else if lrclk_ss = '0' then
+                        --right_reg_output <= right_reg;
+                        left_reg_shift_t <= left_reg_shift_s; -- assinment to hold for an extra 32 sclk
+                    end if; -- why does else if also need a end if statment?
+                end if;
                     
                     --new code-------------------------------------------------------------
                     
@@ -177,7 +179,7 @@ begin
                             if lrclk_ss = '0' then
                                 if sclk_fall_pulse = '1' then 
                                     sclk_fall_pulse <= '0';
-                                    t_data <= right_reg_shift_s(31 - shift_cnt);
+                                    t_data <= right_reg_shift_t(31 - shift_cnt);
                                     shift_cnt <= shift_cnt +1;
                                 end if;
                             end if;
@@ -190,7 +192,7 @@ begin
                             if lrclk_ss = '1' then
                                 if sclk_fall_pulse = '1' then 
                                     sclk_fall_pulse <= '0';
-                                    t_data <= left_reg_shift_s(31 - shift_cnt);
+                                    t_data <= left_reg_shift_t(31 - shift_cnt);
                                     shift_cnt <= shift_cnt +1;
                                 end if;
                             end if;
@@ -210,12 +212,14 @@ begin
 --                    --data <= shift_Reg_load(31 - shift_cnt);
 --                    shift_cnt <= shift_cnt +1;
 --                    --add data_in register to hold data
-----                    if lrclk_s = '0' then
-----                        --this assniment needs the data coming from the computation(the current shift_Reg_load) and needs to shift it out to t_data the current (left_reg)
-----                        --left_reg(31 - shift_cnt) <= shift_Reg_load(31 - shift_cnt);
-----                    elsif lrclk_s = '1' then
-----                        --right_reg(31 - shift_cnt) <= shift_Reg_load(31 - shift_cnt);
-----                    end if;
+--                    if lrclk_ss = '0' then
+--                        --this assniment needs the data coming from the computation(the current shift_Reg_load) and needs to shift it out to t_data the current (left_reg)
+--                        --left_reg(31 - shift_cnt) <= shift_Reg_load(31 - shift_cnt);
+                       
+--                    elsif lrclk_ss = '1' then
+--                        --right_reg(31 - shift_cnt) <= shift_Reg_load(31 - shift_cnt);
+                        
+--                    end if;
 --                end if;     
                 end if;
                 
