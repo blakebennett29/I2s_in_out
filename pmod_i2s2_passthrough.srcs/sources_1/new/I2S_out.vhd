@@ -50,9 +50,9 @@ architecture Behavioral of I2S_out is
 signal mcnt : integer := 0;
 signal scnt : integer :=0;
 signal lrcnt : integer :=0;
-signal mclk_s : std_logic := '0';
-signal sclk_s : std_logic := '0';
-signal lrclk_s : std_logic :='0';
+signal mclk_ss : std_logic := '0';
+signal sclk_ss : std_logic := '0';
+signal lrclk_ss : std_logic :='0';
 signal reset_s : std_logic := '0';
 --blk memory signials
 
@@ -78,9 +78,9 @@ begin
 
 --transmitter clks (all counting off of source clk 100mhz)
     reset_s <= reset;
---    t_mclk <= mclk_s;
---    t_sclk <= sclk_s;
---    t_lrclk <= lrclk_s;
+    mclk_ss <= t_mclk;
+    sclk_ss <= t_sclk;
+    lrclk_ss <= t_lrclk;
     right_reg_shift_s <= right_reg_shift(23 downto 0) & (7 downto 0 => '0');
     left_reg_shift_s <= left_reg_shift(23 downto 0) & (7 downto 0 => '0');
     process(clk)
@@ -89,9 +89,9 @@ begin
                 mcnt <= 0;
                 scnt <= 0;
                 lrcnt <= 0;
-                mclk_s  <= '0';
-                sclk_s  <= '0';
-                lrclk_s <= '0';
+--                mclk_ss  <= '0';
+--                sclk_ss  <= '0';
+--                lrclk_ss <= '0';
                 reset_s <= '0';
                 shift_Reg_load <= (others => '0');
                 shift_cnt <= 0;
@@ -99,23 +99,23 @@ begin
                 next_state <= Idle;
             elsif rising_edge(clk) then 
                 state <= next_state; -- continue if reset isn't high
-            --------------------------------------------------------------------
-            --master clk generation
-                if mcnt >= 1 then   --creating that 25mhz clk (divide the clk by 4)
-                    mcnt <= 0;
-                    mclk_s <= not mclk_s; --toggle the clk
-                else
-                    mcnt <= mcnt + 1;
-                end if;
+--            --------------------------------------------------------------------
+--            --master clk generation
+--                if mcnt >= 1 then   --creating that 25mhz clk (divide the clk by 4)
+--                    mcnt <= 0;
+--                    mclk_s <= not mclk_s; --toggle the clk
+--                else
+--                    mcnt <= mcnt + 1;
+--                end if;
                 --------------------------------------------------------------------
                 --sclk generation
                 if scnt >= 7 then
                     scnt <= 0;
                      -- detect the *falling* edge (about to go low 1 -> 0)
-                    if sclk_s = '1' then
+                    if sclk_ss = '1' then
                         sclk_fall_pulse <= '1';
                     end if;
-                    sclk_s <= not sclk_s;
+                    --sclk_s <= not sclk_s;
                 else
                     scnt <= scnt + 1;
                 end if;
@@ -124,15 +124,15 @@ begin
                 if lrcnt >= 511 then
                     lrcnt <= 0;
                     --not nessisary code------------
-                    if lrclk_s = '0' then   --lr edge detection "rising"
+                    if lrclk_ss = '0' then   --lr edge detection "rising"
                         lrclk_rise_pulse <= '1';
                     end if;
-                    if lrclk_s = '1' then --"falling" edge detection
+                    if lrclk_ss = '1' then --"falling" edge detection
                         lrclk_fall_pulse <= '1';
                     end if;
                     
                     --block above not nessassary -------------
-                    lrclk_s <= not lrclk_s;
+                    --lrclk_s <= not lrclk_s;
                 else
                     lrcnt <= lrcnt + 1;
                 end if;
@@ -165,34 +165,36 @@ begin
                 else
                     case state is
                         when Idle =>
-                            if lrclk_s = '0' then
+                            if lrclk_ss = '0' then
                                 next_state <= Right;
-                            elsif lrclk_s = '1' then
+                            elsif lrclk_ss = '1' then
                                 next_state <= left;
+                            else
+                                next_state <= Idle;
                             end if;
                             
                         when Right =>
-                            if lrclk_s = '0' then
+                            if lrclk_ss = '0' then
                                 if sclk_fall_pulse = '1' then 
                                     sclk_fall_pulse <= '0';
                                     t_data <= right_reg_shift_s(31 - shift_cnt);
                                     shift_cnt <= shift_cnt +1;
                                 end if;
                             end if;
-                            if lrclk_s = '1' then
+                            if lrclk_ss = '1' then
                                 next_state <= Left;
                             else
                                 next_state <= Right;
                             end if;
                         when Left =>
-                            if lrclk_s = '1' then
+                            if lrclk_ss = '1' then
                                 if sclk_fall_pulse = '1' then 
                                     sclk_fall_pulse <= '0';
                                     t_data <= left_reg_shift_s(31 - shift_cnt);
                                     shift_cnt <= shift_cnt +1;
                                 end if;
                             end if;
-                            if lrclk_s = '0' then
+                            if lrclk_ss = '0' then
                                 next_state <= Right;
                             else
                                 next_state <= Left;
@@ -203,18 +205,18 @@ begin
                     end case;
                     -- end of new code -----------------------------------------------------------------------------
                 --shift data bit's out (in is how I am looking at it while programing the dac)
-                if sclk_fall_pulse = '1' then 
-                    sclk_fall_pulse <= '0';
-                    --data <= shift_Reg_load(31 - shift_cnt);
-                    shift_cnt <= shift_cnt +1;
-                    --add data_in register to hold data
---                    if lrclk_s = '0' then
---                        --this assniment needs the data coming from the computation(the current shift_Reg_load) and needs to shift it out to t_data the current (left_reg)
---                        --left_reg(31 - shift_cnt) <= shift_Reg_load(31 - shift_cnt);
---                    elsif lrclk_s = '1' then
---                        --right_reg(31 - shift_cnt) <= shift_Reg_load(31 - shift_cnt);
---                    end if;
-                end if;     
+--                if sclk_fall_pulse = '1' then 
+--                    sclk_fall_pulse <= '0';
+--                    --data <= shift_Reg_load(31 - shift_cnt);
+--                    shift_cnt <= shift_cnt +1;
+--                    --add data_in register to hold data
+----                    if lrclk_s = '0' then
+----                        --this assniment needs the data coming from the computation(the current shift_Reg_load) and needs to shift it out to t_data the current (left_reg)
+----                        --left_reg(31 - shift_cnt) <= shift_Reg_load(31 - shift_cnt);
+----                    elsif lrclk_s = '1' then
+----                        --right_reg(31 - shift_cnt) <= shift_Reg_load(31 - shift_cnt);
+----                    end if;
+--                end if;     
                 end if;
                 
             end if;

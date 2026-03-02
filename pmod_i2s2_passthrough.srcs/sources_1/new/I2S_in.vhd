@@ -37,7 +37,7 @@ entity I2S_in is
             r_sclk: out std_logic;
             r_mclk: out std_logic;
             r_lrclk: out std_logic;
-            r_data: out std_logic;
+            r_data: out std_logic; --out for simulation
             left_reg_output : out std_logic_vector(23 downto 0);
             right_reg_output : out std_logic_vector(23 downto 0);
             left_valid : out std_logic;
@@ -196,13 +196,16 @@ BM1 : blk_mem_gen_0 port map (
                         left_valid <= '1';
                         left_reg_output_s <= left_reg;
                         --right_reg_shift <= right_reg_output_s;-- assinment to hold for an extra 32 sclk
-                    else if lrclk_s = '0' then
+                    elsif lrclk_s = '0' then
                         left_valid <= '0';
                         right_valid <= '1';
                         right_reg_output_s <= right_reg;
                         --left_reg_shift <= left_reg_output_s; -- assinment to hold for an extra 32 sclk
-                    end if; -- why does else if also need a end if statment?
-                    end if;
+                    else
+                        right_valid <= '0';
+                        left_valid <= '0';
+                    end if; 
+                    
                     
                     --new code-------------------------------------------------------------
                     
@@ -244,7 +247,7 @@ BM1 : blk_mem_gen_0 port map (
 --                            end if;
                             
                             
-
+                end if;
 --                    end case;
                     -- end of new code -----------------------------------------------------------------------------
                 --shift data bit's out (in is how I am looking at it while programing the dac)
@@ -255,13 +258,15 @@ BM1 : blk_mem_gen_0 port map (
                     --add data_in register to hold data
                     if lrclk_s = '0' then
                         left_reg(31 - shift_cnt) <= shift_Reg_load(31 - shift_cnt); --r_data
-                    else if lrclk_s = '1' then
+                    elsif lrclk_s = '1' then
                         right_reg(31 - shift_cnt) <= shift_Reg_load(31 - shift_cnt); --r_data
+                    else
+                        null;
                     end if;
                 end if;                                 
-                end if;
+                --end if;
                 
             end if;
-            end if; -- idk where this was missed
+            --end if; -- idk where this was missed
     end process;
     end behavioral;

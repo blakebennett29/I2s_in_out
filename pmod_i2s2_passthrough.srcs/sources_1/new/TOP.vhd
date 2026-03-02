@@ -48,7 +48,8 @@ entity TOP is
 end TOP;
 
 architecture Behavioral of TOP is
-
+signal r_data_s : std_logic := '0';
+signal t_data_s : std_logic := '0';
 signal mclk_s : std_logic := '0';
 signal sclk_s : std_logic := '0';
 signal lrclk_s : std_logic :='0';
@@ -66,6 +67,8 @@ signal fir_out_data_right_s : std_logic_vector(23 downto 0);
 signal fir_out_data_left_s : std_logic_vector(23 downto 0);
 signal left_valid_s : std_logic := '0';
 signal right_valid_s : std_logic := '0';
+
+
 component I2S_in is
   Port (    clk : in std_logic;
             reset : in std_logic;
@@ -115,6 +118,8 @@ r_lrclk <= lrclk_s;
 t_sclk  <= sclk_s;
 t_mclk  <= mclk_s;
 t_lrclk <= lrclk_s;
+r_data <= r_data_s; --r_data_s <= r_data;
+t_data <= t_data_s;
 --assinments for I2S_in
 
 --assinments for I2S_out
@@ -123,13 +128,13 @@ t_lrclk <= lrclk_s;
 I2s_o : I2S_out port map (
     clk => clk,
     reset => reset_s,
-    right_reg_shift => fir_out_data_right_s,--for right out data
-    left_reg_shift => fir_out_data_left_s,--for left out data
+    right_reg_shift => right_reg_shift_c,--fir_out_data_right_s,--for right out data
+    left_reg_shift => left_reg_shift_c,--fir_out_data_left_s,--for left out data
     
     t_sclk => sclk_s,
     t_mclk => mclk_s,
     t_lrclk => lrclk_s,
-    t_data => t_data
+    t_data => t_data_s
     );
 I2s_i : I2S_in port map (
     clk => clk,--assined to top clk
@@ -138,21 +143,21 @@ I2s_i : I2S_in port map (
     r_sclk => sclk_s,
     r_mclk => mclk_s,
     r_lrclk => lrclk_s,
-    r_data => r_data, --update in I2S in to take serial data in instead of blk_mem
+    r_data => r_data_s, --update in I2S in to take serial data in instead of blk_mem
     left_valid => left_valid_s,
     right_valid => right_valid_s,
     
     left_reg_output => left_reg_shift_c, --maps to FIR core inputs
     right_reg_output => right_reg_shift_c
 );
-FIR_0: FIR port map(
-    clk             => clk,
-    left_valid_in   => left_valid_s,
-    right_valid_in  => right_valid_s,
-    left_reg_input  => left_reg_shift_c,--this is an input to the fir core  -- data in fir core
-    right_reg_input => right_reg_shift_c,--this is an input to the fir core
+--FIR_0: FIR port map(
+--    clk             => clk,
+--    left_valid_in   => left_valid_s,
+--    right_valid_in  => right_valid_s,
+--    left_reg_input  => left_reg_shift_c,--this is an input to the fir core  -- data in fir core
+--    right_reg_input => right_reg_shift_c,--this is an input to the fir core
 
-    out_data_left => fir_out_data_left_s,
-    out_data_right => fir_out_data_right_s
-);
+--    out_data_left => fir_out_data_left_s,
+--    out_data_right => fir_out_data_right_s
+--);
 end Behavioral;

@@ -4,7 +4,7 @@
 
 set TIME_start [clock seconds] 
 namespace eval ::optrace {
-  variable script "E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.runs/synth_1/i2s_in_out.tcl"
+  variable script "E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.runs/synth_1/TOP.tcl"
   variable category "vivado_synth"
 }
 
@@ -75,7 +75,11 @@ set_property ip_cache_permissions {read write} [current_project]
 OPTRACE "Creating in-memory project" END { }
 OPTRACE "Adding files" START { }
 add_files E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.ip_user_files/sin.coe
-read_vhdl -library xil_defaultlib E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/i2s_in_out.vhd
+read_vhdl -library xil_defaultlib {
+  E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/I2S_in.vhd
+  E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/I2S_out.vhd
+  E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/TOP.vhd
+}
 read_ip -quiet E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci
 set_property used_in_implementation false [get_files -all e:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.gen/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0_ooc.xdc]
 
@@ -97,7 +101,7 @@ read_checkpoint -auto_incremental -incremental E:/School/SeniorProject/pmod_i2s2
 close [open __synthesis_is_running__ w]
 
 OPTRACE "synth_design" START { }
-synth_design -top i2s_in_out -part xc7a35tcpg236-1
+synth_design -top TOP -part xc7a35tcpg236-1
 OPTRACE "synth_design" END { }
 if { [get_msg_config -count -severity {CRITICAL WARNING}] > 0 } {
  send_msg_id runtcl-6 info "Synthesis results are not added to the cache due to CRITICAL_WARNING"
@@ -107,10 +111,10 @@ if { [get_msg_config -count -severity {CRITICAL WARNING}] > 0 } {
 OPTRACE "write_checkpoint" START { CHECKPOINT }
 # disable binary constraint mode for synth run checkpoints
 set_param constraints.enableBinaryConstraints false
-write_checkpoint -force -noxdef i2s_in_out.dcp
+write_checkpoint -force -noxdef TOP.dcp
 OPTRACE "write_checkpoint" END { }
 OPTRACE "synth reports" START { REPORT }
-generate_parallel_reports -reports { "report_utilization -file i2s_in_out_utilization_synth.rpt -pb i2s_in_out_utilization_synth.pb"  } 
+generate_parallel_reports -reports { "report_utilization -file TOP_utilization_synth.rpt -pb TOP_utilization_synth.pb"  } 
 OPTRACE "synth reports" END { }
 file delete __synthesis_is_running__
 close [open __synthesis_is_complete__ w]
