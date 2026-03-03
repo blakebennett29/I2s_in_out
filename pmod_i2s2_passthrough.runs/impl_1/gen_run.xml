@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="impl_1" LaunchPart="xc7a35tcpg236-1" LaunchTime="1772501834">
-  <File Type="OPT-HWDEF" Name="TOP.hwdef"/>
-  <File Type="ROUTE-BUS-SKEW" Name="TOP_bus_skew_routed.rpt"/>
-  <File Type="PA-DCP" Name="TOP.dcp"/>
+<GenRun Id="impl_1" LaunchPart="xc7a35tcpg236-1" LaunchTime="1772578844">
   <File Type="ROUTE-PWR" Name="TOP_power_routed.rpt"/>
   <File Type="PA-TCL" Name="TOP.tcl"/>
+  <File Type="ROUTE-PWR-SUM" Name="TOP_power_summary_routed.pb"/>
+  <File Type="REPORTS-TCL" Name="TOP_reports.tcl"/>
+  <File Type="OPT-RQA-PB" Name="TOP_rqa_opted.pb"/>
+  <File Type="BITSTR-MMI" Name="TOP.mmi"/>
   <File Type="OPT-METHODOLOGY-DRC" Name="TOP_methodology_drc_opted.rpt"/>
   <File Type="INIT-TIMING" Name="TOP_timing_summary_init.rpt"/>
-  <File Type="ROUTE-PWR-SUM" Name="TOP_power_summary_routed.pb"/>
-  <File Type="OPT-RQA-PB" Name="TOP_rqa_opted.pb"/>
-  <File Type="REPORTS-TCL" Name="TOP_reports.tcl"/>
   <File Type="OPT-TIMING" Name="TOP_timing_summary_opted.rpt"/>
   <File Type="OPT-DCP" Name="TOP_opt.dcp"/>
   <File Type="OPT-DRC" Name="TOP_drc_opted.rpt"/>
+  <File Type="OPT-HWDEF" Name="TOP.hwdef"/>
   <File Type="PWROPT-DCP" Name="TOP_pwropt.dcp"/>
   <File Type="PWROPT-DRC" Name="TOP_drc_pwropted.rpt"/>
   <File Type="PWROPT-TIMING" Name="TOP_timing_summary_pwropted.rpt"/>
@@ -52,6 +51,7 @@
   <File Type="ROUTE-TIMING-RPX" Name="TOP_timing_summary_routed.rpx"/>
   <File Type="ROUTE-SIMILARITY" Name="TOP_incremental_reuse_routed.rpt"/>
   <File Type="ROUTE-CLK" Name="TOP_clock_utilization_routed.rpt"/>
+  <File Type="ROUTE-BUS-SKEW" Name="TOP_bus_skew_routed.rpt"/>
   <File Type="ROUTE-BUS-SKEW-PB" Name="TOP_bus_skew_routed.pb"/>
   <File Type="ROUTE-BUS-SKEW-RPX" Name="TOP_bus_skew_routed.rpx"/>
   <File Type="POSTROUTE-PHYSOPT-DCP" Name="TOP_postroute_physopt.dcp"/>
@@ -65,7 +65,6 @@
   <File Type="POSTROUTE-PHYSOPT-BUS-SKEW-RPX" Name="TOP_bus_skew_postroute_physopted.rpx"/>
   <File Type="BITSTR-NKY" Name="TOP.nky"/>
   <File Type="BITSTR-BMM" Name="TOP_bd.bmm"/>
-  <File Type="BITSTR-MMI" Name="TOP.mmi"/>
   <File Type="PDI-FILE" Name="TOP.pdi"/>
   <File Type="BOOT-PDI-FILE" Name="TOP_boot.pdi"/>
   <File Type="PL-PDI-FILE" Name="TOP_pld.pdi"/>
@@ -87,12 +86,6 @@
   <File Type="POSTROUTE-PHYSOPT-RQS-RPT" Name="postroute_physopt_report_qor_suggestions_0.rpt"/>
   <FileSet Name="sources" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1" RelGenDir="$PGENDIR/sources_1">
     <Filter Type="Srcs"/>
-    <File Path="$PSRCDIR/sources_1/new/FIR.vhd">
-      <FileInfo>
-        <Attr Name="UsedIn" Val="synthesis"/>
-        <Attr Name="UsedIn" Val="simulation"/>
-      </FileInfo>
-    </File>
     <File Path="$PSRCDIR/sources_1/new/I2S_in.vhd">
       <FileInfo>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -107,6 +100,13 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/TOP.vhd">
       <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/new/FIR.vhd">
+      <FileInfo>
+        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="simulation"/>
       </FileInfo>
@@ -183,5 +183,4 @@
     <Step Id="write_bitstream"/>
   </Strategy>
   <BlockFileSet Type="BlockSrcs" Name="blk_mem_gen_0"/>
-  <BlockFileSet Type="BlockSrcs" Name="fir_compiler_0"/>
 </GenRun>

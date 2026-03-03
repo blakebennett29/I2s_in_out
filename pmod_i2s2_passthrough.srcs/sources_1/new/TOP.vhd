@@ -132,8 +132,8 @@ t_data <= t_data_s;
 I2s_o : I2S_out port map (
     clk => clk,
     reset => reset_s,
-    right_reg_shift => fir_out_data_right_s,--for right out data  right_reg_shift_c,--
-    left_reg_shift => fir_out_data_left_s,--for left out data  left_reg_shift_c,--
+    right_reg_shift => fir_out_data_right_s, --for right out data  --right_reg_shift_c,
+    left_reg_shift => fir_out_data_left_s,  --left_reg_shift_c, --for left out data  
     
     t_sclk => sclk_s,
     t_mclk => mclk_s,
@@ -154,6 +154,7 @@ I2s_i : I2S_in port map (
     left_reg_output => left_reg_shift_c, --maps to FIR core inputs
     right_reg_output => right_reg_shift_c
 );
+
 FIR_0: FIR port map(
     clk             => clk,
     left_valid_in   => left_valid_s,

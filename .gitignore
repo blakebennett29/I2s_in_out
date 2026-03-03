@@ -15,7 +15,6 @@
 # Vivado project noise (ignore)
 # -----------------------------
 # Project files (optional to ignore if you use TCL builds)
-*.xpr
 *.xpr.user
 *.xcworkspace
 *.wcfg
