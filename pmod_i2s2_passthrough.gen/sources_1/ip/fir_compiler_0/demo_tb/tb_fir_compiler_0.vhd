@@ -112,7 +112,7 @@ architecture tb of tb_fir_compiler_0 is
   signal s_axis_data_tuser_user        : std_logic_vector(0 downto 0) := (others => '0');
 
   -- Data master channel alias signals
-  signal m_axis_data_tdata_data        : std_logic_vector(31 downto 0) := (others => '0');
+  signal m_axis_data_tdata_data        : std_logic_vector(30 downto 0) := (others => '0');
   signal m_axis_data_tuser_user        : std_logic_vector(0 downto 0) := (others => '0');
 
 
@@ -190,7 +190,7 @@ begin
 
     -- Procedure to drive an impulse and let the impulse response emerge on the data master channel
     -- samples is the number of input samples to drive; default is enough for impulse response output to emerge
-    procedure drive_impulse ( samples : natural := 54 ) is
+    procedure drive_impulse ( samples : natural := 266 ) is
       variable impulse : std_logic_vector(23 downto 0);
     begin
       impulse := (others => '0');  -- initialize unused bits to zero
@@ -220,7 +220,7 @@ begin
     drive_zeros(2);  -- 2 normal input samples
     s_axis_data_tvalid <= '1';
     wait for CLOCK_PERIOD * 2555;  -- provide data as fast as the core can accept it for 5 input samples worth
-    drive_zeros(45);  -- back to normal operation
+    drive_zeros(257);  -- back to normal operation
 
     -- Drive a set of impulses of different magnitudes on each channel
     -- Channel inputs are provided in TDM fashion
@@ -229,7 +229,7 @@ begin
     drive_data(data);
     data(23 downto 0) := "001000000000000000000000";  -- channel 1: impulse >> 1
     drive_data(data);
-    drive_zeros(52);
+    drive_zeros(264);
 
     -- End of test
     report "Not a real failure. Simulation finished successfully. Test completed successfully" severity failure;
@@ -280,7 +280,7 @@ begin
   s_axis_data_tuser_user        <= s_axis_data_tuser(0 downto 0);
 
   -- Data master channel alias signals: update these only when they are valid
-  m_axis_data_tdata_data        <= m_axis_data_tdata(31 downto 0) when m_axis_data_tvalid = '1';
+  m_axis_data_tdata_data        <= m_axis_data_tdata(30 downto 0) when m_axis_data_tvalid = '1';
   m_axis_data_tuser_user        <= m_axis_data_tuser(0 downto 0) when m_axis_data_tvalid = '1';
 
 end tb;

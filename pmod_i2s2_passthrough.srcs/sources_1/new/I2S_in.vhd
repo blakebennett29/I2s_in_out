@@ -38,6 +38,8 @@ entity I2S_in is
             r_mclk: out std_logic;
             r_lrclk: out std_logic;
             r_data: in std_logic; --out for simulation
+            
+            
             left_reg_output : out std_logic_vector(23 downto 0);
             right_reg_output : out std_logic_vector(23 downto 0);
             left_valid : out std_logic;
@@ -163,6 +165,7 @@ BM1 : blk_mem_gen_0 port map (
                 if lrcnt >= 511 then
                     lrcnt <= 0;
                     --not nessisary code------------
+                    
                     if lrclk_s = '0' then   --lr edge detection "rising"
                         lrclk_rise_pulse <= '1';
                     end if;
@@ -184,27 +187,28 @@ BM1 : blk_mem_gen_0 port map (
                 elsif shift_cnt >= 32 then 
                     ena_s <= '1';
                     shift_cnt <= 0;
---                    address <= address + 1;
---                    addra_s <= std_logic_vector(to_unsigned(address, 5));
---                    shift_Reg_load <= douta_s; --assine new sample to register
---                    if address >= 32 then  -- loop the block memory for output
---                        address <= 0;
---                    end if;
-                    -- added for shift reg 
-                    if lrclk_s = '1' then
-                        right_valid <= '0';
-                        left_valid <= '1';
+                    --===========================================
+                    -- comment out for actual use
+                    --===========================================
+                    address <= address + 1;
+                    addra_s <= std_logic_vector(to_unsigned(address, 5));
+                    shift_Reg_load <= douta_s; --assine new sample to register
+                    if address >= 32 then  -- loop the block memory for output
+                        address <= 0;
+                    end if;
+                    --===============
+                    --end of comment(actual use)
+                    --===============
+                    
+                    if lrclk_s = '1' then --shifting in right sample
                         left_reg_output_s <= left_reg;
-                        --right_reg_shift <= right_reg_output_s;-- assinment to hold for an extra 32 sclk
-                    elsif lrclk_s = '0' then
-                        left_valid <= '0';
-                        right_valid <= '1';
+                    end if;
+                    
+                    if lrclk_s = '0' then
                         right_reg_output_s <= right_reg;
-                        --left_reg_shift <= left_reg_output_s; -- assinment to hold for an extra 32 sclk
-                    else
-                        right_valid <= '0';
-                        left_valid <= '0';
-                    end if; 
+                    end if;
+                    -- added for fir samples 
+                    
                     
                     
                     --new code-------------------------------------------------------------
@@ -248,6 +252,25 @@ BM1 : blk_mem_gen_0 port map (
                             
                             
                 end if;
+                --below changes lrclk rise pulse and fall to one system clk cycle
+                if lrclk_rise_pulse = '1' then
+                    lrclk_rise_pulse <='0';
+                    right_valid <= '0';
+                    left_valid <= '1';
+                    
+                    --right_reg_shift <= right_reg_output_s;-- assinment to hold for an extra 32 sclk
+                elsif lrclk_fall_pulse = '1' then
+                    left_valid <= '0';
+                    right_valid <= '1';
+                    lrclk_fall_pulse <='0';
+                    --left_reg_shift <= left_reg_output_s; -- assinment to hold for an extra 32 sclk
+                else
+                    right_valid <= '0';
+                    left_valid <= '0';
+                end if; 
+                
+                
+                
 --                    end case;
                     -- end of new code -----------------------------------------------------------------------------
                 --shift data bit's out (in is how I am looking at it while programing the dac)
@@ -257,9 +280,9 @@ BM1 : blk_mem_gen_0 port map (
                     shift_cnt <= shift_cnt +1;
                     --add data_in register to hold data
                     if lrclk_s = '0' then
-                        left_reg(31 - shift_cnt) <= r_data; --shift_Reg_load(31 - shift_cnt); --
+                        left_reg(31 - shift_cnt) <= r_data; -- shift_Reg_load(31 - shift_cnt); -- 
                     elsif lrclk_s = '1' then
-                        right_reg(31 - shift_cnt) <= r_data; --shift_Reg_load(31 - shift_cnt); --
+                        right_reg(31 - shift_cnt) <= r_data; -- shift_Reg_load(31 - shift_cnt); --
                     else
                         null;
                     end if;

@@ -46,14 +46,15 @@ end FIR;
 architecture Behavioral of FIR is
 
 -- signals for fir_compiler_0 port map and logic
-signal    aclk_s :  STD_LOGIC;
-signal    s_axis_data_tvalid_s :  STD_LOGIC;
-signal    s_axis_data_tready_s :  STD_LOGIC;
-signal    s_axis_data_tdata_s :  STD_LOGIC_VECTOR(23 DOWNTO 0);
-signal    m_axis_data_tvalid_s :  STD_LOGIC;
-signal    m_axis_data_tdata_s :  STD_LOGIC_VECTOR(31 DOWNTO 0);
+signal    aclk_s :  STD_LOGIC := '0';
+signal    s_axis_data_tvalid_s :  STD_LOGIC := '0';
+signal    s_axis_data_tready_s :  STD_LOGIC := '0';
+signal    s_axis_data_tdata_s :  STD_LOGIC_VECTOR(23 DOWNTO 0) := (others => '0');
+signal    m_axis_data_tvalid_s :  STD_LOGIC := '0';
+signal    m_axis_data_tdata_s :  STD_LOGIC_VECTOR(31 DOWNTO 0) := (others => '0');
 signal    s_axis_data_tuser_s : std_logic_vector(0 downto 0) := "0";
 signal    m_axis_data_tuser_s : std_logic_vector(0 downto 0) := "0";
+
 
 component fir_compiler_0 IS
   PORT (
@@ -78,29 +79,39 @@ fir_0: fir_compiler_0 port map (
     s_axis_data_tuser => s_axis_data_tuser_s,
     m_axis_data_tuser => m_axis_data_tuser_s
 );
+
     process(clk)
         begin
-            -- if input channels are valid always valid for single channel every 511 aclk cycles
-            if (left_valid_in = '1') then
-                s_axis_data_tuser_s <= "1"; -- lr_clk high is when riht data is loading so when left_valid can compute/shift or be assined a new register
-                s_axis_data_tdata_s <= left_reg_input;
-                s_axis_data_tvalid_s <= '1';
-            elsif (right_valid_in = '1') then
-                s_axis_data_tuser_s <= "0";
-                s_axis_data_tdata_s <= right_reg_input;
-                s_axis_data_tvalid_s <= '1';
-            else
-                s_axis_data_tvalid_s <= '0';
-            end if;
-            -- end of input channel check
-            
-            if (s_axis_data_tready_s = '1') and (m_axis_data_tvalid_s = '1') then           
-                if m_axis_data_tuser_s = "1" then
-                    out_data_left <= m_axis_data_tdata_s(27 downto 4);
-                elsif m_axis_data_tuser_s = "0" then
-                    out_data_right <= m_axis_data_tdata_s(27 downto 4);
-                --else raise exception(can add later not needed)
+            if rising_edge(clk) then
+                -- if input channels are valid always valid for single channel every 511 aclk cycles
+                -- default: no new input unless we successfully handshake
+                if s_axis_data_tvalid_s = '1' then
+                  -- if we were holding a sample, only drop tvalid after handshake
+                  if s_axis_data_tready_s = '1' then
+                    s_axis_data_tvalid_s <= '0';
+                  end if;
                 end if;
+                -- load a new sample only if we're not currently holding one
+                if s_axis_data_tvalid_s = '0' then
+                  if left_valid_in = '1' then
+                    s_axis_data_tuser_s  <= "1";          -- tag = left
+                    s_axis_data_tdata_s  <= left_reg_input;
+                    s_axis_data_tvalid_s <= '1';
+                  elsif right_valid_in = '1' then
+                    s_axis_data_tuser_s  <= "0";          -- tag = right
+                    s_axis_data_tdata_s  <= right_reg_input;
+                    s_axis_data_tvalid_s <= '1';
+                  end if;
+                end if;
+                
+                -- OUTPUT: use the OUTPUT tag (NOT s_axis tag)
+                if (m_axis_data_tvalid_s = '1') and (m_axis_data_tuser_s = "1") then
+                    out_data_left <= m_axis_data_tdata_s(27 downto 4);--data out
+                end if;
+                if(m_axis_data_tvalid_s = '1') and (m_axis_data_tuser_s = "0") then
+                    out_data_right <= m_axis_data_tdata_s(27 downto 4); --data out
+                end if;
+                -- end of input channel check
             end if;
     end process;
 
