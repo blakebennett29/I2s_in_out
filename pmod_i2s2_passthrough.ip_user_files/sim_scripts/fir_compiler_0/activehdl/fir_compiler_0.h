@@ -54,10 +54,10 @@
 // coefficients: 2398,-1735,-3480,0,3896,2169,-3327,-4449,1459,6209,1774,-6559,-5921,4628,9877,0,-12009,-6839,10624,14269,-4668,-19710,-5565,20282,18008,-13826,-28960,0,33910,18960,-28932,-38197,12295,51127,14233,-51199,-44924,34129,70831,0,-81778,-45510,69236,91300,-29411,-122662,-34329,124477,110426,-85108,-179901,0,218668,126041,-200250,-278639,95997,435973,136265,-572888,-626189,666078,2577947,3495564,2577947,666078,-626189,-572888,136265,435973,95997,-278639,-200250,126041,218668,0,-179901,-85108,110426,124477,-34329,-122662,-29411,91300,69236,-45510,-81778,0,70831,34129,-44924,-51199,14233,51127,12295,-38197,-28932,18960,33910,0,-28960,-13826,18008,20282,-5565,-19710,-4668,14269,10624,-6839,-12009,0,9877,4628,-5921,-6559,1774,6209,1459,-4449,-3327,2169,3896,0,-3480,-1735,2398
 // chanpats: 173
 // name: fir_compiler_0
-// filter_type: 0
+// filter_type: 2
 // rate_change: 0
 // interp_rate: 1
-// decim_rate: 1
+// decim_rate: 2
 // zero_pack_factor: 1
 // coeff_padding: 0
 // num_coeffs: 127
@@ -84,10 +84,10 @@ const xip_fir_v7_2_pattern fir_compiler_0_chanpats[1] = {P_BASIC};
 static xip_fir_v7_2_config gen_fir_compiler_0_config() {
   xip_fir_v7_2_config config;
   config.name                = "fir_compiler_0";
-  config.filter_type         = 0;
+  config.filter_type         = 2;
   config.rate_change         = XIP_FIR_INTEGER_RATE;
   config.interp_rate         = 1;
-  config.decim_rate          = 1;
+  config.decim_rate          = 2;
   config.zero_pack_factor    = 1;
   config.coeff               = &fir_compiler_0_coefficients[0];
   config.coeff_padding       = 0;

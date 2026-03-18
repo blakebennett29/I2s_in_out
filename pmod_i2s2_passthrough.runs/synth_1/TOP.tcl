@@ -77,11 +77,20 @@ set_property ip_cache_permissions {read write} [current_project]
 OPTRACE "Creating in-memory project" END { }
 OPTRACE "Adding files" START { }
 add_files E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.ip_user_files/sin.coe
-add_files e:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/ip/fir_compiler_0/fir_lp_96k_pb20k_sb24k_q1_23_127tap_fircompiler_int.coe
+add_files E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/ip/fir_compiler_0/fir_lp_96k_pb20k_sb24k_q1_23_127tap_fircompiler_int.coe
+add_files E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/ip/level_1_low.coe
+add_files E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/ip/level_1_high.coe
 read_vhdl -library xil_defaultlib {
-  E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/FIR.vhd
+  E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/AA_filter_2.vhd
+  E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/H_INTP_L1.vhd
+  E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/H_L1_FIR.vhd
   E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/I2S_in.vhd
   E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/I2S_out.vhd
+  E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/INTERPOLATE_AA.vhd
+  E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/INTERPOLATE_L1.vhd
+  E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/L_INTP_L1.vhd
+  E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/L_L1_FIR.vhd
+  E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/Level_1.vhd
   E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/TOP.vhd
 }
 read_ip -quiet E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci
@@ -90,6 +99,26 @@ set_property used_in_implementation false [get_files -all e:/School/SeniorProjec
 read_ip -quiet E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/ip/fir_compiler_0/fir_compiler_0.xci
 set_property used_in_implementation false [get_files -all e:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.gen/sources_1/ip/fir_compiler_0/constraints/fir_compiler_v7_2.xdc]
 set_property used_in_implementation false [get_files -all e:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.gen/sources_1/ip/fir_compiler_0/fir_compiler_0_ooc.xdc]
+
+read_ip -quiet E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/ip/L_L1_fir_compiler_1/L_L1_fir_compiler_1.xci
+set_property used_in_implementation false [get_files -all e:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.gen/sources_1/ip/L_L1_fir_compiler_1/constraints/fir_compiler_v7_2.xdc]
+set_property used_in_implementation false [get_files -all e:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.gen/sources_1/ip/L_L1_fir_compiler_1/L_L1_fir_compiler_1_ooc.xdc]
+
+read_ip -quiet E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/ip/H_L1_fir_compiler_2/H_L1_fir_compiler_2.xci
+set_property used_in_implementation false [get_files -all e:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.gen/sources_1/ip/H_L1_fir_compiler_2/constraints/fir_compiler_v7_2.xdc]
+set_property used_in_implementation false [get_files -all e:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.gen/sources_1/ip/H_L1_fir_compiler_2/H_L1_fir_compiler_2_ooc.xdc]
+
+read_ip -quiet E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/ip/fir_compiler_1/fir_compiler_1.xci
+set_property used_in_implementation false [get_files -all e:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.gen/sources_1/ip/fir_compiler_1/constraints/fir_compiler_v7_2.xdc]
+set_property used_in_implementation false [get_files -all e:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.gen/sources_1/ip/fir_compiler_1/fir_compiler_1_ooc.xdc]
+
+read_ip -quiet E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/ip/INT_L_L1_fir_compiler/INT_L_L1_fir_compiler.xci
+set_property used_in_implementation false [get_files -all e:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.gen/sources_1/ip/INT_L_L1_fir_compiler/constraints/fir_compiler_v7_2.xdc]
+set_property used_in_implementation false [get_files -all e:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.gen/sources_1/ip/INT_L_L1_fir_compiler/INT_L_L1_fir_compiler_ooc.xdc]
+
+read_ip -quiet E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/ip/fir_compiler_2/fir_compiler_2.xci
+set_property used_in_implementation false [get_files -all e:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.gen/sources_1/ip/fir_compiler_2/constraints/fir_compiler_v7_2.xdc]
+set_property used_in_implementation false [get_files -all e:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.gen/sources_1/ip/fir_compiler_2/fir_compiler_2_ooc.xdc]
 
 OPTRACE "Adding files" END { }
 # Mark all dcp files as not used in implementation to prevent them from being

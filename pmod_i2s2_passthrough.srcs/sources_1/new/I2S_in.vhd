@@ -37,6 +37,7 @@ entity I2S_in is
             r_sclk: out std_logic;
             r_mclk: out std_logic;
             r_lrclk: out std_logic;
+            --r_data: out std_logic;
             r_data: in std_logic; --out for simulation
             
             
