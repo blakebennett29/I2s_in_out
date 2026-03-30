@@ -2,7 +2,7 @@
 // Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2024.1 (win64) Build 5076996 Wed May 22 18:37:14 MDT 2024
-// Date        : Thu Mar 12 15:10:26 2026
+// Date        : Mon Mar 30 16:21:22 2026
 // Host        : Blakes-PC running 64-bit major release  (build 9200)
 // Command     : write_verilog -force -mode synth_stub
 //               e:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.gen/sources_1/ip/L_L1_fir_compiler_1/L_L1_fir_compiler_1_stub.v
@@ -17,15 +17,16 @@
 (* x_core_info = "fir_compiler_v7_2_22,Vivado 2024.1" *)
 module L_L1_fir_compiler_1(aclk, s_axis_data_tvalid, s_axis_data_tready, 
   s_axis_data_tuser, s_axis_data_tdata, m_axis_data_tvalid, m_axis_data_tuser, 
-  m_axis_data_tdata)
-/* synthesis syn_black_box black_box_pad_pin="s_axis_data_tvalid,s_axis_data_tready,s_axis_data_tuser[0:0],s_axis_data_tdata[23:0],m_axis_data_tvalid,m_axis_data_tuser[0:0],m_axis_data_tdata[31:0]" */
+  m_axis_data_tdata, event_s_data_chanid_incorrect)
+/* synthesis syn_black_box black_box_pad_pin="s_axis_data_tvalid,s_axis_data_tready,s_axis_data_tuser[0:0],s_axis_data_tdata[31:0],m_axis_data_tvalid,m_axis_data_tuser[0:0],m_axis_data_tdata[31:0],event_s_data_chanid_incorrect" */
 /* synthesis syn_force_seq_prim="aclk" */;
   input aclk /* synthesis syn_isclock = 1 */;
   input s_axis_data_tvalid;
   output s_axis_data_tready;
   input [0:0]s_axis_data_tuser;
-  input [23:0]s_axis_data_tdata;
+  input [31:0]s_axis_data_tdata;
   output m_axis_data_tvalid;
   output [0:0]m_axis_data_tuser;
   output [31:0]m_axis_data_tdata;
+  output event_s_data_chanid_incorrect;
 endmodule

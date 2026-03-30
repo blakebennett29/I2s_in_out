@@ -636,7 +636,7 @@
         </spirit:parameter>
         <spirit:parameter>
           <spirit:name>HAS_TLAST</spirit:name>
-          <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.S_AXIS_DATA.HAS_TLAST">0</spirit:value>
+          <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.S_AXIS_DATA.HAS_TLAST">1</spirit:value>
           <spirit:vendorExtensions>
             <xilinx:parameterInfo>
               <xilinx:parameterUsage>none</xilinx:parameterUsage>
@@ -804,7 +804,7 @@
         </spirit:parameter>
         <spirit:parameter>
           <spirit:name>HAS_TLAST</spirit:name>
-          <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.M_AXIS_DATA.HAS_TLAST">0</spirit:value>
+          <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.M_AXIS_DATA.HAS_TLAST">1</spirit:value>
           <spirit:vendorExtensions>
             <xilinx:parameterInfo>
               <xilinx:parameterUsage>none</xilinx:parameterUsage>
@@ -1039,11 +1039,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Sat Mar 14 18:55:00 UTC 2026</spirit:value>
+            <spirit:value>Mon Mar 30 22:14:58 UTC 2026</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:304c832d</spirit:value>
+            <spirit:value>9:864b964f</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1057,11 +1057,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Sat Mar 14 18:56:03 UTC 2026</spirit:value>
+            <spirit:value>Mon Mar 30 22:16:09 UTC 2026</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:304c832d</spirit:value>
+            <spirit:value>9:864b964f</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1072,7 +1072,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:304c832d</spirit:value>
+            <spirit:value>9:864b964f</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1086,11 +1086,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Sat Mar 14 18:54:59 UTC 2026</spirit:value>
+            <spirit:value>Mon Mar 30 22:14:57 UTC 2026</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:304c832d</spirit:value>
+            <spirit:value>9:864b964f</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1104,11 +1104,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Sat Mar 14 18:55:00 UTC 2026</spirit:value>
+            <spirit:value>Mon Mar 30 22:14:58 UTC 2026</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:304c832d</spirit:value>
+            <spirit:value>9:864b964f</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1130,11 +1130,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Sat Mar 14 18:55:00 UTC 2026</spirit:value>
+            <spirit:value>Mon Mar 30 22:14:57 UTC 2026</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:1cf4d14b</spirit:value>
+            <spirit:value>9:889defed</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1149,11 +1149,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Sat Mar 14 18:54:59 UTC 2026</spirit:value>
+            <spirit:value>Mon Mar 30 22:14:57 UTC 2026</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:304c832d</spirit:value>
+            <spirit:value>9:864b964f</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1169,11 +1169,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Sat Mar 14 18:55:00 UTC 2026</spirit:value>
+            <spirit:value>Mon Mar 30 22:14:57 UTC 2026</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:1cf4d14b</spirit:value>
+            <spirit:value>9:889defed</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1195,11 +1195,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Sat Mar 14 18:54:59 UTC 2026</spirit:value>
+            <spirit:value>Mon Mar 30 22:14:57 UTC 2026</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:304c832d</spirit:value>
+            <spirit:value>9:864b964f</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1215,11 +1215,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Sat Mar 14 18:54:59 UTC 2026</spirit:value>
+            <spirit:value>Mon Mar 30 22:14:57 UTC 2026</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:304c832d</spirit:value>
+            <spirit:value>9:864b964f</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1235,11 +1235,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Sat Mar 14 18:55:00 UTC 2026</spirit:value>
+            <spirit:value>Mon Mar 30 22:14:58 UTC 2026</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:304c832d</spirit:value>
+            <spirit:value>9:864b964f</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1354,7 +1354,7 @@
         <spirit:vendorExtensions>
           <xilinx:portInfo>
             <xilinx:enablement>
-              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.s_axis_data_tlast" xilinx:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_DATA_HAS_TLAST&apos;)) != 0)">false</xilinx:isEnabled>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.s_axis_data_tlast" xilinx:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_DATA_HAS_TLAST&apos;)) != 0)">true</xilinx:isEnabled>
             </xilinx:enablement>
           </xilinx:portInfo>
         </spirit:vendorExtensions>
@@ -1655,7 +1655,7 @@
         <spirit:vendorExtensions>
           <xilinx:portInfo>
             <xilinx:enablement>
-              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.m_axis_data_tlast" xilinx:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_DATA_HAS_TLAST&apos;)) != 0)">false</xilinx:isEnabled>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.m_axis_data_tlast" xilinx:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_DATA_HAS_TLAST&apos;)) != 0)">true</xilinx:isEnabled>
             </xilinx:enablement>
           </xilinx:portInfo>
         </spirit:vendorExtensions>
@@ -1725,7 +1725,7 @@
         <spirit:vendorExtensions>
           <xilinx:portInfo>
             <xilinx:enablement>
-              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.event_s_data_tlast_missing" xilinx:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_DATA_HAS_TLAST&apos;)) = 1)">false</xilinx:isEnabled>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.event_s_data_tlast_missing" xilinx:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_DATA_HAS_TLAST&apos;)) = 1)">true</xilinx:isEnabled>
             </xilinx:enablement>
           </xilinx:portInfo>
         </spirit:vendorExtensions>
@@ -1748,7 +1748,7 @@
         <spirit:vendorExtensions>
           <xilinx:portInfo>
             <xilinx:enablement>
-              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.event_s_data_tlast_unexpected" xilinx:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_DATA_HAS_TLAST&apos;)) = 1)">false</xilinx:isEnabled>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.event_s_data_tlast_unexpected" xilinx:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_DATA_HAS_TLAST&apos;)) = 1)">true</xilinx:isEnabled>
             </xilinx:enablement>
           </xilinx:portInfo>
         </spirit:vendorExtensions>
@@ -1771,7 +1771,7 @@
         <spirit:vendorExtensions>
           <xilinx:portInfo>
             <xilinx:enablement>
-              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.event_s_data_chanid_incorrect" xilinx:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_S_DATA_HAS_TUSER&apos;)) = 1 or spirit:decode(id(&apos;MODELPARAM_VALUE.C_S_DATA_HAS_TUSER&apos;)) = 3)">false</xilinx:isEnabled>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.event_s_data_chanid_incorrect" xilinx:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_S_DATA_HAS_TUSER&apos;)) = 1 or spirit:decode(id(&apos;MODELPARAM_VALUE.C_S_DATA_HAS_TUSER&apos;)) = 3)">true</xilinx:isEnabled>
             </xilinx:enablement>
           </xilinx:portInfo>
         </spirit:vendorExtensions>
@@ -2000,7 +2000,7 @@
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="string">
         <spirit:name>C_ACCUM_PATH_WIDTHS</spirit:name>
-        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_ACCUM_PATH_WIDTHS">38,37</spirit:value>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_ACCUM_PATH_WIDTHS">39,38</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="integer">
         <spirit:name>C_OUTPUT_WIDTH</spirit:name>
@@ -2012,7 +2012,7 @@
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="string">
         <spirit:name>C_ACCUM_OP_PATH_WIDTHS</spirit:name>
-        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_ACCUM_OP_PATH_WIDTHS">49</spirit:value>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_ACCUM_OP_PATH_WIDTHS">50</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="string">
         <spirit:name>C_EXT_MULT_CNFG</spirit:name>
@@ -2048,11 +2048,11 @@
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="integer">
         <spirit:name>C_DATA_MEMTYPE</spirit:name>
-        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_DATA_MEMTYPE">1</spirit:value>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_DATA_MEMTYPE">0</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="integer">
         <spirit:name>C_COEF_MEMTYPE</spirit:name>
-        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_COEF_MEMTYPE">2</spirit:value>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_COEF_MEMTYPE">1</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="integer">
         <spirit:name>C_IPBUFF_MEMTYPE</spirit:name>
@@ -2072,7 +2072,7 @@
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="integer">
         <spirit:name>C_DATA_MEM_PACKING</spirit:name>
-        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_DATA_MEM_PACKING">1</spirit:value>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_DATA_MEM_PACKING">0</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="integer">
         <spirit:name>C_COEF_MEM_PACKING</spirit:name>
@@ -2096,15 +2096,15 @@
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="integer">
         <spirit:name>C_DATA_HAS_TLAST</spirit:name>
-        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_DATA_HAS_TLAST">0</spirit:value>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_DATA_HAS_TLAST">1</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="integer">
         <spirit:name>C_S_DATA_HAS_FIFO</spirit:name>
-        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_S_DATA_HAS_FIFO">1</spirit:value>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_S_DATA_HAS_FIFO">0</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="integer">
         <spirit:name>C_S_DATA_HAS_TUSER</spirit:name>
-        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_S_DATA_HAS_TUSER">2</spirit:value>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_S_DATA_HAS_TUSER">1</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="integer">
         <spirit:name>C_S_DATA_TDATA_WIDTH</spirit:name>
@@ -2120,7 +2120,7 @@
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="integer">
         <spirit:name>C_M_DATA_HAS_TUSER</spirit:name>
-        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_M_DATA_HAS_TUSER">2</spirit:value>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_M_DATA_HAS_TUSER">1</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="integer">
         <spirit:name>C_M_DATA_TDATA_WIDTH</spirit:name>
@@ -2235,17 +2235,21 @@
       <spirit:enumeration spirit:text="Packet Framing">Packet_Framing</spirit:enumeration>
     </spirit:choice>
     <spirit:choice>
+      <spirit:name>choice_pairs_33abc840</spirit:name>
+      <spirit:enumeration spirit:text="Quantize Only">Quantize_Only</spirit:enumeration>
+      <spirit:enumeration spirit:text="Maximize Dynamic Range">Maximize_Dynamic_Range</spirit:enumeration>
+      <spirit:enumeration spirit:text="Normalize to Centre Coefficient">Normalize_to_Centre_Coefficient</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_pairs_3ab545a3</spirit:name>
+      <spirit:enumeration spirit:text="Not Required">Not_Required</spirit:enumeration>
+      <spirit:enumeration spirit:text="Chan ID Field">Chan_ID_Field</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
       <spirit:name>choice_pairs_541959c1</spirit:name>
       <spirit:enumeration spirit:text="Inferred">Inferred</spirit:enumeration>
       <spirit:enumeration spirit:text="Non Symmetric">Non_Symmetric</spirit:enumeration>
       <spirit:enumeration spirit:text="Symmetric">Symmetric</spirit:enumeration>
-    </spirit:choice>
-    <spirit:choice>
-      <spirit:name>choice_pairs_6748615b</spirit:name>
-      <spirit:enumeration spirit:text="Integer Coefficients">Integer_Coefficients</spirit:enumeration>
-      <spirit:enumeration spirit:text="Quantize Only">Quantize_Only</spirit:enumeration>
-      <spirit:enumeration spirit:text="Maximize Dynamic Range">Maximize_Dynamic_Range</spirit:enumeration>
-      <spirit:enumeration spirit:text="Normalize to Centre Coefficient">Normalize_to_Centre_Coefficient</spirit:enumeration>
     </spirit:choice>
     <spirit:choice>
       <spirit:name>choice_pairs_74144f21</spirit:name>
@@ -2505,7 +2509,7 @@
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>Coefficient_File</spirit:name>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.Coefficient_File" spirit:order="5">fir_lp_96k_pb20k_sb24k_q1_23_127tap_fircompiler_int.coe</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.Coefficient_File" spirit:order="5">AA_2x.coe</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>Coefficient_Sets</spirit:name>
@@ -2581,11 +2585,11 @@
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>Quantization</spirit:name>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.Quantization" spirit:choiceRef="choice_pairs_6748615b" spirit:order="24">Integer_Coefficients</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.Quantization" spirit:choiceRef="choice_pairs_33abc840" spirit:order="24">Quantize_Only</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>Coefficient_Width</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.Coefficient_Width" spirit:order="25" spirit:minimum="23" spirit:maximum="49" spirit:rangeType="long">24</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.Coefficient_Width" spirit:order="25" spirit:minimum="2" spirit:maximum="49" spirit:rangeType="long">24</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>BestPrecision</spirit:name>
@@ -2593,7 +2597,7 @@
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>Coefficient_Fractional_Bits</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.Coefficient_Fractional_Bits" spirit:order="27" spirit:minimum="0" spirit:maximum="0" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.Coefficient_Fractional_Bits" spirit:order="27" spirit:minimum="0" spirit:maximum="23" spirit:rangeType="long">23</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>Coefficient_Structure</spirit:name>
@@ -2617,7 +2621,7 @@
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>Output_Width</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.Output_Width" spirit:order="33" spirit:minimum="1" spirit:maximum="48" spirit:rangeType="long">32</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.Output_Width" spirit:order="33" spirit:minimum="1" spirit:maximum="49" spirit:rangeType="long">32</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>Filter_Architecture</spirit:name>
@@ -2689,23 +2693,23 @@
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>Data_Buffer_Type</spirit:name>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.Data_Buffer_Type" spirit:choiceRef="choice_list_dd381b21" spirit:order="36">Automatic</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.Data_Buffer_Type" spirit:choiceRef="choice_list_dd381b21" spirit:order="36">Distributed</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>Coefficient_Buffer_Type</spirit:name>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.Coefficient_Buffer_Type" spirit:choiceRef="choice_list_dd381b21" spirit:order="37">Automatic</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.Coefficient_Buffer_Type" spirit:choiceRef="choice_list_dd381b21" spirit:order="37">Block</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>Input_Buffer_Type</spirit:name>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.Input_Buffer_Type" spirit:choiceRef="choice_list_dd381b21" spirit:order="38">Automatic</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.Input_Buffer_Type" spirit:choiceRef="choice_list_dd381b21" spirit:order="38">Distributed</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>Output_Buffer_Type</spirit:name>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.Output_Buffer_Type" spirit:choiceRef="choice_list_dd381b21" spirit:order="39">Automatic</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.Output_Buffer_Type" spirit:choiceRef="choice_list_dd381b21" spirit:order="39">Distributed</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>Preference_For_Other_Storage</spirit:name>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.Preference_For_Other_Storage" spirit:choiceRef="choice_list_dd381b21" spirit:order="40">Automatic</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.Preference_For_Other_Storage" spirit:choiceRef="choice_list_dd381b21" spirit:order="40">Distributed</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>Multi_Column_Support</spirit:name>
@@ -2721,7 +2725,7 @@
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>DATA_Has_TLAST</spirit:name>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.DATA_Has_TLAST" spirit:choiceRef="choice_pairs_30d5ecb6" spirit:order="44">Not_Required</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.DATA_Has_TLAST" spirit:choiceRef="choice_pairs_30d5ecb6" spirit:order="44">Vector_Framing</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>M_DATA_Has_TREADY</spirit:name>
@@ -2729,15 +2733,15 @@
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>S_DATA_Has_FIFO</spirit:name>
-      <spirit:value spirit:format="bool" spirit:resolve="user" spirit:id="PARAM_VALUE.S_DATA_Has_FIFO" spirit:order="46">true</spirit:value>
+      <spirit:value spirit:format="bool" spirit:resolve="user" spirit:id="PARAM_VALUE.S_DATA_Has_FIFO" spirit:order="46">false</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>S_DATA_Has_TUSER</spirit:name>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.S_DATA_Has_TUSER" spirit:choiceRef="choice_pairs_24981fac" spirit:order="47">User_Field</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.S_DATA_Has_TUSER" spirit:choiceRef="choice_pairs_24981fac" spirit:order="47">Chan_ID_Field</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>M_DATA_Has_TUSER</spirit:name>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.M_DATA_Has_TUSER" spirit:choiceRef="choice_pairs_24981fac" spirit:order="48">User_Field</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.M_DATA_Has_TUSER" spirit:choiceRef="choice_pairs_3ab545a3" spirit:order="48">Chan_ID_Field</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>DATA_TUSER_Width</spirit:name>
@@ -2818,6 +2822,7 @@
       <xilinx:coreRevision>22</xilinx:coreRevision>
       <xilinx:configElementInfos>
         <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.M_AXIS_DATA.HAS_TKEEP" xilinx:valueSource="constant"/>
+        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.M_AXIS_DATA.HAS_TLAST" xilinx:valueSource="auto"/>
         <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.M_AXIS_DATA.HAS_TREADY" xilinx:valueSource="auto"/>
         <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.M_AXIS_DATA.HAS_TSTRB" xilinx:valueSource="constant"/>
         <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.M_AXIS_DATA.TDATA_NUM_BYTES" xilinx:valueSource="auto"/>
@@ -2832,6 +2837,7 @@
         <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.S_AXIS_CONFIG.TID_WIDTH" xilinx:valueSource="constant"/>
         <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.S_AXIS_CONFIG.TUSER_WIDTH" xilinx:valueSource="constant"/>
         <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.S_AXIS_DATA.HAS_TKEEP" xilinx:valueSource="constant"/>
+        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.S_AXIS_DATA.HAS_TLAST" xilinx:valueSource="auto"/>
         <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.S_AXIS_DATA.HAS_TREADY" xilinx:valueSource="constant"/>
         <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.S_AXIS_DATA.HAS_TSTRB" xilinx:valueSource="constant"/>
         <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.S_AXIS_DATA.TDATA_NUM_BYTES" xilinx:valueSource="auto"/>
@@ -2847,6 +2853,7 @@
         <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.S_AXIS_RELOAD.TUSER_WIDTH" xilinx:valueSource="constant"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.Clock_Frequency" xilinx:valueSource="user"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.CoefficientSource" xilinx:valueSource="user"/>
+        <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.Coefficient_Buffer_Type" xilinx:valueSource="user"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.Coefficient_File" xilinx:valueSource="user"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.Coefficient_Fractional_Bits" xilinx:valueSource="user"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.Coefficient_Sets" xilinx:valueSource="user"/>
@@ -2855,17 +2862,23 @@
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.Coefficient_Width" xilinx:valueSource="user"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.ColumnConfig" xilinx:valueSource="user"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.DATA_Has_TLAST" xilinx:valueSource="user"/>
+        <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.Data_Buffer_Type" xilinx:valueSource="user"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.Data_Fractional_Bits" xilinx:valueSource="user"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.Data_Width" xilinx:valueSource="user"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.Decimation_Rate" xilinx:valueSource="user"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.Filter_Architecture" xilinx:valueSource="user"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.Filter_Selection" xilinx:valueSource="user"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.Filter_Type" xilinx:valueSource="user"/>
+        <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.Input_Buffer_Type" xilinx:valueSource="user"/>
+        <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.Inter_Column_Pipe_Length" xilinx:valueSource="user"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.Interpolation_Rate" xilinx:valueSource="user"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.M_DATA_Has_TUSER" xilinx:valueSource="user"/>
+        <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.Multi_Column_Support" xilinx:valueSource="user"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.Number_Channels" xilinx:valueSource="user"/>
+        <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.Output_Buffer_Type" xilinx:valueSource="user"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.Output_Rounding_Mode" xilinx:valueSource="user"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.Output_Width" xilinx:valueSource="user"/>
+        <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.Preference_For_Other_Storage" xilinx:valueSource="user"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.Quantization" xilinx:valueSource="user"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.RateSpecification" xilinx:valueSource="user"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.S_DATA_Has_FIFO" xilinx:valueSource="user"/>

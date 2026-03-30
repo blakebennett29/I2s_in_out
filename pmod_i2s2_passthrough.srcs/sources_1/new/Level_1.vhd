@@ -34,57 +34,71 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity Level_1 is
   Port (   
            clk : in std_logic;
-           L1_input_left  : in std_logic_vector(23 downto 0);
-           L1_input_right : in std_logic_vector(23 downto 0);
+           L1_input_left  : in std_logic_vector(31 downto 0);
+           L1_input_right : in std_logic_vector(31 downto 0);
            left_valid_in : in std_logic;
            right_valid_in : in std_logic;
+           m_tdata_valid_in : in std_logic;
+           
+           m_tdata_valid_out_L1 : out std_logic;
+           m_tdata_valid_out_H1 : out std_logic;
            --High output
-           H_L1_output_left : out std_logic_vector(23 downto 0);
-           H_L1_output_right : out std_logic_vector(23 downto 0);
+           H_L1_output_left : out std_logic_vector(31 downto 0);
+           H_L1_output_right : out std_logic_vector(31 downto 0);
            --low output
-           L_L1_output_left : out std_logic_vector(23 downto 0);
-           L_L1_output_right : out std_logic_vector(23 downto 0)
+           L_L1_output_left : out std_logic_vector(31 downto 0);
+           L_L1_output_right : out std_logic_vector(31 downto 0)
            );
 end Level_1;
 
 architecture Behavioral of Level_1 is
     -- Internal signals used to connect Level_1 inputs to the FIR
-    signal clk_s              : std_logic;
-    signal L1_input_left_s    : std_logic_vector(23 downto 0);
-    signal L1_input_right_s   : std_logic_vector(23 downto 0);
-    signal left_valid_in_s    : std_logic;
-    signal right_valid_in_s   : std_logic;
+    signal clk_s              : std_logic := '0';
+    signal L1_input_left_s    : std_logic_vector(31 downto 0) := (others => '0');
+    signal L1_input_right_s   : std_logic_vector(31 downto 0) := (others => '0');
+    signal left_valid_in_s    : std_logic := '0';
+    signal right_valid_in_s   : std_logic := '0';
 
     -- Internal signals used to capture FIR outputs
-    signal L_L1_output_left_s  : std_logic_vector(23 downto 0);
-    signal L_L1_output_right_s : std_logic_vector(23 downto 0);
+    signal L_L1_output_left_s  : std_logic_vector(31 downto 0) := (others => '0');
+    signal L_L1_output_right_s : std_logic_vector(31 downto 0) := (others => '0');
 
-    signal H_L1_output_left_s  : std_logic_vector(23 downto 0);
-    signal H_L1_output_right_s : std_logic_vector(23 downto 0);
+    signal H_L1_output_left_s  : std_logic_vector(31 downto 0) := (others => '0');
+    signal H_L1_output_right_s : std_logic_vector(31 downto 0) := (others => '0');
 
-
+    signal m_tdata_valid_out_L1_s : std_logic := '0';
+    signal m_tdata_valid_out_H1_s : std_logic := '0';
+    
+    signal M_tdata_valid_in_s : std_logic := '0';
+    
 component L_L1_FIR is
     Port ( 
            clk : in std_logic;
-           L1_input_left  : in std_logic_vector(23 downto 0);
-           L1_input_right : in std_logic_vector(23 downto 0);
+           L1_input_left  : in std_logic_vector(31 downto 0);
+           L1_input_right : in std_logic_vector(31 downto 0);
            left_valid_in : in std_logic;
            right_valid_in : in std_logic;
+           m_tdata_valid_in : in std_logic;
+           
+           m_tdata_valid_out : out std_logic;
              --low output
-           L_L1_output_left : out std_logic_vector(23 downto 0);
-           L_L1_output_right : out std_logic_vector(23 downto 0));
+           L_L1_output_left : out std_logic_vector(31 downto 0);
+           L_L1_output_right : out std_logic_vector(31 downto 0));
 end component;
 
 component H_L1_FIR is
   Port ( 
            clk : in std_logic;
-           L1_input_left  : in std_logic_vector(23 downto 0);
-           L1_input_right : in std_logic_vector(23 downto 0);
+           L1_input_left  : in std_logic_vector(31 downto 0);
+           L1_input_right : in std_logic_vector(31 downto 0);
            left_valid_in : in std_logic;
            right_valid_in : in std_logic;
+           m_tdata_valid_in : in std_logic;
+           
+           m_tdata_valid_out : out std_logic;
            --High output
-           H_L1_output_left : out std_logic_vector(23 downto 0);
-           H_L1_output_right : out std_logic_vector(23 downto 0)
+           H_L1_output_left : out std_logic_vector(31 downto 0);
+           H_L1_output_right : out std_logic_vector(31 downto 0)
   );
 end component;
 begin
@@ -94,7 +108,10 @@ begin
     L1_input_right_s <= L1_input_right;
     left_valid_in_s  <= left_valid_in;
     right_valid_in_s <= right_valid_in;
+    M_tdata_valid_in_s <= M_tdata_valid_in;
     
+    m_tdata_valid_out_L1 <= m_tdata_valid_out_L1_s;
+    m_tdata_valid_out_H1 <= m_tdata_valid_out_H1_s;
     -- Instantiate low-pass FIR
     U_L_L1_FIR : L_L1_FIR
         port map (
@@ -103,6 +120,9 @@ begin
             L1_input_right    => L1_input_right_s,
             left_valid_in     => left_valid_in_s,
             right_valid_in    => right_valid_in_s,
+            m_tdata_valid_out => m_tdata_valid_out_L1_s,
+            m_tdata_valid_in => M_tdata_valid_in_s,
+
             L_L1_output_left  => L_L1_output_left_s,
             L_L1_output_right => L_L1_output_right_s
         );
@@ -115,12 +135,15 @@ begin
             L1_input_right    => L1_input_right_s,
             left_valid_in     => left_valid_in_s,
             right_valid_in    => right_valid_in_s,
+            m_tdata_valid_out => m_tdata_valid_out_H1_s,
+            M_tdata_valid_in => M_tdata_valid_in_s,
+            
             H_L1_output_left  => H_L1_output_left_s,
             H_L1_output_right => H_L1_output_right_s
         );
 
     -- Drive top-level low outputs from FIR output signals
-    L_L1_output_left  <= L_L1_output_left_s;
+    L_L1_output_left  <= L_L1_output_left_s; --(23 downto 0)
     L_L1_output_right <= L_L1_output_right_s;
     
      -- High outputs  connected

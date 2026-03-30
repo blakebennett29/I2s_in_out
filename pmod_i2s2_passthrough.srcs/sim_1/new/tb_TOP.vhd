@@ -83,7 +83,7 @@ begin
     reset <= '0';
 
     -- run simulation long enough to observe mclk toggles
-    wait for 150 us;
+    wait for 2000 us;
 
     -- end sim
     assert false report "Simulation finished." severity failure;

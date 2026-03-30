@@ -57,10 +57,10 @@ COMPONENT fir_compiler_1
     s_axis_data_tvalid : IN STD_LOGIC;
     s_axis_data_tready : OUT STD_LOGIC;
     s_axis_data_tuser : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
-    s_axis_data_tdata : IN STD_LOGIC_VECTOR(23 DOWNTO 0);
+    s_axis_data_tdata : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
     m_axis_data_tvalid : OUT STD_LOGIC;
     m_axis_data_tuser : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
-    m_axis_data_tdata : OUT STD_LOGIC_VECTOR(23 DOWNTO 0);
+    m_axis_data_tdata : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
     event_s_data_chanid_incorrect : OUT STD_LOGIC 
   );
 END COMPONENT;

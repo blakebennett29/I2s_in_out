@@ -70,24 +70,33 @@ signal right_valid_s : std_logic := '0';
 
 signal m_tdata_valid_s :  std_logic := '0';
 --data out for diffrent levels to see on output only use one set at a time
-signal fir_out_data_right_s : std_logic_vector(23 downto 0);
-signal fir_out_data_left_s : std_logic_vector(23 downto 0);
+signal fir_out_data_right_s : std_logic_vector(31 downto 0) := (others =>'0');
+signal fir_out_data_left_s : std_logic_vector(31 downto 0) := (others =>'0');
 --Level 1
 --high
-signal H_L1_output_left_s : std_logic_vector(23 downto 0);
-signal H_L1_output_right_s : std_logic_vector(23 downto 0);
+signal H_L1_output_left_s : std_logic_vector(31 downto 0) := (others =>'0');
+signal H_L1_output_right_s : std_logic_vector(31 downto 0) := (others =>'0');
 --low
-signal L_L1_output_left_s : std_logic_vector(23 downto 0);
-signal L_L1_output_right_s : std_logic_vector(23 downto 0);
-
-
+signal L_L1_output_left_s : std_logic_vector(31 downto 0) := (others =>'0');
+signal L_L1_output_right_s : std_logic_vector(31 downto 0) := (others =>'0');
+--signials for testing
+signal L_L1_test_left_s : std_logic_vector(23 downto 0) := (others => '0');
+signal L_L1_test_right_s : std_logic_vector(23 downto 0) := (others => '0');
 --data out for interpolation AA
 -- internal signals
-signal interpolate_aa_data_out_left_s   : std_logic_vector(23 downto 0);
-signal interpolate_aa_data_out_right_s  : std_logic_vector(23 downto 0);
+signal interpolate_aa_data_out_left_s   : std_logic_vector(23 downto 0) := (others =>'0');
+signal interpolate_aa_data_out_right_s  : std_logic_vector(23 downto 0) := (others =>'0');
 --data out for interpolation level 1
-signal interpolate_l1_data_out_left_s     : std_logic_vector(23 downto 0);
-signal interpolate_l1_data_out_right_s    : std_logic_vector(23 downto 0);
+signal interpolate_l1_data_out_left_s     : std_logic_vector(31 downto 0) := (others =>'0');
+signal interpolate_l1_data_out_right_s    : std_logic_vector(31 downto 0) := (others =>'0');
+
+signal m_tdata_valid_out_L1_s            : std_logic := '0';
+signal m_tdata_valid_in_AA              : std_logic := '0';
+signal m_tdata_valid_s_int_aa_s : std_logic := '0';
+
+signal m_tdata_valid_out_H1_s : std_logic := '0';
+signal m_tdata_valid_out_int_aa_s : std_logic := '0';
+
 component I2S_in is
   Port (    clk : in std_logic;
             reset : in std_logic;
@@ -128,25 +137,29 @@ component AA_filter_2 is
             right_reg_input : in std_logic_vector(23 downto 0);
             
             m_tdata_valid_out : out std_logic;
-            out_data_left : out std_logic_vector(23 downto 0);
-            out_data_right : out std_logic_vector(23 downto 0)
+            out_data_left : out std_logic_vector(31 downto 0);
+            out_data_right : out std_logic_vector(31 downto 0)
             );
 end component;
 
 --level 1 of tree 2 filters
 component Level_1 is
-  Port (   
+  Port (
            clk : in std_logic;
-           L1_input_left  : in std_logic_vector(23 downto 0);
-           L1_input_right : in std_logic_vector(23 downto 0);
+           L1_input_left  : in std_logic_vector(31 downto 0);
+           L1_input_right : in std_logic_vector(31 downto 0);
            left_valid_in : in std_logic;
            right_valid_in : in std_logic;
+           m_tdata_valid_in : in std_logic;
+           
+           m_tdata_valid_out_H1 : out std_logic;
+           m_tdata_valid_out_L1 : out std_logic;
            --High output
-           H_L1_output_left : out std_logic_vector(23 downto 0);
-           H_L1_output_right : out std_logic_vector(23 downto 0);
+           H_L1_output_left : out std_logic_vector(31 downto 0);
+           H_L1_output_right : out std_logic_vector(31 downto 0);
            --low output
-           L_L1_output_left : out std_logic_vector(23 downto 0);
-           L_L1_output_right : out std_logic_vector(23 downto 0)
+           L_L1_output_left : out std_logic_vector(31 downto 0);
+           L_L1_output_right : out std_logic_vector(31 downto 0)
            );
 end component;
 
@@ -156,11 +169,11 @@ component INTERPOLATE_AA is
         reset            : in  std_logic;
 
         -- input samples
-        data_in_left     : in  std_logic_vector(23 downto 0);
-        data_in_right    : in  std_logic_vector(23 downto 0);
+        data_in_left     : in  std_logic_vector(31 downto 0);
+        data_in_right    : in  std_logic_vector(31 downto 0);
         left_valid_in    : in  std_logic;
         right_valid_in   : in  std_logic;
-        m_tdata_valid_in : in std_logic;
+        m_tdata_valid_in : in  std_logic;
         
         -- output samples
         data_out_left    : out std_logic_vector(23 downto 0);
@@ -174,16 +187,19 @@ component INTERPOLATE_L1 is
         reset            : in  std_logic;
 
         -- input samples
-        H_data_in_left     : in  std_logic_vector(23 downto 0);
-        H_data_in_right    : in  std_logic_vector(23 downto 0);
-        L_data_in_left     : in  std_logic_vector(23 downto 0);
-        L_data_in_right    : in  std_logic_vector(23 downto 0);
+        H_data_in_left     : in  std_logic_vector(31 downto 0);
+        H_data_in_right    : in  std_logic_vector(31 downto 0);
+        L_data_in_left     : in  std_logic_vector(31 downto 0);
+        L_data_in_right    : in  std_logic_vector(31 downto 0);
         left_valid_in    : in  std_logic;
         right_valid_in   : in  std_logic;
-
+        m_tdata_valid_in_L1 : in std_logic;
+        m_tdata_valid_in_H1 : in std_logic;
+        
+        m_tdata_valid_out_int_aa : out std_logic;
         -- output samples
-        data_out_left    : out std_logic_vector(23 downto 0);
-        data_out_right   : out std_logic_vector(23 downto 0) );
+        data_out_left    : out std_logic_vector(31 downto 0);
+        data_out_right   : out std_logic_vector(31 downto 0) );
 end component;
 
 begin
@@ -211,7 +227,7 @@ I2s_o : I2S_out port map (
     right_reg_shift => left_reg_shift_c, --for right out data  --right_reg_shift_c,
     --passthrough_signal --left_reg_shift_c,
     --AA_filter_signal  --fir_out_data_left_s,
-    left_reg_shift => interpolate_aa_data_out_left_s, --fir_out_data_left_s,   --for left out data  
+    left_reg_shift => interpolate_aa_data_out_left_s, --fir_out_data_left_s(44 downto 21), --L_L1_test_left_s,-- , --fir_out_data_left_s,   --for left out data  -- right_reg_shift_c,-- --
     
     t_sclk => sclk_s,
     t_mclk => mclk_s,
@@ -241,7 +257,7 @@ AA_2: AA_filter_2 port map(
     left_reg_input  => left_reg_shift_c,--this is an input to the fir core  -- data in fir core
     right_reg_input => right_reg_shift_c,--this is an input to the fir core
     
-    m_tdata_valid_out => m_tdata_valid_s,
+    m_tdata_valid_out => m_tdata_valid_in_AA,
     out_data_left => fir_out_data_left_s,
     out_data_right => fir_out_data_right_s
 );
@@ -251,24 +267,30 @@ L1: Level_1 port map(
            L1_input_right => fir_out_data_right_s, --in from AA_filter_2
            left_valid_in => left_valid_s, -- this is still valid for 96khz not anything downsampled
            right_valid_in => right_valid_s, --this is still valid for 96khz not anything downsampled
+           m_tdata_valid_in => m_tdata_valid_in_AA,
+           m_tdata_valid_out_H1 => m_tdata_valid_out_H1_s,
+           m_tdata_valid_out_L1 => m_tdata_valid_out_L1_s,
+
            --High output
            H_L1_output_left => H_L1_output_left_s,
            H_L1_output_right => H_L1_output_right_s,
            --low output
-           L_L1_output_left => L_L1_output_left_s,
-           L_L1_output_right => L_L1_output_right_s
+           L_L1_output_left =>  L_L1_output_left_s, --L_L1_test_left_s, --
+           L_L1_output_right => L_L1_output_right_s --L_L1_test_right_s --
            );
 U_INTERPOLATE_AA : INTERPOLATE_AA
     port map (
         clk            => clk,
         reset          => reset,
 
-        data_in_left   => fir_out_data_left_s, --data from AA filter
-        data_in_right  => fir_out_data_right_s, --data from AA filter
+        data_in_left   => interpolate_l1_data_out_left_s, --data from AA filter
+        data_in_right  => interpolate_l1_data_out_right_s, --data from AA filter
         left_valid_in  => left_valid_s,
         right_valid_in => right_valid_s,
         
-        m_tdata_valid_in => m_tdata_valid_s,
+        m_tdata_valid_in => m_tdata_valid_out_int_aa_s,
+        
+        
         data_out_left  => interpolate_aa_data_out_left_s,
         data_out_right => interpolate_aa_data_out_right_s
     );
@@ -276,14 +298,19 @@ U_INTERPOLATE_L1 : INTERPOLATE_L1
     port map (
         clk            => clk,
         reset          => reset,
-
+        
         H_data_in_left   => H_L1_output_left_s,
         H_data_in_right  => H_L1_output_right_s,
+        
         L_data_in_left   => L_L1_output_left_s,
         L_data_in_right  => L_L1_output_right_s,
+        
         left_valid_in    => left_valid_s,
         right_valid_in   => right_valid_s,
-
+        m_tdata_valid_in_L1 => m_tdata_valid_out_L1_s,
+        m_tdata_valid_in_H1 => m_tdata_valid_out_H1_s,
+        
+        m_tdata_valid_out_int_aa => m_tdata_valid_out_int_aa_s,
         data_out_left    => interpolate_l1_data_out_left_s,
         data_out_right   => interpolate_l1_data_out_right_s
     );

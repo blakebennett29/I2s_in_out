@@ -3,8 +3,8 @@
 # SW Build 5076996 on Wed May 22 18:37:14 MDT 2024
 # IP Build 5075265 on Wed May 22 21:45:21 MDT 2024
 # SharedData Build 5076995 on Wed May 22 18:29:18 MDT 2024
-# Start of session at: Thu Mar 12 17:25:21 2026
-# Process ID: 152836
+# Start of session at: Mon Mar 30 16:27:25 2026
+# Process ID: 35256
 # Current directory: E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.runs/INT_L_L1_fir_compiler_synth_1
 # Command line: vivado.exe -log INT_L_L1_fir_compiler.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source INT_L_L1_fir_compiler.tcl
 # Log file: E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.runs/INT_L_L1_fir_compiler_synth_1/INT_L_L1_fir_compiler.vds
@@ -17,12 +17,12 @@
 # CPU Physical cores:8
 # CPU Logical cores :16
 # Host memory       :16363 MB
-# Swap memory       :43462 MB
-# Total Virtual     :59826 MB
-# Available Virtual :30606 MB
+# Swap memory       :22548 MB
+# Total Virtual     :38912 MB
+# Available Virtual :23288 MB
 #-----------------------------------------------------------
 source INT_L_L1_fir_compiler.tcl -notrace
-create_project: Time (s): cpu = 00:00:04 ; elapsed = 00:00:06 . Memory (MB): peak = 531.934 ; gain = 198.891
+create_project: Time (s): cpu = 00:00:05 ; elapsed = 00:00:06 . Memory (MB): peak = 532.137 ; gain = 199.602
 INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: INT_L_L1_fir_compiler
 Command: synth_design -top INT_L_L1_fir_compiler -part xc7a35tcpg236-1 -incremental_mode off -mode out_of_context
 Starting synth_design
@@ -32,11 +32,11 @@ INFO: [Device 21-403] Loading part xc7a35tcpg236-1
 INFO: [Device 21-9227] Part: xc7a35tcpg236-1 does not have CEAM library.
 INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
 INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
-INFO: [Synth 8-7075] Helper process launched with PID 68632
+INFO: [Synth 8-7075] Helper process launched with PID 33496
 ---------------------------------------------------------------------------------
-Starting RTL Elaboration : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 1396.223 ; gain = 447.191
+Starting RTL Elaboration : Time (s): cpu = 00:00:05 ; elapsed = 00:00:06 . Memory (MB): peak = 1395.633 ; gain = 446.434
 ---------------------------------------------------------------------------------
-INFO: [Synth 8-638] synthesizing module 'INT_L_L1_fir_compiler' [e:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.gen/sources_1/ip/INT_L_L1_fir_compiler/synth/INT_L_L1_fir_compiler.vhd:72]
+INFO: [Synth 8-638] synthesizing module 'INT_L_L1_fir_compiler' [e:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.gen/sources_1/ip/INT_L_L1_fir_compiler/synth/INT_L_L1_fir_compiler.vhd:73]
 	Parameter C_XDEVICEFAMILY bound to: artix7 - type: string 
 	Parameter C_ELABORATION_DIR bound to: ./ - type: string 
 	Parameter C_COMPONENT_NAME bound to: INT_L_L1_fir_compiler - type: string 
@@ -58,10 +58,10 @@ INFO: [Synth 8-638] synthesizing module 'INT_L_L1_fir_compiler' [e:/School/Senio
 	Parameter C_COL_PIPE_LEN bound to: 4 - type: integer 
 	Parameter C_COL_CONFIG bound to: 1 - type: string 
 	Parameter C_OPTIMIZATION bound to: 0 - type: integer 
-	Parameter C_DATA_PATH_WIDTHS bound to: 12,12 - type: string 
-	Parameter C_DATA_IP_PATH_WIDTHS bound to: 24 - type: string 
-	Parameter C_DATA_PX_PATH_WIDTHS bound to: 24 - type: string 
-	Parameter C_DATA_WIDTH bound to: 24 - type: integer 
+	Parameter C_DATA_PATH_WIDTHS bound to: 16,16 - type: string 
+	Parameter C_DATA_IP_PATH_WIDTHS bound to: 32 - type: string 
+	Parameter C_DATA_PX_PATH_WIDTHS bound to: 32 - type: string 
+	Parameter C_DATA_WIDTH bound to: 32 - type: integer 
 	Parameter C_COEF_PATH_WIDTHS bound to: 24,24 - type: string 
 	Parameter C_COEF_WIDTH bound to: 24 - type: integer 
 	Parameter C_DATA_PATH_SRC bound to: 0,1 - type: string 
@@ -69,20 +69,20 @@ INFO: [Synth 8-638] synthesizing module 'INT_L_L1_fir_compiler' [e:/School/Senio
 	Parameter C_PX_PATH_SRC bound to: 0,1 - type: string 
 	Parameter C_DATA_PATH_SIGN bound to: 1,0 - type: string 
 	Parameter C_COEF_PATH_SIGN bound to: 0,0 - type: string 
-	Parameter C_ACCUM_PATH_WIDTHS bound to: 37,36 - type: string 
+	Parameter C_ACCUM_PATH_WIDTHS bound to: 41,40 - type: string 
 	Parameter C_OUTPUT_WIDTH bound to: 32 - type: integer 
 	Parameter C_OUTPUT_PATH_WIDTHS bound to: 32 - type: string 
-	Parameter C_ACCUM_OP_PATH_WIDTHS bound to: 48 - type: string 
-	Parameter C_EXT_MULT_CNFG bound to: 0,1,0,12 - type: string 
+	Parameter C_ACCUM_OP_PATH_WIDTHS bound to: 56 - type: string 
+	Parameter C_EXT_MULT_CNFG bound to: 0,1,0,16 - type: string 
 	Parameter C_DATA_PATH_PSAMP_SRC bound to: 0 - type: string 
 	Parameter C_OP_PATH_PSAMP_SRC bound to: 0 - type: string 
 	Parameter C_NUM_MADDS bound to: 1 - type: integer 
 	Parameter C_OPT_MADDS bound to: none - type: string 
 	Parameter C_OVERSAMPLING_RATE bound to: 33 - type: integer 
-	Parameter C_INPUT_RATE bound to: 4088 - type: integer 
-	Parameter C_OUTPUT_RATE bound to: 2044 - type: integer 
+	Parameter C_INPUT_RATE bound to: 2044 - type: integer 
+	Parameter C_OUTPUT_RATE bound to: 1022 - type: integer 
 	Parameter C_DATA_MEMTYPE bound to: 0 - type: integer 
-	Parameter C_COEF_MEMTYPE bound to: 2 - type: integer 
+	Parameter C_COEF_MEMTYPE bound to: 1 - type: integer 
 	Parameter C_IPBUFF_MEMTYPE bound to: 0 - type: integer 
 	Parameter C_OPBUFF_MEMTYPE bound to: 2 - type: integer 
 	Parameter C_DATAPATH_MEMTYPE bound to: 0 - type: integer 
@@ -90,16 +90,16 @@ INFO: [Synth 8-638] synthesizing module 'INT_L_L1_fir_compiler' [e:/School/Senio
 	Parameter C_DATA_MEM_PACKING bound to: 0 - type: integer 
 	Parameter C_COEF_MEM_PACKING bound to: 0 - type: integer 
 	Parameter C_FILTS_PACKED bound to: 0 - type: integer 
-	Parameter C_LATENCY bound to: 2085 - type: integer 
+	Parameter C_LATENCY bound to: 1064 - type: integer 
 	Parameter C_HAS_ARESETn bound to: 0 - type: integer 
 	Parameter C_HAS_ACLKEN bound to: 0 - type: integer 
 	Parameter C_DATA_HAS_TLAST bound to: 0 - type: integer 
-	Parameter C_S_DATA_HAS_FIFO bound to: 1 - type: integer 
-	Parameter C_S_DATA_HAS_TUSER bound to: 2 - type: integer 
-	Parameter C_S_DATA_TDATA_WIDTH bound to: 24 - type: integer 
+	Parameter C_S_DATA_HAS_FIFO bound to: 0 - type: integer 
+	Parameter C_S_DATA_HAS_TUSER bound to: 1 - type: integer 
+	Parameter C_S_DATA_TDATA_WIDTH bound to: 32 - type: integer 
 	Parameter C_S_DATA_TUSER_WIDTH bound to: 1 - type: integer 
 	Parameter C_M_DATA_HAS_TREADY bound to: 0 - type: integer 
-	Parameter C_M_DATA_HAS_TUSER bound to: 2 - type: integer 
+	Parameter C_M_DATA_HAS_TUSER bound to: 1 - type: integer 
 	Parameter C_M_DATA_TDATA_WIDTH bound to: 32 - type: integer 
 	Parameter C_M_DATA_TUSER_WIDTH bound to: 1 - type: integer 
 	Parameter C_HAS_CONFIG_CHANNEL bound to: 0 - type: integer 
@@ -107,43 +107,43 @@ INFO: [Synth 8-638] synthesizing module 'INT_L_L1_fir_compiler' [e:/School/Senio
 	Parameter C_CONFIG_PACKET_SIZE bound to: 0 - type: integer 
 	Parameter C_CONFIG_TDATA_WIDTH bound to: 1 - type: integer 
 	Parameter C_RELOAD_TDATA_WIDTH bound to: 1 - type: integer 
-INFO: [Synth 8-3491] module 'fir_compiler_v7_2_22' declared at 'e:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.gen/sources_1/ip/INT_L_L1_fir_compiler/hdl/fir_compiler_v7_2_vh_rfs.vhd:67067' bound to instance 'U0' of component 'fir_compiler_v7_2_22' [e:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.gen/sources_1/ip/INT_L_L1_fir_compiler/synth/INT_L_L1_fir_compiler.vhd:202]
-INFO: [Synth 8-256] done synthesizing module 'INT_L_L1_fir_compiler' (0#1) [e:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.gen/sources_1/ip/INT_L_L1_fir_compiler/synth/INT_L_L1_fir_compiler.vhd:72]
-WARNING: [Synth 8-7129] Port WE in module delay__parameterized28 is either unconnected or has no load
-WARNING: [Synth 8-7129] Port CE in module delay__parameterized28 is either unconnected or has no load
-WARNING: [Synth 8-7129] Port SCLR in module delay__parameterized28 is either unconnected or has no load
-WARNING: [Synth 8-7129] Port SCLR_ALT in module delay__parameterized28 is either unconnected or has no load
-WARNING: [Synth 8-7129] Port CLK in module delay__parameterized28 is either unconnected or has no load
+INFO: [Synth 8-3491] module 'fir_compiler_v7_2_22' declared at 'e:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.gen/sources_1/ip/INT_L_L1_fir_compiler/hdl/fir_compiler_v7_2_vh_rfs.vhd:67067' bound to instance 'U0' of component 'fir_compiler_v7_2_22' [e:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.gen/sources_1/ip/INT_L_L1_fir_compiler/synth/INT_L_L1_fir_compiler.vhd:205]
+INFO: [Synth 8-256] done synthesizing module 'INT_L_L1_fir_compiler' (0#1) [e:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.gen/sources_1/ip/INT_L_L1_fir_compiler/synth/INT_L_L1_fir_compiler.vhd:73]
+WARNING: [Synth 8-7129] Port WE in module delay__parameterized27 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port CE in module delay__parameterized27 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port SCLR in module delay__parameterized27 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port SCLR_ALT in module delay__parameterized27 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port CLK in module delay__parameterized27 is either unconnected or has no load
 WARNING: [Synth 8-7129] Port CE_B in module dpr_mem is either unconnected or has no load
 WARNING: [Synth 8-7129] Port SCLR_A in module dpr_mem is either unconnected or has no load
 WARNING: [Synth 8-7129] Port SCLR_B in module dpr_mem is either unconnected or has no load
-WARNING: [Synth 8-7129] Port SCLR in module delay__parameterized27 is either unconnected or has no load
-WARNING: [Synth 8-7129] Port SCLR_ALT in module delay__parameterized27 is either unconnected or has no load
 WARNING: [Synth 8-7129] Port SCLR in module delay__parameterized26 is either unconnected or has no load
 WARNING: [Synth 8-7129] Port SCLR_ALT in module delay__parameterized26 is either unconnected or has no load
-WARNING: [Synth 8-7129] Port WE in module delay__parameterized25 is either unconnected or has no load
-WARNING: [Synth 8-7129] Port CE in module delay__parameterized25 is either unconnected or has no load
 WARNING: [Synth 8-7129] Port SCLR in module delay__parameterized25 is either unconnected or has no load
 WARNING: [Synth 8-7129] Port SCLR_ALT in module delay__parameterized25 is either unconnected or has no load
-WARNING: [Synth 8-7129] Port CLK in module delay__parameterized25 is either unconnected or has no load
 WARNING: [Synth 8-7129] Port WE in module delay__parameterized24 is either unconnected or has no load
 WARNING: [Synth 8-7129] Port CE in module delay__parameterized24 is either unconnected or has no load
 WARNING: [Synth 8-7129] Port SCLR in module delay__parameterized24 is either unconnected or has no load
 WARNING: [Synth 8-7129] Port SCLR_ALT in module delay__parameterized24 is either unconnected or has no load
 WARNING: [Synth 8-7129] Port CLK in module delay__parameterized24 is either unconnected or has no load
-WARNING: [Synth 8-7129] Port PRE_ADDSUB in module calc__parameterized1 is either unconnected or has no load
-WARNING: [Synth 8-7129] Port PRE_ADD_BYPASS in module calc__parameterized1 is either unconnected or has no load
-WARNING: [Synth 8-7129] Port CED in module calc__parameterized1 is either unconnected or has no load
 WARNING: [Synth 8-7129] Port WE in module delay__parameterized23 is either unconnected or has no load
 WARNING: [Synth 8-7129] Port CE in module delay__parameterized23 is either unconnected or has no load
 WARNING: [Synth 8-7129] Port SCLR in module delay__parameterized23 is either unconnected or has no load
 WARNING: [Synth 8-7129] Port SCLR_ALT in module delay__parameterized23 is either unconnected or has no load
 WARNING: [Synth 8-7129] Port CLK in module delay__parameterized23 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port PRE_ADDSUB in module calc__parameterized1 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port PRE_ADD_BYPASS in module calc__parameterized1 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port CED in module calc__parameterized1 is either unconnected or has no load
 WARNING: [Synth 8-7129] Port WE in module delay__parameterized22 is either unconnected or has no load
 WARNING: [Synth 8-7129] Port CE in module delay__parameterized22 is either unconnected or has no load
 WARNING: [Synth 8-7129] Port SCLR in module delay__parameterized22 is either unconnected or has no load
 WARNING: [Synth 8-7129] Port SCLR_ALT in module delay__parameterized22 is either unconnected or has no load
 WARNING: [Synth 8-7129] Port CLK in module delay__parameterized22 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port WE in module delay__parameterized21 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port CE in module delay__parameterized21 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port SCLR in module delay__parameterized21 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port SCLR_ALT in module delay__parameterized21 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port CLK in module delay__parameterized21 is either unconnected or has no load
 WARNING: [Synth 8-7129] Port POUT[fab][57] in module add_accum is either unconnected or has no load
 WARNING: [Synth 8-7129] Port POUT[fab][56] in module add_accum is either unconnected or has no load
 WARNING: [Synth 8-7129] Port POUT[fab][55] in module add_accum is either unconnected or has no load
@@ -211,19 +211,19 @@ WARNING: [Synth 8-7129] Port PIN[fab][19] in module add_accum is either unconnec
 WARNING: [Synth 8-7129] Port PIN[fab][18] in module add_accum is either unconnected or has no load
 INFO: [Common 17-14] Message 'Synth 8-7129' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
 ---------------------------------------------------------------------------------
-Finished RTL Elaboration : Time (s): cpu = 00:00:14 ; elapsed = 00:00:17 . Memory (MB): peak = 1692.785 ; gain = 743.754
+Finished RTL Elaboration : Time (s): cpu = 00:00:14 ; elapsed = 00:00:16 . Memory (MB): peak = 1697.797 ; gain = 748.598
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:14 ; elapsed = 00:00:17 . Memory (MB): peak = 1692.785 ; gain = 743.754
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:14 ; elapsed = 00:00:16 . Memory (MB): peak = 1697.797 ; gain = 748.598
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:14 ; elapsed = 00:00:17 . Memory (MB): peak = 1692.785 ; gain = 743.754
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:14 ; elapsed = 00:00:16 . Memory (MB): peak = 1697.797 ; gain = 748.598
 ---------------------------------------------------------------------------------
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.066 . Memory (MB): peak = 1692.785 ; gain = 0.000
-INFO: [Netlist 29-17] Analyzing 85 Unisim elements for replacement
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.070 . Memory (MB): peak = 1697.797 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 109 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 INFO: [Project 1-570] Preparing netlist for logic optimization
 
@@ -237,36 +237,36 @@ Parsing XDC File [E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passth
 Finished Parsing XDC File [E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.runs/INT_L_L1_fir_compiler_synth_1/dont_touch.xdc]
 Completed Processing XDC Constraints
 
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 1692.785 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 1697.797 ; gain = 0.000
 INFO: [Project 1-111] Unisim Transformation Summary:
-  A total of 54 instances were transformed.
-  FDRSE => FDRSE (FDRE, LUT4, VCC): 28 instances
-  MUXCY_L => MUXCY: 26 instances
+  A total of 70 instances were transformed.
+  FDRSE => FDRSE (FDRE, LUT4, VCC): 36 instances
+  MUXCY_L => MUXCY: 34 instances
 
-Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.089 . Memory (MB): peak = 1692.785 ; gain = 0.000
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.085 . Memory (MB): peak = 1697.797 ; gain = 0.000
 INFO: [Designutils 20-5008] Incremental synthesis strategy off
 ---------------------------------------------------------------------------------
-Finished Constraint Validation : Time (s): cpu = 00:00:23 ; elapsed = 00:00:28 . Memory (MB): peak = 1692.785 ; gain = 743.754
+Finished Constraint Validation : Time (s): cpu = 00:00:23 ; elapsed = 00:00:27 . Memory (MB): peak = 1697.797 ; gain = 748.598
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Loading Part and Timing Information
 ---------------------------------------------------------------------------------
 Loading part: xc7a35tcpg236-1
 ---------------------------------------------------------------------------------
-Finished Loading Part and Timing Information : Time (s): cpu = 00:00:23 ; elapsed = 00:00:28 . Memory (MB): peak = 1692.785 ; gain = 743.754
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:23 ; elapsed = 00:00:27 . Memory (MB): peak = 1697.797 ; gain = 748.598
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying 'set_property' XDC Constraints
 ---------------------------------------------------------------------------------
 Applied set_property KEEP_HIERARCHY = SOFT for U0. (constraint file  E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.runs/INT_L_L1_fir_compiler_synth_1/dont_touch.xdc, line 9).
 ---------------------------------------------------------------------------------
-Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:23 ; elapsed = 00:00:28 . Memory (MB): peak = 1692.785 ; gain = 743.754
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:23 ; elapsed = 00:00:27 . Memory (MB): peak = 1697.797 ; gain = 748.598
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:23 ; elapsed = 00:00:29 . Memory (MB): peak = 1692.785 ; gain = 743.754
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:23 ; elapsed = 00:00:27 . Memory (MB): peak = 1697.797 ; gain = 748.598
 ---------------------------------------------------------------------------------
-INFO: [Synth 8-223] decloning instance 'U0/i_synth/g_halfband_interpolation.i_halfband_interpolation/g_semi_parallel_and_smac.g_cntrl_signals[4].i_delay' (delay__parameterized5) to 'U0/i_synth/g_halfband_interpolation.i_halfband_interpolation/g_semi_parallel_and_smac.g_cntrl_signals[5].i_delay'
-INFO: [Synth 8-223] decloning instance 'U0/i_synth/g_halfband_interpolation.i_halfband_interpolation/g_semi_parallel_and_smac.g_paths[0].g_smac.i_pre_add_bypass' (delay__parameterized5) to 'U0/i_synth/g_halfband_interpolation.i_halfband_interpolation/g_semi_parallel_and_smac.g_paths[1].g_smac.i_pre_add_bypass'
+INFO: [Synth 8-223] decloning instance 'U0/i_synth/g_halfband_interpolation.i_halfband_interpolation/g_semi_parallel_and_smac.g_cntrl_signals[4].i_delay' (delay__parameterized6) to 'U0/i_synth/g_halfband_interpolation.i_halfband_interpolation/g_semi_parallel_and_smac.g_cntrl_signals[5].i_delay'
+INFO: [Synth 8-223] decloning instance 'U0/i_synth/g_halfband_interpolation.i_halfband_interpolation/g_semi_parallel_and_smac.g_paths[0].g_smac.i_pre_add_bypass' (delay__parameterized6) to 'U0/i_synth/g_halfband_interpolation.i_halfband_interpolation/g_semi_parallel_and_smac.g_paths[1].g_smac.i_pre_add_bypass'
 ---------------------------------------------------------------------------------
 Start RTL Component Statistics 
 ---------------------------------------------------------------------------------
@@ -287,27 +287,25 @@ Start Cross Boundary and Area Optimization
 ---------------------------------------------------------------------------------
 WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
 ---------------------------------------------------------------------------------
-Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:25 ; elapsed = 00:00:31 . Memory (MB): peak = 1692.785 ; gain = 743.754
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:25 ; elapsed = 00:00:29 . Memory (MB): peak = 1697.797 ; gain = 748.598
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying XDC Timing Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:31 ; elapsed = 00:00:39 . Memory (MB): peak = 1692.785 ; gain = 743.754
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:31 ; elapsed = 00:00:36 . Memory (MB): peak = 1697.797 ; gain = 748.598
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Timing Optimization
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Timing Optimization : Time (s): cpu = 00:00:32 ; elapsed = 00:00:39 . Memory (MB): peak = 1692.785 ; gain = 743.754
+Finished Timing Optimization : Time (s): cpu = 00:00:32 ; elapsed = 00:00:36 . Memory (MB): peak = 1697.797 ; gain = 748.598
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Technology Mapping
 ---------------------------------------------------------------------------------
-WARNING: [Synth 8-5591] srl_style attribute value srl_reg on U0/i_synth/g_halfband_interpolation.i_halfband_interpolation/g_semi_parallel_and_smac.i_latch_op/gen_dly.gen_shiftreg.gen_rtl_delay.delay_bus_reg[2][0] cannot be supported because of smaller than expected depth of fanout-free flop chain.
-WARNING: [Synth 8-5591] srl_style attribute value srl_reg on U0/i_synth/g_halfband_interpolation.i_halfband_interpolation/g_semi_parallel_and_smac.i_latch_op/gen_dly.gen_shiftreg.gen_rtl_delay.delay_bus_reg[2][0] cannot be supported because of smaller than expected depth of fanout-free flop chain.
 ---------------------------------------------------------------------------------
-Finished Technology Mapping : Time (s): cpu = 00:00:32 ; elapsed = 00:00:39 . Memory (MB): peak = 1692.785 ; gain = 743.754
+Finished Technology Mapping : Time (s): cpu = 00:00:32 ; elapsed = 00:00:37 . Memory (MB): peak = 1697.797 ; gain = 748.598
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start IO Insertion
@@ -325,37 +323,37 @@ Start Final Netlist Cleanup
 Finished Final Netlist Cleanup
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished IO Insertion : Time (s): cpu = 00:00:36 ; elapsed = 00:00:44 . Memory (MB): peak = 1692.785 ; gain = 743.754
+Finished IO Insertion : Time (s): cpu = 00:00:36 ; elapsed = 00:00:41 . Memory (MB): peak = 1697.797 ; gain = 748.598
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Instances
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Instances : Time (s): cpu = 00:00:36 ; elapsed = 00:00:44 . Memory (MB): peak = 1692.785 ; gain = 743.754
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:36 ; elapsed = 00:00:41 . Memory (MB): peak = 1697.797 ; gain = 748.598
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Rebuilding User Hierarchy
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:36 ; elapsed = 00:00:44 . Memory (MB): peak = 1692.785 ; gain = 743.754
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:36 ; elapsed = 00:00:41 . Memory (MB): peak = 1697.797 ; gain = 748.598
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Ports
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Ports : Time (s): cpu = 00:00:36 ; elapsed = 00:00:44 . Memory (MB): peak = 1692.785 ; gain = 743.754
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:36 ; elapsed = 00:00:41 . Memory (MB): peak = 1697.797 ; gain = 748.598
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:36 ; elapsed = 00:00:44 . Memory (MB): peak = 1692.785 ; gain = 743.754
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:36 ; elapsed = 00:00:41 . Memory (MB): peak = 1697.797 ; gain = 748.598
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Nets
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Nets : Time (s): cpu = 00:00:36 ; elapsed = 00:00:44 . Memory (MB): peak = 1692.785 ; gain = 743.754
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:36 ; elapsed = 00:00:41 . Memory (MB): peak = 1697.797 ; gain = 748.598
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Writing Synthesis Report
@@ -378,54 +376,57 @@ Report BlackBoxes:
 +-+--------------+----------+
 
 Report Cell Usage: 
-+------+--------+------+
-|      |Cell    |Count |
-+------+--------+------+
-|1     |CARRY4  |     4|
-|2     |DSP48E1 |     3|
-|5     |LUT1    |     7|
-|6     |LUT2    |    18|
-|7     |LUT3    |    16|
-|8     |LUT4    |    37|
-|9     |LUT5    |    10|
-|10    |LUT6    |    39|
-|11    |MUXCY_L |    26|
-|12    |MUXF7   |    48|
-|13    |RAM32M  |     6|
-|14    |SRL16E  |    62|
-|15    |SRLC32E |    96|
-|16    |XORCY   |    26|
-|17    |FDRE    |   325|
-|18    |FDSE    |     9|
-+------+--------+------+
++------+---------+------+
+|      |Cell     |Count |
++------+---------+------+
+|1     |CARRY4   |     3|
+|2     |DSP48E1  |     3|
+|5     |LUT1     |     7|
+|6     |LUT2     |    14|
+|7     |LUT3     |    13|
+|8     |LUT4     |    45|
+|9     |LUT5     |     7|
+|10    |LUT6     |    12|
+|11    |MUXCY_L  |    34|
+|12    |MUXF7    |    64|
+|13    |RAM32M   |     5|
+|14    |RAM32X1D |     2|
+|15    |RAMB18E1 |     1|
+|16    |SRL16E   |    77|
+|17    |SRLC32E  |   128|
+|18    |XORCY    |    34|
+|19    |FDRE     |   314|
+|20    |FDSE     |     9|
++------+---------+------+
 ---------------------------------------------------------------------------------
-Finished Writing Synthesis Report : Time (s): cpu = 00:00:36 ; elapsed = 00:00:44 . Memory (MB): peak = 1692.785 ; gain = 743.754
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:36 ; elapsed = 00:00:41 . Memory (MB): peak = 1697.797 ; gain = 748.598
 ---------------------------------------------------------------------------------
-Synthesis finished with 0 errors, 0 critical warnings and 16 warnings.
-Synthesis Optimization Runtime : Time (s): cpu = 00:00:18 ; elapsed = 00:00:39 . Memory (MB): peak = 1692.785 ; gain = 743.754
-Synthesis Optimization Complete : Time (s): cpu = 00:00:36 ; elapsed = 00:00:44 . Memory (MB): peak = 1692.785 ; gain = 743.754
+Synthesis finished with 0 errors, 0 critical warnings and 14 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:18 ; elapsed = 00:00:36 . Memory (MB): peak = 1697.797 ; gain = 748.598
+Synthesis Optimization Complete : Time (s): cpu = 00:00:36 ; elapsed = 00:00:41 . Memory (MB): peak = 1697.797 ; gain = 748.598
 INFO: [Project 1-571] Translating synthesized netlist
-Netlist sorting complete. Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.017 . Memory (MB): peak = 1692.785 ; gain = 0.000
-INFO: [Netlist 29-17] Analyzing 113 Unisim elements for replacement
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.018 . Memory (MB): peak = 1697.797 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 146 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 INFO: [Project 1-570] Preparing netlist for logic optimization
 INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1692.785 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1697.797 ; gain = 0.000
 INFO: [Project 1-111] Unisim Transformation Summary:
-  A total of 14 instances were transformed.
-  (MUXCY,XORCY) => CARRY4: 8 instances
-  RAM32M => RAM32M (RAMD32(x6), RAMS32(x2)): 6 instances
+  A total of 17 instances were transformed.
+  (MUXCY,XORCY) => CARRY4: 10 instances
+  RAM32M => RAM32M (RAMD32(x6), RAMS32(x2)): 5 instances
+  RAM32X1D => RAM32X1D (RAMD32(x2)): 2 instances
 
-Synth Design complete | Checksum: 64299500
+Synth Design complete | Checksum: 8c62613a
 INFO: [Common 17-83] Releasing license: Synthesis
-25 Infos, 103 Warnings, 0 Critical Warnings and 0 Errors encountered.
+25 Infos, 101 Warnings, 0 Critical Warnings and 0 Errors encountered.
 synth_design completed successfully
-synth_design: Time (s): cpu = 00:00:40 ; elapsed = 00:00:50 . Memory (MB): peak = 1692.785 ; gain = 1144.957
-Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.004 . Memory (MB): peak = 1692.785 ; gain = 0.000
+synth_design: Time (s): cpu = 00:00:40 ; elapsed = 00:00:46 . Memory (MB): peak = 1697.797 ; gain = 1149.668
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 1697.797 ; gain = 0.000
 INFO: [Common 17-1381] The checkpoint 'E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.runs/INT_L_L1_fir_compiler_synth_1/INT_L_L1_fir_compiler.dcp' has been generated.
-INFO: [Coretcl 2-1648] Added synthesis output to IP cache for IP INT_L_L1_fir_compiler, cache-ID = b02f26121a05622b
-INFO: [Coretcl 2-1174] Renamed 40 cell refs.
-Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.003 . Memory (MB): peak = 1692.785 ; gain = 0.000
+INFO: [Coretcl 2-1648] Added synthesis output to IP cache for IP INT_L_L1_fir_compiler, cache-ID = fa474c4d1cf21998
+INFO: [Coretcl 2-1174] Renamed 41 cell refs.
+Write ShapeDB Complete: Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.003 . Memory (MB): peak = 1697.797 ; gain = 0.000
 INFO: [Common 17-1381] The checkpoint 'E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.runs/INT_L_L1_fir_compiler_synth_1/INT_L_L1_fir_compiler.dcp' has been generated.
 INFO: [Vivado 12-24828] Executing command : report_utilization -file INT_L_L1_fir_compiler_utilization_synth.rpt -pb INT_L_L1_fir_compiler_utilization_synth.pb
-INFO: [Common 17-206] Exiting Vivado at Thu Mar 12 17:26:24 2026...
+INFO: [Common 17-206] Exiting Vivado at Mon Mar 30 16:28:22 2026...

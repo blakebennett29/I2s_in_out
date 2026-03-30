@@ -95,8 +95,8 @@ signal right_reg_shift_c : std_logic_vector(23 downto 0) := (others =>'0');-- sh
 type LR_State is (Idle, Right, Left);
 signal state, next_state : LR_State;
 
-signal left_valid_s : std_logic;
-signal right_valid_s : std_logic;
+signal left_valid_s : std_logic := '0';
+signal right_valid_s : std_logic := '0';
 begin
 
 BM1 : blk_mem_gen_0 port map (
@@ -116,13 +116,14 @@ BM1 : blk_mem_gen_0 port map (
     r_lrclk <= lrclk_s;
     reset_s <= reset;
     --output registers left and right
-    left_reg_output <= left_reg_output_s(30 downto 7);
-    right_reg_output <= right_reg_output_s(30 downto 7);
+    left_reg_output <= left_reg_output_s(31 downto 8); --(30 downto 7);
+    right_reg_output <= right_reg_output_s(31 downto 8); --(30 downto 7);
     --assined for testing i2s out module with only i2s in at top module
-    left_reg_shift_c <= left_reg_output_s(30 downto 7);
-    right_reg_shift_c <= right_reg_output_s(30 downto 7);
+    left_reg_shift_c <= left_reg_output_s(31 downto 8); --(30 downto 7);
+    right_reg_shift_c <= right_reg_output_s(31 downto 8); --(30 downto 7);
     
-    
+    right_valid <= right_valid_s;
+    left_valid <= left_valid_s;
     process(clk)
         begin
             if reset = '1' then
@@ -169,9 +170,13 @@ BM1 : blk_mem_gen_0 port map (
                     
                     if lrclk_s = '0' then   --lr edge detection "rising"
                         lrclk_rise_pulse <= '1';
+                        --right_valid_s <= '0';
+                        left_valid_s <= '1';
                     end if;
                     if lrclk_s = '1' then --"falling" edge detection
                         lrclk_fall_pulse <= '1';
+                        --left_valid_s <= '0';
+                        right_valid_s <= '1';
                     end if;
                     
                     --block above not nessassary -------------
@@ -191,11 +196,12 @@ BM1 : blk_mem_gen_0 port map (
                     --===========================================
                     -- comment out for actual use
                     --===========================================
+                    
                     address <= address + 1;
                     addra_s <= std_logic_vector(to_unsigned(address, 5));
                     shift_Reg_load <= douta_s; --assine new sample to register
                     if address >= 32 then  -- loop the block memory for output
-                        address <= 0;
+                        address <= 31;
                     end if;
                     --===============
                     --end of comment(actual use)
@@ -256,19 +262,29 @@ BM1 : blk_mem_gen_0 port map (
                 --below changes lrclk rise pulse and fall to one system clk cycle
                 if lrclk_rise_pulse = '1' then
                     lrclk_rise_pulse <='0';
-                    right_valid <= '0';
-                    left_valid <= '1';
+--                    right_valid_s <= '0';
+--                    left_valid <= '1';
                     
                     --right_reg_shift <= right_reg_output_s;-- assinment to hold for an extra 32 sclk
                 elsif lrclk_fall_pulse = '1' then
-                    left_valid <= '0';
-                    right_valid <= '1';
+--                    left_valid_s <= '0';
+--                    right_valid <= '1';
                     lrclk_fall_pulse <='0';
                     --left_reg_shift <= left_reg_output_s; -- assinment to hold for an extra 32 sclk
                 else
-                    right_valid <= '0';
-                    left_valid <= '0';
+--                    right_valid_s <= '0';
+--                    left_valid_s <= '0';
                 end if; 
+                
+                if right_valid_s = '1' then
+                    if left_valid_s = '0' then --delay an extra cycle so valid can go high
+                        right_valid_s <= '0';
+                    end if;
+                elsif left_valid_s = '1' then
+                    if right_valid_s = '0' then
+                        left_valid_s <= '0';
+                    end if;
+                end if;
                 
                 
                 
@@ -281,9 +297,9 @@ BM1 : blk_mem_gen_0 port map (
                     shift_cnt <= shift_cnt +1;
                     --add data_in register to hold data
                     if lrclk_s = '0' then
-                        left_reg(31 - shift_cnt) <= r_data; -- shift_Reg_load(31 - shift_cnt); -- 
+                        left_reg(31 - shift_cnt) <=   r_data; --shift_Reg_load(31 - shift_cnt);--
                     elsif lrclk_s = '1' then
-                        right_reg(31 - shift_cnt) <= r_data; -- shift_Reg_load(31 - shift_cnt); --
+                        right_reg(31 - shift_cnt) <=   r_data; --shift_Reg_load(31 - shift_cnt);--
                     else
                         null;
                     end if;

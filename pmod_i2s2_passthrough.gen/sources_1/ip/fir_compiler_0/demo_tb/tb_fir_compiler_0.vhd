@@ -94,11 +94,18 @@ architecture tb of tb_fir_compiler_0 is
   signal s_axis_data_tready              : std_logic := '1';  -- slave is ready
   signal s_axis_data_tdata               : std_logic_vector(23 downto 0) := (others => '0');  -- data payload
   signal s_axis_data_tuser               : std_logic_vector(0 downto 0) := (others => '0');  -- user-defined payload
+  signal s_axis_data_tlast               : std_logic := '0';  -- indicates end of packet
 
   -- Data master channel signals
   signal m_axis_data_tvalid              : std_logic := '0';  -- payload is valid
   signal m_axis_data_tdata               : std_logic_vector(31 downto 0) := (others => '0');  -- data payload
   signal m_axis_data_tuser               : std_logic_vector(0 downto 0) := (others => '0');  -- user-defined payload
+  signal m_axis_data_tlast               : std_logic := '0';  -- indicates end of packet
+
+  -- Event signals
+  signal event_s_data_tlast_missing      : std_logic  :=  '0';  -- s_axis_data_tlast low at end of data packet
+  signal event_s_data_tlast_unexpected   : std_logic  :=  '0';  -- s_axis_data_tlast high not at end of data packet
+  signal event_s_data_chanid_incorrect   : std_logic  :=  '0';  -- s_axis_data_tuser contains wrong channel ID
 
   -----------------------------------------------------------------------
   -- Aliases for AXI channel TDATA and TUSER fields
@@ -109,11 +116,17 @@ architecture tb of tb_fir_compiler_0 is
 
   -- Data slave channel alias signals
   signal s_axis_data_tdata_data        : std_logic_vector(23 downto 0) := (others => '0');
-  signal s_axis_data_tuser_user        : std_logic_vector(0 downto 0) := (others => '0');
+  signal s_axis_data_tuser_channel_id  : std_logic_vector(0 downto 0) := (others => '0');
 
   -- Data master channel alias signals
   signal m_axis_data_tdata_data        : std_logic_vector(31 downto 0) := (others => '0');
-  signal m_axis_data_tuser_user        : std_logic_vector(0 downto 0) := (others => '0');
+  signal m_axis_data_tuser_channel_id  : std_logic_vector(0 downto 0) := (others => '0');
+
+  -----------------------------------------------------------------------
+  -- Testbench signals
+  -----------------------------------------------------------------------
+
+  signal ip_channel_nxt      : integer range 0 to 1 := 0;
 
 
 begin
@@ -129,9 +142,14 @@ begin
       s_axis_data_tready              => s_axis_data_tready,
       s_axis_data_tdata               => s_axis_data_tdata,
       s_axis_data_tuser               => s_axis_data_tuser,
+      s_axis_data_tlast               => s_axis_data_tlast,
       m_axis_data_tvalid              => m_axis_data_tvalid,
       m_axis_data_tdata               => m_axis_data_tdata,
-      m_axis_data_tuser               => m_axis_data_tuser
+      m_axis_data_tuser               => m_axis_data_tuser,
+      m_axis_data_tlast               => m_axis_data_tlast,
+      event_s_data_tlast_missing      => event_s_data_tlast_missing,
+      event_s_data_tlast_unexpected   => event_s_data_tlast_unexpected,
+      event_s_data_chanid_incorrect   => event_s_data_chanid_incorrect
       );
 
   -----------------------------------------------------------------------
@@ -167,7 +185,12 @@ begin
       loop
         s_axis_data_tvalid <= '1';
         s_axis_data_tdata  <= data;
-        s_axis_data_tuser  <= std_logic_vector(to_unsigned(ip_count, 1));  -- sample number in this procedure call
+        s_axis_data_tuser  <= std_logic_vector(to_unsigned(ip_channel_nxt, 1));  -- channel ID
+        if ip_channel_nxt = 1 then
+          s_axis_data_tlast <= '1';  -- TLAST indicates a sample for the last channel
+        else
+          s_axis_data_tlast <= '0';
+        end if;
         loop
           wait until rising_edge(aclk);
           exit when s_axis_data_tready = '1';
@@ -237,6 +260,23 @@ begin
 
   end process stimuli;
 
+  -- Counter to track the channel number of the next input data sample
+  -- This is used to:
+  -- - set the channel ID field of s_axis_data_tuser
+  -- - select the s_axis_data_tlast value
+  channel_id_count : process (aclk)
+  begin
+    if rising_edge(aclk) then
+      if s_axis_data_tvalid = '1' and s_axis_data_tready = '1' then
+        if ip_channel_nxt = 1 then
+          ip_channel_nxt <= 0;
+        else
+          ip_channel_nxt <= ip_channel_nxt + 1;
+        end if;
+      end if;
+    end if;
+  end process channel_id_count;
+
   -----------------------------------------------------------------------
   -- Check outputs
   -----------------------------------------------------------------------
@@ -263,6 +303,10 @@ begin
         report "ERROR: m_axis_data_tuser is invalid when m_axis_data_tvalid is high" severity error;
         check_ok := false;
       end if;
+      if is_x(m_axis_data_tlast) then
+        report "ERROR: m_axis_data_tlast is invalid when m_axis_data_tvalid is high" severity error;
+        check_ok := false;
+      end if;
 
     end if;
 
@@ -277,10 +321,10 @@ begin
 
   -- Data slave channel alias signals
   s_axis_data_tdata_data        <= s_axis_data_tdata(23 downto 0);
-  s_axis_data_tuser_user        <= s_axis_data_tuser(0 downto 0);
+  s_axis_data_tuser_channel_id  <= s_axis_data_tuser(0 downto 0);
 
   -- Data master channel alias signals: update these only when they are valid
   m_axis_data_tdata_data        <= m_axis_data_tdata(31 downto 0) when m_axis_data_tvalid = '1';
-  m_axis_data_tuser_user        <= m_axis_data_tuser(0 downto 0) when m_axis_data_tvalid = '1';
+  m_axis_data_tuser_channel_id  <= m_axis_data_tuser(0 downto 0) when m_axis_data_tvalid = '1';
 
 end tb;

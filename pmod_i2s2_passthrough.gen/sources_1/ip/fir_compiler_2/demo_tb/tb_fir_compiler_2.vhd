@@ -92,13 +92,16 @@ architecture tb of tb_fir_compiler_2 is
   -- Data slave channel signals
   signal s_axis_data_tvalid              : std_logic := '0';  -- payload is valid
   signal s_axis_data_tready              : std_logic := '1';  -- slave is ready
-  signal s_axis_data_tdata               : std_logic_vector(23 downto 0) := (others => '0');  -- data payload
+  signal s_axis_data_tdata               : std_logic_vector(31 downto 0) := (others => '0');  -- data payload
   signal s_axis_data_tuser               : std_logic_vector(0 downto 0) := (others => '0');  -- user-defined payload
 
   -- Data master channel signals
   signal m_axis_data_tvalid              : std_logic := '0';  -- payload is valid
   signal m_axis_data_tdata               : std_logic_vector(31 downto 0) := (others => '0');  -- data payload
   signal m_axis_data_tuser               : std_logic_vector(0 downto 0) := (others => '0');  -- user-defined payload
+
+  -- Event signals
+  signal event_s_data_chanid_incorrect   : std_logic  :=  '0';  -- s_axis_data_tuser contains wrong channel ID
 
   -----------------------------------------------------------------------
   -- Aliases for AXI channel TDATA and TUSER fields
@@ -108,12 +111,18 @@ architecture tb of tb_fir_compiler_2 is
   -----------------------------------------------------------------------
 
   -- Data slave channel alias signals
-  signal s_axis_data_tdata_data        : std_logic_vector(23 downto 0) := (others => '0');
-  signal s_axis_data_tuser_user        : std_logic_vector(0 downto 0) := (others => '0');
+  signal s_axis_data_tdata_data        : std_logic_vector(31 downto 0) := (others => '0');
+  signal s_axis_data_tuser_channel_id  : std_logic_vector(0 downto 0) := (others => '0');
 
   -- Data master channel alias signals
   signal m_axis_data_tdata_data        : std_logic_vector(31 downto 0) := (others => '0');
-  signal m_axis_data_tuser_user        : std_logic_vector(0 downto 0) := (others => '0');
+  signal m_axis_data_tuser_channel_id  : std_logic_vector(0 downto 0) := (others => '0');
+
+  -----------------------------------------------------------------------
+  -- Testbench signals
+  -----------------------------------------------------------------------
+
+  signal ip_channel_nxt      : integer range 0 to 1 := 0;
 
 
 begin
@@ -131,7 +140,8 @@ begin
       s_axis_data_tuser               => s_axis_data_tuser,
       m_axis_data_tvalid              => m_axis_data_tvalid,
       m_axis_data_tdata               => m_axis_data_tdata,
-      m_axis_data_tuser               => m_axis_data_tuser
+      m_axis_data_tuser               => m_axis_data_tuser,
+      event_s_data_chanid_incorrect   => event_s_data_chanid_incorrect
       );
 
   -----------------------------------------------------------------------
@@ -159,7 +169,7 @@ begin
     -- Procedure to drive a number of input samples with specific data
     -- data is the data value to drive on the tdata signal
     -- samples is the number of zero-data input samples to drive
-    procedure drive_data ( data    : std_logic_vector(23 downto 0);
+    procedure drive_data ( data    : std_logic_vector(31 downto 0);
                            samples : natural := 1 ) is
       variable ip_count : integer := 0;
     begin
@@ -167,16 +177,16 @@ begin
       loop
         s_axis_data_tvalid <= '1';
         s_axis_data_tdata  <= data;
-        s_axis_data_tuser  <= std_logic_vector(to_unsigned(ip_count, 1));  -- sample number in this procedure call
+        s_axis_data_tuser  <= std_logic_vector(to_unsigned(ip_channel_nxt, 1));  -- channel ID
         loop
           wait until rising_edge(aclk);
           exit when s_axis_data_tready = '1';
         end loop;
         ip_count := ip_count + 1;
         wait for T_HOLD;
-      -- Input rate is 1 input each 4088 clock cycles: drive valid inputs at this rate
+      -- Input rate is 1 input each 2044 clock cycles: drive valid inputs at this rate
         s_axis_data_tvalid <= '0';
-        wait for CLOCK_PERIOD * 4087;
+        wait for CLOCK_PERIOD * 2043;
         exit when ip_count >= samples;
       end loop;
     end procedure drive_data;
@@ -191,10 +201,10 @@ begin
     -- Procedure to drive an impulse and let the impulse response emerge on the data master channel
     -- samples is the number of input samples to drive; default is enough for impulse response output to emerge
     procedure drive_impulse ( samples : natural := 146 ) is
-      variable impulse : std_logic_vector(23 downto 0);
+      variable impulse : std_logic_vector(31 downto 0);
     begin
       impulse := (others => '0');  -- initialize unused bits to zero
-      impulse(23 downto 0) := "010000000000000000000000";
+      impulse(31 downto 0) := "01000000000000000000000000000000";
       drive_data(impulse);
       if samples > 1 then
         drive_zeros(samples-1);
@@ -202,7 +212,7 @@ begin
     end procedure drive_impulse;
 
     -- Local variables
-    variable data : std_logic_vector(23 downto 0);
+    variable data : std_logic_vector(31 downto 0);
 
   begin
 
@@ -216,18 +226,18 @@ begin
     -- Drive another impulse, during which demonstrate use and effect of AXI handshaking signals
     drive_impulse(2);  -- start of impulse; data is now zero
     s_axis_data_tvalid <= '0';
-    wait for CLOCK_PERIOD * 20440;  -- provide no data for 5 input samples worth
+    wait for CLOCK_PERIOD * 10220;  -- provide no data for 5 input samples worth
     drive_zeros(2);  -- 2 normal input samples
     s_axis_data_tvalid <= '1';
-    wait for CLOCK_PERIOD * 20440;  -- provide data as fast as the core can accept it for 5 input samples worth
+    wait for CLOCK_PERIOD * 10220;  -- provide data as fast as the core can accept it for 5 input samples worth
     drive_zeros(137);  -- back to normal operation
 
     -- Drive a set of impulses of different magnitudes on each channel
     -- Channel inputs are provided in TDM fashion
     data := (others => '0');  -- initialize unused bits to zero
-    data(23 downto 0) := "010000000000000000000000";  -- channel 0: impulse >> 0
+    data(31 downto 0) := "01000000000000000000000000000000";  -- channel 0: impulse >> 0
     drive_data(data);
-    data(23 downto 0) := "001000000000000000000000";  -- channel 1: impulse >> 1
+    data(31 downto 0) := "00100000000000000000000000000000";  -- channel 1: impulse >> 1
     drive_data(data);
     drive_zeros(144);
 
@@ -236,6 +246,22 @@ begin
     wait;
 
   end process stimuli;
+
+  -- Counter to track the channel number of the next input data sample
+  -- This is used to:
+  -- - set the channel ID field of s_axis_data_tuser
+  channel_id_count : process (aclk)
+  begin
+    if rising_edge(aclk) then
+      if s_axis_data_tvalid = '1' and s_axis_data_tready = '1' then
+        if ip_channel_nxt = 1 then
+          ip_channel_nxt <= 0;
+        else
+          ip_channel_nxt <= ip_channel_nxt + 1;
+        end if;
+      end if;
+    end if;
+  end process channel_id_count;
 
   -----------------------------------------------------------------------
   -- Check outputs
@@ -276,11 +302,11 @@ begin
   -----------------------------------------------------------------------
 
   -- Data slave channel alias signals
-  s_axis_data_tdata_data        <= s_axis_data_tdata(23 downto 0);
-  s_axis_data_tuser_user        <= s_axis_data_tuser(0 downto 0);
+  s_axis_data_tdata_data        <= s_axis_data_tdata(31 downto 0);
+  s_axis_data_tuser_channel_id  <= s_axis_data_tuser(0 downto 0);
 
   -- Data master channel alias signals: update these only when they are valid
   m_axis_data_tdata_data        <= m_axis_data_tdata(31 downto 0) when m_axis_data_tvalid = '1';
-  m_axis_data_tuser_user        <= m_axis_data_tuser(0 downto 0) when m_axis_data_tvalid = '1';
+  m_axis_data_tuser_channel_id  <= m_axis_data_tuser(0 downto 0) when m_axis_data_tvalid = '1';
 
 end tb;

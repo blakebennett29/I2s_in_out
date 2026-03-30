@@ -97,20 +97,203 @@ proc step_failed { step } {
 OPTRACE "impl_1" END { }
 }
 
+set_msg_config -id {Common 17-41} -limit 10000000
 
 OPTRACE "impl_1" START { ROLLUP_1 }
+OPTRACE "Phase: Init Design" START { ROLLUP_AUTO }
+start_step init_design
+set ACTIVE_STEP init_design
+set rc [catch {
+  create_msg_db init_design.pb
+  set_param chipscope.maxJobs 4
+  set_param xicom.use_bs_reader 1
+  set_param runs.launchOptions { -jobs 8  }
+OPTRACE "create in-memory project" START { }
+  create_project -in_memory -part xc7a35tcpg236-1
+  set_property board_part_repo_paths {C:/Users/20bbe/AppData/Roaming/Xilinx/Vivado/2024.1/xhub/board_store/xilinx_board_store} [current_project]
+  set_property board_part digilentinc.com:basys3:part0:1.2 [current_project]
+  set_property design_mode GateLvl [current_fileset]
+  set_param project.singleFileAddWarning.threshold 0
+OPTRACE "create in-memory project" END { }
+OPTRACE "set parameters" START { }
+  set_property webtalk.parent_dir E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.cache/wt [current_project]
+  set_property parent.project_path E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.xpr [current_project]
+  set_property ip_output_repo E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.cache/ip [current_project]
+  set_property ip_cache_permissions {read write} [current_project]
+  set_property XPM_LIBRARIES XPM_MEMORY [current_project]
+OPTRACE "set parameters" END { }
+OPTRACE "add files" START { }
+  add_files -quiet E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.runs/synth_1/TOP.dcp
+  read_ip -quiet E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/ip/L_L1_fir_compiler_1/L_L1_fir_compiler_1.xci
+  read_ip -quiet E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/ip/H_L1_fir_compiler_2/H_L1_fir_compiler_2.xci
+  read_ip -quiet E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/ip/fir_compiler_1/fir_compiler_1.xci
+  read_ip -quiet E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/ip/INT_L_L1_fir_compiler/INT_L_L1_fir_compiler.xci
+  read_ip -quiet E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/ip/fir_compiler_2/fir_compiler_2.xci
+  read_ip -quiet E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci
+  read_ip -quiet E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/ip/fir_compiler_0/fir_compiler_0.xci
+OPTRACE "read constraints: implementation" START { }
+  read_xdc E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/constrs_1/new/Constraints.xdc
+OPTRACE "read constraints: implementation" END { }
+OPTRACE "read constraints: implementation_pre" START { }
+OPTRACE "read constraints: implementation_pre" END { }
+OPTRACE "add files" END { }
+OPTRACE "link_design" START { }
+  link_design -top TOP -part xc7a35tcpg236-1 
+OPTRACE "link_design" END { }
+OPTRACE "gray box cells" START { }
+OPTRACE "gray box cells" END { }
+OPTRACE "init_design_reports" START { REPORT }
+OPTRACE "init_design_reports" END { }
+OPTRACE "init_design_write_hwdef" START { }
+OPTRACE "init_design_write_hwdef" END { }
+  close_msg_db -file init_design.pb
+} RESULT]
+if {$rc} {
+  step_failed init_design
+  return -code error $RESULT
+} else {
+  end_step init_design
+  unset ACTIVE_STEP 
+}
+
+OPTRACE "Phase: Init Design" END { }
+OPTRACE "Phase: Opt Design" START { ROLLUP_AUTO }
+start_step opt_design
+set ACTIVE_STEP opt_design
+set rc [catch {
+  create_msg_db opt_design.pb
+OPTRACE "read constraints: opt_design" START { }
+OPTRACE "read constraints: opt_design" END { }
+OPTRACE "opt_design" START { }
+  opt_design 
+OPTRACE "opt_design" END { }
+OPTRACE "read constraints: opt_design_post" START { }
+OPTRACE "read constraints: opt_design_post" END { }
+OPTRACE "opt_design reports" START { REPORT }
+  set_param project.isImplRun true
+  generate_parallel_reports -reports { "report_drc -file TOP_drc_opted.rpt -pb TOP_drc_opted.pb -rpx TOP_drc_opted.rpx"  }
+  set_param project.isImplRun false
+OPTRACE "opt_design reports" END { }
+OPTRACE "Opt Design: write_checkpoint" START { CHECKPOINT }
+  write_checkpoint -force TOP_opt.dcp
+OPTRACE "Opt Design: write_checkpoint" END { }
+  close_msg_db -file opt_design.pb
+} RESULT]
+if {$rc} {
+  step_failed opt_design
+  return -code error $RESULT
+} else {
+  end_step opt_design
+  unset ACTIVE_STEP 
+}
+
+OPTRACE "Phase: Opt Design" END { }
+OPTRACE "Phase: Place Design" START { ROLLUP_AUTO }
+start_step place_design
+set ACTIVE_STEP place_design
+set rc [catch {
+  create_msg_db place_design.pb
+OPTRACE "read constraints: place_design" START { }
+OPTRACE "read constraints: place_design" END { }
+  if { [llength [get_debug_cores -quiet] ] > 0 }  { 
+OPTRACE "implement_debug_core" START { }
+    implement_debug_core 
+OPTRACE "implement_debug_core" END { }
+  } 
+OPTRACE "place_design" START { }
+  place_design 
+OPTRACE "place_design" END { }
+OPTRACE "read constraints: place_design_post" START { }
+OPTRACE "read constraints: place_design_post" END { }
+OPTRACE "place_design reports" START { REPORT }
+  set_param project.isImplRun true
+  generate_parallel_reports -reports { "report_io -file TOP_io_placed.rpt" "report_utilization -file TOP_utilization_placed.rpt -pb TOP_utilization_placed.pb" "report_control_sets -verbose -file TOP_control_sets_placed.rpt"  }
+  set_param project.isImplRun false
+OPTRACE "place_design reports" END { }
+OPTRACE "Place Design: write_checkpoint" START { CHECKPOINT }
+  write_checkpoint -force TOP_placed.dcp
+OPTRACE "Place Design: write_checkpoint" END { }
+  close_msg_db -file place_design.pb
+} RESULT]
+if {$rc} {
+  step_failed place_design
+  return -code error $RESULT
+} else {
+  end_step place_design
+  unset ACTIVE_STEP 
+}
+
+OPTRACE "Phase: Place Design" END { }
+OPTRACE "Phase: Physical Opt Design" START { ROLLUP_AUTO }
+start_step phys_opt_design
+set ACTIVE_STEP phys_opt_design
+set rc [catch {
+  create_msg_db phys_opt_design.pb
+OPTRACE "read constraints: phys_opt_design" START { }
+OPTRACE "read constraints: phys_opt_design" END { }
+OPTRACE "phys_opt_design" START { }
+  phys_opt_design 
+OPTRACE "phys_opt_design" END { }
+OPTRACE "read constraints: phys_opt_design_post" START { }
+OPTRACE "read constraints: phys_opt_design_post" END { }
+OPTRACE "phys_opt_design report" START { REPORT }
+OPTRACE "phys_opt_design report" END { }
+OPTRACE "Post-Place Phys Opt Design: write_checkpoint" START { CHECKPOINT }
+  write_checkpoint -force TOP_physopt.dcp
+OPTRACE "Post-Place Phys Opt Design: write_checkpoint" END { }
+  close_msg_db -file phys_opt_design.pb
+} RESULT]
+if {$rc} {
+  step_failed phys_opt_design
+  return -code error $RESULT
+} else {
+  end_step phys_opt_design
+  unset ACTIVE_STEP 
+}
+
+OPTRACE "Phase: Physical Opt Design" END { }
+OPTRACE "Phase: Route Design" START { ROLLUP_AUTO }
+start_step route_design
+set ACTIVE_STEP route_design
+set rc [catch {
+  create_msg_db route_design.pb
+OPTRACE "read constraints: route_design" START { }
+OPTRACE "read constraints: route_design" END { }
+OPTRACE "route_design" START { }
+  route_design 
+OPTRACE "route_design" END { }
+OPTRACE "read constraints: route_design_post" START { }
+OPTRACE "read constraints: route_design_post" END { }
+OPTRACE "route_design reports" START { REPORT }
+  set_param project.isImplRun true
+  generate_parallel_reports -reports { "report_drc -file TOP_drc_routed.rpt -pb TOP_drc_routed.pb -rpx TOP_drc_routed.rpx" "report_methodology -file TOP_methodology_drc_routed.rpt -pb TOP_methodology_drc_routed.pb -rpx TOP_methodology_drc_routed.rpx" "report_power -file TOP_power_routed.rpt -pb TOP_power_summary_routed.pb -rpx TOP_power_routed.rpx" "report_route_status -file TOP_route_status.rpt -pb TOP_route_status.pb" "report_timing_summary -max_paths 10 -report_unconstrained -file TOP_timing_summary_routed.rpt -pb TOP_timing_summary_routed.pb -rpx TOP_timing_summary_routed.rpx -warn_on_violation " "report_incremental_reuse -file TOP_incremental_reuse_routed.rpt" "report_clock_utilization -file TOP_clock_utilization_routed.rpt" "report_bus_skew -warn_on_violation -file TOP_bus_skew_routed.rpt -pb TOP_bus_skew_routed.pb -rpx TOP_bus_skew_routed.rpx"  }
+  set_param project.isImplRun false
+OPTRACE "route_design reports" END { }
+OPTRACE "Route Design: write_checkpoint" START { CHECKPOINT }
+  write_checkpoint -force TOP_routed.dcp
+OPTRACE "Route Design: write_checkpoint" END { }
+OPTRACE "route_design misc" START { }
+  close_msg_db -file route_design.pb
+} RESULT]
+if {$rc} {
+OPTRACE "route_design write_checkpoint" START { CHECKPOINT }
+OPTRACE "route_design write_checkpoint" END { }
+  write_checkpoint -force TOP_routed_error.dcp
+  step_failed route_design
+  return -code error $RESULT
+} else {
+  end_step route_design
+  unset ACTIVE_STEP 
+}
+
+OPTRACE "route_design misc" END { }
+OPTRACE "Phase: Route Design" END { }
 OPTRACE "Phase: Write Bitstream" START { ROLLUP_AUTO }
 OPTRACE "write_bitstream setup" START { }
 start_step write_bitstream
 set ACTIVE_STEP write_bitstream
 set rc [catch {
   create_msg_db write_bitstream.pb
-  set_param chipscope.maxJobs 4
-  set_param xicom.use_bs_reader 1
-  set_param runs.launchOptions { -jobs 8  }
-  open_checkpoint TOP_routed.dcp
-  set_property webtalk.parent_dir E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.cache/wt [current_project]
-set_property TOP TOP [current_fileset]
 OPTRACE "read constraints: write_bitstream" START { }
 OPTRACE "read constraints: write_bitstream" END { }
   set_property XPM_LIBRARIES XPM_MEMORY [current_project]

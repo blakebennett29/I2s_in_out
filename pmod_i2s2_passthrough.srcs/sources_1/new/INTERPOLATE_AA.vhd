@@ -37,8 +37,8 @@ entity INTERPOLATE_AA is
         reset            : in  std_logic;
 
         -- input samples
-        data_in_left     : in  std_logic_vector(23 downto 0);
-        data_in_right    : in  std_logic_vector(23 downto 0);
+        data_in_left     : in  std_logic_vector(31 downto 0);
+        data_in_right    : in  std_logic_vector(31 downto 0);
         left_valid_in    : in  std_logic; --remove
         right_valid_in   : in  std_logic; --remove
         m_tdata_valid_in : in std_logic;
@@ -54,9 +54,9 @@ architecture Behavioral of INTERPOLATE_AA is
 signal    aclk_s :  STD_LOGIC := '0';
 signal    s_axis_data_tvalid_s :  STD_LOGIC := '0';
 signal    s_axis_data_tready_s :  STD_LOGIC := '1';
-signal    s_axis_data_tdata_s :  STD_LOGIC_VECTOR(23 DOWNTO 0) := (others => '0');
+signal    s_axis_data_tdata_s :  STD_LOGIC_VECTOR(31 DOWNTO 0) := (others => '0');
 signal    m_axis_data_tvalid_s :  STD_LOGIC := '0';
-signal    m_axis_data_tdata_s :  STD_LOGIC_VECTOR(23 DOWNTO 0) := (others => '0');
+signal    m_axis_data_tdata_s :  STD_LOGIC_VECTOR(31 DOWNTO 0) := (others => '0');
 signal    s_axis_data_tuser_s : std_logic_vector(0 downto 0) := "0";
 signal    m_axis_data_tuser_s : std_logic_vector(0 downto 0) := "0";
 
@@ -67,16 +67,17 @@ signal    right_valid_cnt : integer := 0;
 signal    out_data_L_s : std_logic_vector(23 downto 0) := (others => '0');
 signal    out_data_R_s : std_logic_vector(23 downto 0) := (others => '0');
 
-signal send_left : std_logic := '1';
+signal    data_in_left_s : std_logic_vector(31 downto 0) := (others => '0');
+signal    data_in_right_s : std_logic_vector(31 downto 0) := (others => '0');
 
 component fir_compiler_1 IS
   PORT (
     aclk : IN STD_LOGIC;
     s_axis_data_tvalid : IN STD_LOGIC;
     s_axis_data_tready : OUT STD_LOGIC;
-    s_axis_data_tdata : IN STD_LOGIC_VECTOR(23 DOWNTO 0);
+    s_axis_data_tdata : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
     m_axis_data_tvalid : OUT STD_LOGIC;
-    m_axis_data_tdata : OUT STD_LOGIC_VECTOR(23 DOWNTO 0);
+    m_axis_data_tdata : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
     s_axis_data_tuser : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
     m_axis_data_tuser : OUT STD_LOGIC_VECTOR(0 DOWNTO 0)
   );
@@ -97,6 +98,10 @@ AA_fir_up_sample_1: fir_compiler_1 port map (
 m_tdata_valid_in_s <= m_tdata_valid_in;
 data_out_left <= out_data_L_s;
 data_out_right <= out_data_R_s;
+
+data_in_right_s <= data_in_right;
+data_in_left_s <= data_in_left;
+
 process(clk)
         begin
             if rising_edge(clk) then
@@ -144,10 +149,10 @@ process(clk)
                 
                 -- OUTPUT: use the OUTPUT tag (NOT s_axis tag)
                 if (m_axis_data_tvalid_s = '1') and (m_axis_data_tuser_s = "1") then
-                    out_data_l_s <= m_axis_data_tdata_s;--data out
+                    out_data_l_s <= m_axis_data_tdata_s(24 downto 1);--data out
                 end if;
                 if(m_axis_data_tvalid_s = '1') and (m_axis_data_tuser_s = "0") then
-                    out_data_R_s <= m_axis_data_tdata_s; --data out
+                    out_data_R_s <= m_axis_data_tdata_s(24 downto 1); --data out
                 end if;
                 -- end of input channel check
             end if;

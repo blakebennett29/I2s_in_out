@@ -56,11 +56,16 @@ COMPONENT fir_compiler_0
     aclk : IN STD_LOGIC;
     s_axis_data_tvalid : IN STD_LOGIC;
     s_axis_data_tready : OUT STD_LOGIC;
+    s_axis_data_tlast : IN STD_LOGIC;
     s_axis_data_tuser : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
     s_axis_data_tdata : IN STD_LOGIC_VECTOR(23 DOWNTO 0);
     m_axis_data_tvalid : OUT STD_LOGIC;
+    m_axis_data_tlast : OUT STD_LOGIC;
     m_axis_data_tuser : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
-    m_axis_data_tdata : OUT STD_LOGIC_VECTOR(31 DOWNTO 0) 
+    m_axis_data_tdata : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+    event_s_data_tlast_missing : OUT STD_LOGIC;
+    event_s_data_tlast_unexpected : OUT STD_LOGIC;
+    event_s_data_chanid_incorrect : OUT STD_LOGIC 
   );
 END COMPONENT;
 -- COMP_TAG_END ------ End COMPONENT Declaration ------------
@@ -74,11 +79,16 @@ your_instance_name : fir_compiler_0
     aclk => aclk,
     s_axis_data_tvalid => s_axis_data_tvalid,
     s_axis_data_tready => s_axis_data_tready,
+    s_axis_data_tlast => s_axis_data_tlast,
     s_axis_data_tuser => s_axis_data_tuser,
     s_axis_data_tdata => s_axis_data_tdata,
     m_axis_data_tvalid => m_axis_data_tvalid,
+    m_axis_data_tlast => m_axis_data_tlast,
     m_axis_data_tuser => m_axis_data_tuser,
-    m_axis_data_tdata => m_axis_data_tdata
+    m_axis_data_tdata => m_axis_data_tdata,
+    event_s_data_tlast_missing => event_s_data_tlast_missing,
+    event_s_data_tlast_unexpected => event_s_data_tlast_unexpected,
+    event_s_data_chanid_incorrect => event_s_data_chanid_incorrect
   );
 -- INST_TAG_END ------ End INSTANTIATION Template ---------
 

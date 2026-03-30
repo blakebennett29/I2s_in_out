@@ -92,12 +92,12 @@ architecture tb of tb_fir_compiler_1 is
   -- Data slave channel signals
   signal s_axis_data_tvalid              : std_logic := '0';  -- payload is valid
   signal s_axis_data_tready              : std_logic := '1';  -- slave is ready
-  signal s_axis_data_tdata               : std_logic_vector(23 downto 0) := (others => '0');  -- data payload
+  signal s_axis_data_tdata               : std_logic_vector(31 downto 0) := (others => '0');  -- data payload
   signal s_axis_data_tuser               : std_logic_vector(0 downto 0) := (others => '0');  -- user-defined payload
 
   -- Data master channel signals
   signal m_axis_data_tvalid              : std_logic := '0';  -- payload is valid
-  signal m_axis_data_tdata               : std_logic_vector(23 downto 0) := (others => '0');  -- data payload
+  signal m_axis_data_tdata               : std_logic_vector(31 downto 0) := (others => '0');  -- data payload
   signal m_axis_data_tuser               : std_logic_vector(0 downto 0) := (others => '0');  -- user-defined payload
 
   -- Event signals
@@ -111,11 +111,11 @@ architecture tb of tb_fir_compiler_1 is
   -----------------------------------------------------------------------
 
   -- Data slave channel alias signals
-  signal s_axis_data_tdata_data        : std_logic_vector(23 downto 0) := (others => '0');
+  signal s_axis_data_tdata_data        : std_logic_vector(31 downto 0) := (others => '0');
   signal s_axis_data_tuser_channel_id  : std_logic_vector(0 downto 0) := (others => '0');
 
   -- Data master channel alias signals
-  signal m_axis_data_tdata_data        : std_logic_vector(23 downto 0) := (others => '0');
+  signal m_axis_data_tdata_data        : std_logic_vector(31 downto 0) := (others => '0');
   signal m_axis_data_tuser_channel_id  : std_logic_vector(0 downto 0) := (others => '0');
 
   -----------------------------------------------------------------------
@@ -169,7 +169,7 @@ begin
     -- Procedure to drive a number of input samples with specific data
     -- data is the data value to drive on the tdata signal
     -- samples is the number of zero-data input samples to drive
-    procedure drive_data ( data    : std_logic_vector(23 downto 0);
+    procedure drive_data ( data    : std_logic_vector(31 downto 0);
                            samples : natural := 1 ) is
       variable ip_count : integer := 0;
     begin
@@ -201,10 +201,10 @@ begin
     -- Procedure to drive an impulse and let the impulse response emerge on the data master channel
     -- samples is the number of input samples to drive; default is enough for impulse response output to emerge
     procedure drive_impulse ( samples : natural := 266 ) is
-      variable impulse : std_logic_vector(23 downto 0);
+      variable impulse : std_logic_vector(31 downto 0);
     begin
       impulse := (others => '0');  -- initialize unused bits to zero
-      impulse(23 downto 0) := "010000000000000000000000";
+      impulse(31 downto 0) := "01000000000000000000000000000000";
       drive_data(impulse);
       if samples > 1 then
         drive_zeros(samples-1);
@@ -212,7 +212,7 @@ begin
     end procedure drive_impulse;
 
     -- Local variables
-    variable data : std_logic_vector(23 downto 0);
+    variable data : std_logic_vector(31 downto 0);
 
   begin
 
@@ -235,9 +235,9 @@ begin
     -- Drive a set of impulses of different magnitudes on each channel
     -- Channel inputs are provided in TDM fashion
     data := (others => '0');  -- initialize unused bits to zero
-    data(23 downto 0) := "010000000000000000000000";  -- channel 0: impulse >> 0
+    data(31 downto 0) := "01000000000000000000000000000000";  -- channel 0: impulse >> 0
     drive_data(data);
-    data(23 downto 0) := "001000000000000000000000";  -- channel 1: impulse >> 1
+    data(31 downto 0) := "00100000000000000000000000000000";  -- channel 1: impulse >> 1
     drive_data(data);
     drive_zeros(264);
 
@@ -302,11 +302,11 @@ begin
   -----------------------------------------------------------------------
 
   -- Data slave channel alias signals
-  s_axis_data_tdata_data        <= s_axis_data_tdata(23 downto 0);
+  s_axis_data_tdata_data        <= s_axis_data_tdata(31 downto 0);
   s_axis_data_tuser_channel_id  <= s_axis_data_tuser(0 downto 0);
 
   -- Data master channel alias signals: update these only when they are valid
-  m_axis_data_tdata_data        <= m_axis_data_tdata(23 downto 0) when m_axis_data_tvalid = '1';
+  m_axis_data_tdata_data        <= m_axis_data_tdata(31 downto 0) when m_axis_data_tvalid = '1';
   m_axis_data_tuser_channel_id  <= m_axis_data_tuser(0 downto 0) when m_axis_data_tvalid = '1';
 
 end tb;
