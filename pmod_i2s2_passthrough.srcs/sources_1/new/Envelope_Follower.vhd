@@ -48,9 +48,9 @@ signal alpha : sfixed(0 downto -14);
 
 signal state_cnt: integer := 0;
 
-constant alpha_attack  : sfixed(0 downto -14):= to_sfixed(0.9937, 0, -14);
-constant alpha_release : sfixed(0 downto -14):= to_sfixed(0.99979, 0, -14);
-constant ADC_offset: signed(17 downto 0) := to_signed(8388607, 18);
+constant alpha_attack  : sfixed(0 downto -14):= to_sfixed(0.001111, 0, -14);
+constant alpha_release : sfixed(0 downto -14):= to_sfixed(0.999999999999999, 0, -14);
+constant ADC_offset: signed(17 downto 0) := to_signed(131071, 18);
 constant output_hold: integer := 8;
 constant one_fx : sfixed(0 downto -14) := to_sfixed(1.0,0,-14);
 
@@ -123,11 +123,22 @@ begin
             
         --Set value through filter
         elsif curr_state = MULTIPLY then
+        
             if rectified_fx > feedback_fx then
                 alpha <= alpha_attack;
             else
                 alpha <= alpha_release;
             end if;
+--            if rectified_fx > feedback_fx then
+--                -- fast attack (not necessarily instant)
+--                    --idea
+--                  feedback_fx <= resize(feedback_fx + alpha_attack * (rectified_fx - feedback_fx),0, -17);
+----                  feedback_fx <= resize(alpha_attack *(feedback_fx + (rectified_fx - feedback_fx)),0, -17);
+-- --                               
+--            else
+--                -- slow release
+--                alpha <= alpha_release; --feedback_fx <= resize(feedback_fx + alpha_release * (rectified_fx - feedback_fx),0,-17);
+--            end if;
             term1 <= resize((one_fx - alpha) * rectified_fx,17,-14);
             term2 <= resize(alpha * feedback_fx,17,-14);          
             state_cnt <= state_cnt + 1;

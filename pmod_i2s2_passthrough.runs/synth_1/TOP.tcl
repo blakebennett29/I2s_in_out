@@ -58,7 +58,6 @@ if {$::dispatch::connected} {
 OPTRACE "synth_1" START { ROLLUP_AUTO }
 set_param chipscope.maxJobs 4
 set_param xicom.use_bs_reader 1
-set_msg_config -id {Common 17-41} -limit 10000000
 OPTRACE "Creating in-memory project" START { }
 create_project -in_memory -part xc7a35tcpg236-1
 
@@ -85,14 +84,14 @@ add_files E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.sr
 add_files E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/ip/fir_compiler_2/high.coe
 add_files E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/ip/INT_L_L1_fir_compiler/low.coe
 add_files E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/ip/blk_mem_gen_0/sine02.coe
-read_vhdl -library xil_defaultlib {
-  E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/Data_line_output.vhd
-  E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/Half_Data_line_Env_fol.vhd
-}
 read_vhdl -vhdl2008 -library xil_defaultlib {
   E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/AA_filter_2.vhd
+  E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/Data_line_output.vhd
+  E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/Envelope_Follower.vhd
+  E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/Envlope_Follower_control_Logic.vhd
   E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/H_INTP_L1.vhd
   E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/H_L1_FIR.vhd
+  E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/Half_Data_line_Env_fol.vhd
   E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/I2S_in.vhd
   E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/I2S_out.vhd
   E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/INTERPOLATE_AA.vhd
@@ -100,6 +99,7 @@ read_vhdl -vhdl2008 -library xil_defaultlib {
   E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/L_INTP_L1.vhd
   E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/L_L1_FIR.vhd
   E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/Level_1.vhd
+  E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/Modulator.vhd
   E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/TOP.vhd
 }
 read_ip -quiet E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/ip/L_L1_fir_compiler_1/L_L1_fir_compiler_1.xci

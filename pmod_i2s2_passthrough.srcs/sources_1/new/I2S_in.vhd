@@ -37,8 +37,8 @@ entity I2S_in is
             r_sclk: out std_logic;
             r_mclk: out std_logic;
             r_lrclk: out std_logic;
-            --r_data: out std_logic;
-            r_data: in std_logic; --out for simulation
+            r_data: out std_logic;
+            --r_data: in std_logic; --out for simulation
             
             
             left_reg_output : out std_logic_vector(23 downto 0);
@@ -293,13 +293,13 @@ BM1 : blk_mem_gen_0 port map (
                 --shift data bit's out (in is how I am looking at it while programing the dac)
                 if sclk_fall_pulse = '1' then 
                     sclk_fall_pulse <= '0';
-                    --r_data <= shift_Reg_load(31 - shift_cnt);--comment out for actual data
+                    r_data <= shift_Reg_load(31 - shift_cnt);--comment out for actual data
                     shift_cnt <= shift_cnt +1;
                     --add data_in register to hold data
                     if lrclk_s = '0' then
-                        left_reg(31 - shift_cnt) <=   r_data; --shift_Reg_load(31 - shift_cnt);--
+                        left_reg(31 - shift_cnt) <=   shift_Reg_load(31 - shift_cnt);   -- r_data; --
                     elsif lrclk_s = '1' then
-                        right_reg(31 - shift_cnt) <=   r_data; --shift_Reg_load(31 - shift_cnt);--
+                        right_reg(31 - shift_cnt) <=   shift_Reg_load(31 - shift_cnt);  --r_data; --
                     else
                         null;
                     end if;

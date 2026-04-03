@@ -36,13 +36,13 @@ entity Half_Data_line_Env_fol is
   Port (    clk: in std_logic;
             reset: in std_logic;
             
-            Env_fol_out : out sfixed(0 downto -18);
+            Env_fol_out : out std_logic_vector(17 downto 0);
             
             r_sclk: out std_logic;
             r_mclk: out std_logic;
             r_lrclk: out std_logic;
-            r_data: in std_logic; --in for actual use
-            --r_data: out std_logic;
+            --r_data: in std_logic; --in for actual use
+            r_data: out std_logic;
             
             t_sclk: out std_logic;
             t_mclk: out std_logic;
@@ -100,7 +100,8 @@ signal m_tdata_valid_s_int_aa_s : std_logic := '0';
 signal m_tdata_valid_out_H1_s : std_logic := '0';
 signal m_tdata_valid_out_int_aa_s : std_logic := '0';
 
-signal Env_fol_out_s : sfixed(0 downto -18); -- needs
+signal Env_fol_out_s : std_logic_vector(17 downto 0); -- needs
+signal env_out_s : std_logic_vector(17 downto 0) := (others => '0');
 
 component I2S_in is
   Port (    clk : in std_logic;
@@ -109,8 +110,8 @@ component I2S_in is
             r_sclk: out std_logic;
             r_mclk: out std_logic;
             r_lrclk: out std_logic;
-            r_data: in std_logic;
-            --r_data: out std_logic;--out for simulation
+            --r_data: in std_logic;
+            r_data: out std_logic;--out for simulation
             
             left_valid : out std_logic;
             right_valid : out std_logic;
@@ -157,6 +158,15 @@ component Level_1 is
            );
 end component;
 
+component Envlope_Follower_control_Logic is
+    Port (  env_in : in std_logic_vector(17 downto 0);
+            env_start: in STD_LOGIC;
+            env_clk : in STD_LOGIC;
+            env_rst : in STD_LOGIC;
+            env_out : out std_logic_vector(17 downto 0)
+             );
+end component;
+
 
 --component I2S_out is
 --  Port (    clk : in std_logic;
@@ -180,8 +190,8 @@ r_lrclk <= lrclk_s;
 t_sclk  <= sclk_s;
 t_mclk  <= mclk_s;
 t_lrclk <= lrclk_s;
-r_data_s <= r_data; --actual use
---r_data <= r_data_s; --simulation
+--r_data_s <= r_data; --actual use
+r_data <= r_data_s; --simulation
 t_data <= t_data_s;
 --assinments for modulator
 Env_fol_out <= Env_fol_out_s;
@@ -248,5 +258,17 @@ L1: Level_1 port map(
            L_L1_output_left =>  L_L1_output_left_s, --L_L1_test_left_s, --
            L_L1_output_right => L_L1_output_right_s --L_L1_test_right_s --
            );
+           
+--==================
+--EV follower passthrough test
+--====================
+EV_B: Envlope_Follower_control_Logic Port map(
+            env_in => L_L1_output_left_s(23 downto 6),
+            env_start => m_tdata_valid_out_L1_s,
+            env_clk => clk,
+            env_rst => reset,
+            env_out => Env_fol_out_s
+             );
+
 
 end Behavioral;

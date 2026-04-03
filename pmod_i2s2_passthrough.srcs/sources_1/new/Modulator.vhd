@@ -27,7 +27,7 @@ entity Modulator is
         right_input_L1_H  : in  std_logic_vector(31 downto 0);
         left_input_L1_L   : in std_logic_vector(31 downto 0);
         right_input_L1_L  : in std_logic_vector(31 downto 0);
-        Env_fol_in        : in  sfixed(0 downto -18);
+        Env_fol_in        : in  std_logic_vector(17 downto 0);
         m_tvalid_in       : in  std_logic;
         
 
@@ -42,28 +42,30 @@ architecture Behavioral of Modulator is
 
     type state_type is (IDLE, MODULATE, OUTPUT_STATE);
     signal current_state : state_type := IDLE;
-
+    
+    signal Env_fol_in_s : ufixed(-1 downto -18) := to_ufixed(0, -1, -18);
     -- input converted to signed/fixed
-    signal left_in_L1_H_s      : sfixed(31 downto 0) := to_sfixed(0, 0, -18);
-    signal right_in_L1_H_s     : sfixed(31 downto 0) := to_sfixed(0, 0, -18);
-    signal left_in_L1_L_s      : sfixed(31 downto 0) := to_sfixed(0, 0, -18);
-    signal right_in_L1_L_s     : sfixed(31 downto 0) := to_sfixed(0, 0, -18);
+    signal left_in_L1_H_s      : sfixed(31 downto 0) := (others => '0');
+    signal right_in_L1_H_s     : sfixed(31 downto 0) := (others => '0');
+    signal left_in_L1_L_s      : sfixed(31 downto 0) := (others => '0');
+    signal right_in_L1_L_s     : sfixed(31 downto 0) := (others => '0');
+
     -- multiplication result width:
-    -- left_in_s  = sfixed(31 downto 0)
-    -- Env_fol_in = sfixed(0 downto -18)
-    -- result     = sfixed(31 downto -18)
-    signal left_mult_L1_H_s    : sfixed(31 downto -18) := to_sfixed(0, 0, -18);
-    signal right_mult_L1_H_s   : sfixed(31 downto -18) := to_sfixed(0, 0, -18);
-    signal left_mult_L1_L_s    : sfixed(31 downto -18) := to_sfixed(0, 0, -18);
-    signal right_mult_L1_L_s   : sfixed(31 downto -18) := to_sfixed(0, 0, -18);
+    -- left_in_s  = ufixed(31 downto 0)
+    -- Env_fol_in = ufixed(0 downto -18)
+    -- result     = ufixed(31 downto -18)
+    signal left_mult_L1_H_s    : sfixed(31 downto 0) := (others => '0');
+    signal right_mult_L1_H_s   : sfixed(31 downto 0) := (others => '0');
+    signal left_mult_L1_L_s    : sfixed(31 downto 0) := (others => '0');
+    signal right_mult_L1_L_s   : sfixed(31 downto 0) := (others => '0');
     
     -- resized back to output width
---    signal left_out_s     : sfixed(31 downto 0) := to_sfixed(0, 0, -18);
---    signal right_out_s    : sfixed(31 downto 0) := to_sfixed(0, 0, -18);
-    signal sfix_left_output_L1_H_s  : sfixed(31 downto 0) := to_sfixed(0, 0, -18);
-    signal sfix_right_output_L1_H_s : sfixed(31 downto 0) := to_sfixed(0, 0, -18);
-    signal sfix_left_output_L1_L_s  : sfixed(31 downto 0) := to_sfixed(0, 0, -18);
-    signal sfix_right_output_L1_L_s : sfixed(31 downto 0) := to_sfixed(0, 0, -18);
+--    signal left_out_s     : ufixed(31 downto 0) := (others => '0');
+--    signal right_out_s    : ufixed(31 downto 0) := (others => '0');
+    signal sfix_left_output_L1_H_s  : sfixed(31 downto 0) := (others => '0');
+    signal sfix_right_output_L1_H_s : sfixed(31 downto 0) := (others => '0');
+    signal sfix_left_output_L1_L_s  : sfixed(31 downto 0) := (others => '0');
+    signal sfix_right_output_L1_L_s : sfixed(31 downto 0) := (others => '0');
     
     signal left_output_L1_H_s  : std_logic_vector(31 downto 0) := (others => '0') ;
     signal right_output_L1_H_s : std_logic_vector(31 downto 0) := (others => '0');
@@ -81,9 +83,14 @@ begin
     left_output_L1_L <= left_output_L1_L_s;
     right_output_L1_L <= right_output_L1_L_s;
     
-
+    --------------------------------------------
+    --assinment for std_logic_vector to ufixed
+    --------------------------------------------
+    
+    Env_fol_in_s <= to_ufixed(unsigned(Env_fol_in), -1, -18);
+    
     ------------------------------------------------------------------------------
-    -- Convert std_logic_vector inputs to sfixed
+    -- Convert std_logic_vector inputs to ufixed
     ------------------------------------------------------------------------------
     left_in_L1_H_s  <= to_sfixed(signed(left_input_L1_H), 31, 0);
     right_in_L1_H_s <= to_sfixed(signed(right_input_L1_H), 31, 0);
@@ -119,11 +126,11 @@ begin
                     when MODULATE =>
                         -- Multiply input by envelope
                         --high L1 modulation
-                        left_mult_L1_H_s  <= left_in_L1_H_s * Env_fol_in;
-                        right_mult_L1_H_s <= right_in_L1_H_s * Env_fol_in;
+                        left_mult_L1_H_s  <= resize(left_in_L1_H_s * to_sfixed(signed('0' & Env_fol_in_s), -1, -18), 31, 0);
+                        right_mult_L1_H_s <= resize(right_in_L1_H_s * to_sfixed(signed('0' & Env_fol_in_s),-1, -18), 31, 0);
                         --Low L1 modulation
-                        left_mult_L1_L_s  <= left_in_L1_L_s  * Env_fol_in;
-                        right_in_L1_L_s   <= right_in_L1_L_s * Env_fol_in;
+                        left_mult_L1_L_s  <= resize(left_in_L1_L_s  * to_sfixed(signed('0' & Env_fol_in_s), -1, -18), 31, 0);
+                        right_mult_L1_L_s   <= resize(right_in_L1_L_s * to_sfixed(signed('0' & Env_fol_in_s), -1, -18), 31, 0);
                         
                         current_state <= OUTPUT_STATE;
                     when OUTPUT_STATE =>
@@ -133,7 +140,7 @@ begin
                         sfix_right_output_L1_H_s <= resize(right_mult_L1_H_s, 31, 0);
                         --resize L1 Low side
                         sfix_left_output_L1_L_s  <= resize(left_mult_L1_L_s, 31, 0);
-                        sfix_right_output_L1_L_s <= resize(right_in_L1_L_s, 31, 0);
+                        sfix_right_output_L1_L_s <= resize(right_mult_L1_L_s, 31, 0);
                         
                         -- Convert back to std_logic_vector
                         left_output_L1_H_s  <= std_logic_vector(to_signed((sfix_left_output_L1_H_s), 32));
@@ -145,5 +152,5 @@ begin
             end if;
         end if;
     end process;
-    
+     
 end Behavioral;

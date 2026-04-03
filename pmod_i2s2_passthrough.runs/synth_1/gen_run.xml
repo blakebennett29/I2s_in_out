@@ -1,29 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="synth_1" LaunchPart="xc7a35tcpg236-1" LaunchTime="1774918972" LaunchIncrCheckpoint="$PSRCDIR/utils_1/imports/synth_1/i2s_in_out.dcp">
+<GenRun Id="synth_1" LaunchPart="xc7a35tcpg236-1" LaunchTime="1775098727" LaunchIncrCheckpoint="$PSRCDIR/utils_1/imports/synth_1/i2s_in_out.dcp">
   <File Type="PA-TCL" Name="TOP.tcl"/>
-  <File Type="RDS-PROPCONSTRS" Name="TOP_drc_synth.rpt"/>
   <File Type="REPORTS-TCL" Name="TOP_reports.tcl"/>
   <File Type="RDS-RDS" Name="TOP.vds"/>
   <File Type="RDS-UTIL" Name="TOP_utilization_synth.rpt"/>
   <File Type="RDS-UTIL-PB" Name="TOP_utilization_synth.pb"/>
   <File Type="RDS-DCP" Name="TOP.dcp"/>
-  <File Type="VDS-TIMINGSUMMARY" Name="TOP_timing_summary_synth.rpt"/>
-  <File Type="VDS-TIMING-PB" Name="TOP_timing_summary_synth.pb"/>
   <FileSet Name="sources" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1" RelGenDir="$PGENDIR/sources_1">
     <Filter Type="Srcs"/>
-    <File Path="$PSRCDIR/sources_1/new/Data_line_output.vhd">
-      <FileInfo>
-        <Attr Name="UsedIn" Val="synthesis"/>
-        <Attr Name="UsedIn" Val="simulation"/>
-      </FileInfo>
-    </File>
-    <File Path="$PSRCDIR/sources_1/new/Half_Data_line_Env_fol.vhd">
-      <FileInfo>
-        <Attr Name="UsedIn" Val="synthesis"/>
-        <Attr Name="UsedIn" Val="simulation"/>
-      </FileInfo>
-    </File>
     <File Path="$PSRCDIR/sources_1/new/AA_filter_2.vhd">
+      <FileInfo SFType="VHDL2008">
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/new/Data_line_output.vhd">
+      <FileInfo SFType="VHDL2008">
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/new/Envelope_Follower.vhd">
+      <FileInfo SFType="VHDL2008">
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/new/Envlope_Follower_control_Logic.vhd">
       <FileInfo SFType="VHDL2008">
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -36,6 +39,12 @@
       </FileInfo>
     </File>
     <File Path="$PSRCDIR/sources_1/new/H_L1_FIR.vhd">
+      <FileInfo SFType="VHDL2008">
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/new/Half_Data_line_Env_fol.vhd">
       <FileInfo SFType="VHDL2008">
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -78,6 +87,12 @@
       </FileInfo>
     </File>
     <File Path="$PSRCDIR/sources_1/new/Level_1.vhd">
+      <FileInfo SFType="VHDL2008">
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/new/Modulator.vhd">
       <FileInfo SFType="VHDL2008">
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -158,13 +173,6 @@
         <Attr Name="UsedIn" Val="simulation"/>
       </FileInfo>
     </File>
-    <File Path="$PSRCDIR/sources_1/new/Modulator.vhd">
-      <FileInfo SFType="VHDL2008">
-        <Attr Name="AutoDisabled" Val="1"/>
-        <Attr Name="UsedIn" Val="synthesis"/>
-        <Attr Name="UsedIn" Val="simulation"/>
-      </FileInfo>
-    </File>
     <Config>
       <Option Name="DesignMode" Val="RTL"/>
       <Option Name="TopModule" Val="TOP"/>
@@ -202,11 +210,11 @@
     <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2024"/>
     <Step Id="synth_design"/>
   </Strategy>
-  <BlockFileSet Type="BlockSrcs" Name="fir_compiler_0"/>
   <BlockFileSet Type="BlockSrcs" Name="L_L1_fir_compiler_1"/>
+  <BlockFileSet Type="BlockSrcs" Name="fir_compiler_0"/>
   <BlockFileSet Type="BlockSrcs" Name="H_L1_fir_compiler_2"/>
-  <BlockFileSet Type="BlockSrcs" Name="blk_mem_gen_0"/>
   <BlockFileSet Type="BlockSrcs" Name="fir_compiler_1"/>
+  <BlockFileSet Type="BlockSrcs" Name="blk_mem_gen_0"/>
   <BlockFileSet Type="BlockSrcs" Name="INT_L_L1_fir_compiler"/>
   <BlockFileSet Type="BlockSrcs" Name="fir_compiler_2"/>
 </GenRun>

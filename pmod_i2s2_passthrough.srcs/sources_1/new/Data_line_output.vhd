@@ -36,13 +36,13 @@ entity Data_line_output is
   Port (    clk: in std_logic;
             reset: in std_logic;
             
-            Env_fol_in : in sfixed(0 downto -18);
+            Env_fol_in : in std_logic_vector(17 downto 0);
               
             r_sclk: out std_logic;
             r_mclk: out std_logic;
             r_lrclk: out std_logic;
-            r_data: in std_logic; --in for actual use
-            --r_data: out std_logic;
+            --r_data: in std_logic; --in for actual use
+            r_data: out std_logic;
             
             t_sclk: out std_logic;
             t_mclk: out std_logic;
@@ -107,7 +107,22 @@ signal H_L1_output_right_M_s : std_logic_vector(31 downto 0);
 signal L_L1_output_right_M_s : std_logic_vector(31 downto 0);
 signal L_L1_output_left_M_s : std_logic_vector(31 downto 0);
 
-signal Env_fol_value_in_s : sfixed(0 downto -18);
+signal Env_fol_value_in_s : std_logic_vector(17 downto 0);
+--Envlope Follower passthrough signials
+signal env_in_s : std_logic_vector(17 downto 0) := (others => '0');
+signal env_start_s : std_logic := '0';
+signal env_clk_s : std_logic := '0';
+signal env_rst_s : std_logic := '0';
+signal env_out_s : std_logic_vector(17 downto 0) := (others => '0');
+
+--component Envlope_Follower_control_Logic is
+--    Port (  env_in : in std_logic_vector(17 downto 0);
+--            env_start: in STD_LOGIC;
+--            env_clk : in STD_LOGIC;
+--            env_rst : in STD_LOGIC;
+--            env_out : out std_logic_vector(17 downto 0)
+--             );
+--end component;
 
 component I2S_in is
   Port (    clk : in std_logic;
@@ -116,8 +131,8 @@ component I2S_in is
             r_sclk: out std_logic;
             r_mclk: out std_logic;
             r_lrclk: out std_logic;
-            r_data: in std_logic;
-            --r_data: out std_logic;--out for simulation
+            --r_data: in std_logic;
+            r_data: out std_logic;--out for simulation
             
             left_valid : out std_logic;
             right_valid : out std_logic;
@@ -171,7 +186,7 @@ component Modulator is
         right_input_L1_H  : in  std_logic_vector(31 downto 0);
         left_input_L1_L   : in std_logic_vector(31 downto 0);
         right_input_L1_L  : in std_logic_vector(31 downto 0);
-        Env_fol_in   : in  sfixed(0 downto -18);
+        Env_fol_in   : in  std_logic_vector(17 downto 0);
         m_tvalid_in  : in  std_logic;
 
         left_output_L1_H : out std_logic_vector(31 downto 0);
@@ -245,8 +260,8 @@ r_lrclk <= lrclk_s;
 t_sclk  <= sclk_s;
 t_mclk  <= mclk_s;
 t_lrclk <= lrclk_s;
-r_data_s <= r_data; --actual use
---r_data <= r_data_s; --simulation
+--r_data_s <= r_data; --actual use
+r_data <= r_data_s; --simulation
 t_data <= t_data_s;
 
 
@@ -269,6 +284,9 @@ I2s_i : I2S_in port map (
     left_reg_output => left_reg_shift_c, --maps to FIR core inputs
     right_reg_output => right_reg_shift_c
 );
+
+
+
 --AA filter
 AA_2: AA_filter_2 port map(
     clk             => clk,
@@ -327,11 +345,11 @@ U_INTERPOLATE_L1 : INTERPOLATE_L1
         clk            => clk,
         reset          => reset,
         
-        H_data_in_left   => H_L1_output_left_s,
-        H_data_in_right  => H_L1_output_right_s,
+        H_data_in_left   => H_L1_output_left_M_s,
+        H_data_in_right  => H_L1_output_right_M_s,
         
-        L_data_in_left   => L_L1_output_left_s,
-        L_data_in_right  => L_L1_output_right_s,
+        L_data_in_left   => L_L1_output_left_M_s,
+        L_data_in_right  => L_L1_output_right_M_s,
         
         left_valid_in    => left_valid_s,
         right_valid_in   => right_valid_s,
@@ -358,7 +376,7 @@ port map (
     
     data_out_left  => interpolate_aa_data_out_left_s,
     data_out_right => interpolate_aa_data_out_right_s
-);
+); 
 
 --assinments for I2S_out
 --left_reg_shift_c <= left_reg_output;
@@ -370,7 +388,7 @@ I2s_o : I2S_out port map (
     right_reg_shift => left_reg_shift_c, --for right out data  --right_reg_shift_c,
     --passthrough_signal --left_reg_shift_c,
     --AA_filter_signal  --fir_out_data_left_s,
-    left_reg_shift => interpolate_aa_data_out_left_s, --fir_out_data_left_s(44 downto 21), --L_L1_test_left_s,-- , --fir_out_data_left_s,   --for left out data  -- right_reg_shift_c,-- --
+    left_reg_shift => interpolate_aa_data_out_left_s, --env_out_s(17 downto 0) & "000000",--interpolate_aa_data_out_left_s, --fir_out_data_left_s(44 downto 21), --L_L1_test_left_s,-- , --fir_out_data_left_s,   --for left out data  -- right_reg_shift_c,-- --
     
     t_sclk => sclk_s,
     t_mclk => mclk_s,
