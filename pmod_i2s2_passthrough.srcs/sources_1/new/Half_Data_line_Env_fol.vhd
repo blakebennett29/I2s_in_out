@@ -36,13 +36,14 @@ entity Half_Data_line_Env_fol is
   Port (    clk: in std_logic;
             reset: in std_logic;
             
-            Env_fol_out : out std_logic_vector(17 downto 0);
+            Env_fol_out : out std_logic_vector(16 downto 0);
+            out_valid : out std_logic;
             
             r_sclk: out std_logic;
             r_mclk: out std_logic;
             r_lrclk: out std_logic;
-            --r_data: in std_logic; --in for actual use
-            r_data: out std_logic;
+            r_data: in std_logic; --in for actual use
+            --r_data: out std_logic;
             
             t_sclk: out std_logic;
             t_mclk: out std_logic;
@@ -75,6 +76,9 @@ signal m_tdata_valid_s :  std_logic := '0';
 --data out for diffrent levels to see on output only use one set at a time
 signal fir_out_data_right_s : std_logic_vector(31 downto 0) := (others =>'0');
 signal fir_out_data_left_s : std_logic_vector(31 downto 0) := (others =>'0');
+signal fir_out_data_right_2_s : std_logic_vector(31 downto 0) := (others =>'0');
+signal fir_out_data_left_2_s : std_logic_vector(31 downto 0) := (others =>'0');
+
 --Level 1
 --high
 signal H_L1_output_left_s : std_logic_vector(31 downto 0) := (others =>'0');
@@ -95,13 +99,16 @@ signal interpolate_l1_data_out_right_s    : std_logic_vector(31 downto 0) := (ot
 
 signal m_tdata_valid_out_L1_s            : std_logic := '0';
 signal m_tdata_valid_in_AA              : std_logic := '0';
+signal m_tdata_valid_in_AA_1            : std_logic := '0';
+signal m_tdata_valid_in_AA_2            : std_logic := '0';
 signal m_tdata_valid_s_int_aa_s : std_logic := '0';
 
 signal m_tdata_valid_out_H1_s : std_logic := '0';
 signal m_tdata_valid_out_int_aa_s : std_logic := '0';
 
-signal Env_fol_out_s : std_logic_vector(17 downto 0); -- needs
-signal env_out_s : std_logic_vector(17 downto 0) := (others => '0');
+signal Env_fol_out_s : std_logic_vector(16 downto 0); -- needs
+signal env_out_s : std_logic_vector(16 downto 0) := (others => '0');
+signal out_valid_s : std_logic := '0';
 
 component I2S_in is
   Port (    clk : in std_logic;
@@ -110,8 +117,8 @@ component I2S_in is
             r_sclk: out std_logic;
             r_mclk: out std_logic;
             r_lrclk: out std_logic;
-            --r_data: in std_logic;
-            r_data: out std_logic;--out for simulation
+            r_data: in std_logic;
+            --r_data: out std_logic;--out for simulation
             
             left_valid : out std_logic;
             right_valid : out std_logic;
@@ -121,6 +128,20 @@ component I2S_in is
 end component;
 
 
+component AA_filter_1 is
+  Port (        clk : in std_logic;
+                reset : in std_logic;
+                left_valid_in : in std_logic;
+                right_valid_in : in std_logic;
+                left_reg_input : in std_logic_vector(23 downto 0);
+                right_reg_input : in std_logic_vector(23 downto 0);
+        
+                out_data_left : out std_logic_vector(31 downto 0);
+                out_data_right : out std_logic_vector(31 downto 0);
+                m_tdata_valid_out: out std_logic
+                );
+end component;
+
 
 -- second of 2 AA filters
 component AA_filter_2 is
@@ -128,8 +149,9 @@ component AA_filter_2 is
             reset : in std_logic;
             left_valid_in : in std_logic;
             right_valid_in : in std_logic;
-            left_reg_input : in std_logic_vector(23 downto 0);
-            right_reg_input : in std_logic_vector(23 downto 0);
+            m_tdata_valid_in: in std_logic;
+            input_left : in std_logic_vector(31 downto 0);
+            input_right : in std_logic_vector(31 downto 0);
             
             m_tdata_valid_out : out std_logic;
             out_data_left : out std_logic_vector(31 downto 0);
@@ -163,7 +185,8 @@ component Envlope_Follower_control_Logic is
             env_start: in STD_LOGIC;
             env_clk : in STD_LOGIC;
             env_rst : in STD_LOGIC;
-            env_out : out std_logic_vector(17 downto 0)
+            env_out : out std_logic_vector(16 downto 0);
+            out_valid : out std_logic
              );
 end component;
 
@@ -190,11 +213,13 @@ r_lrclk <= lrclk_s;
 t_sclk  <= sclk_s;
 t_mclk  <= mclk_s;
 t_lrclk <= lrclk_s;
---r_data_s <= r_data; --actual use
-r_data <= r_data_s; --simulation
+r_data_s <= r_data; --actual use
+--r_data <= r_data_s; --simulation
 t_data <= t_data_s;
 --assinments for modulator
 Env_fol_out <= Env_fol_out_s;
+
+out_valid <= out_valid_s;
 --assinments for I2S_in
 
 ----assinments for I2S_out
@@ -228,26 +253,41 @@ I2s_i : I2S_in port map (
     left_reg_output => left_reg_shift_c, --maps to FIR core inputs
     right_reg_output => right_reg_shift_c
 );
+
+AA_1: AA_filter_1 Port map (
+                clk => clk,
+                reset => reset_s,
+                left_valid_in => left_valid_s,
+                right_valid_in => right_valid_s,
+                left_reg_input => left_reg_shift_c,
+                right_reg_input => right_reg_shift_c,
+        
+                out_data_left => fir_out_data_left_s,
+                out_data_right => fir_out_data_right_s,
+                m_tdata_valid_out => m_tdata_valid_in_AA_1
+            );
+
 --AA filter
 AA_2: AA_filter_2 port map(
     clk             => clk,
     reset => reset,
     left_valid_in   => left_valid_s,
     right_valid_in  => right_valid_s,
-    left_reg_input  => left_reg_shift_c,--this is an input to the fir core  -- data in fir core
-    right_reg_input => right_reg_shift_c,--this is an input to the fir core
+    M_tdata_valid_in => m_tdata_valid_in_AA_1,
+    input_left  => fir_out_data_left_s,--this is an input to the fir core  -- data in fir core
+    input_right => fir_out_data_right_s,--this is an input to the fir core
     
-    m_tdata_valid_out => m_tdata_valid_in_AA,
-    out_data_left => fir_out_data_left_s,
-    out_data_right => fir_out_data_right_s
+    m_tdata_valid_out => m_tdata_valid_in_AA_2,
+    out_data_left => fir_out_data_left_2_s,
+    out_data_right => fir_out_data_right_2_s
 );
 L1: Level_1 port map(  
            clk => clk,
-           L1_input_left => fir_out_data_left_s, -- in from AA_filter_2
-           L1_input_right => fir_out_data_right_s, --in from AA_filter_2
+           L1_input_left => fir_out_data_left_2_s, -- in from AA_filter_2
+           L1_input_right => fir_out_data_right_2_s, --in from AA_filter_2
            left_valid_in => left_valid_s, -- this is still valid for 96khz not anything downsampled
            right_valid_in => right_valid_s, --this is still valid for 96khz not anything downsampled
-           m_tdata_valid_in => m_tdata_valid_in_AA,
+           m_tdata_valid_in => m_tdata_valid_in_AA_2,
            m_tdata_valid_out_H1 => m_tdata_valid_out_H1_s,
            m_tdata_valid_out_L1 => m_tdata_valid_out_L1_s,
 
@@ -267,7 +307,8 @@ EV_B: Envlope_Follower_control_Logic Port map(
             env_start => m_tdata_valid_out_L1_s,
             env_clk => clk,
             env_rst => reset,
-            env_out => Env_fol_out_s
+            env_out => Env_fol_out_s,
+            out_valid => out_valid_s
              );
 
 

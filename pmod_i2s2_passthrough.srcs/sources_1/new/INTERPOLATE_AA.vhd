@@ -42,10 +42,11 @@ entity INTERPOLATE_AA is
         left_valid_in    : in  std_logic; --remove
         right_valid_in   : in  std_logic; --remove
         m_tdata_valid_in : in std_logic;
-
+        
+        m_tdata_valid_out : out std_logic;
         -- output samples
-        data_out_left    : out std_logic_vector(23 downto 0);
-        data_out_right   : out std_logic_vector(23 downto 0)
+        data_out_left    : out std_logic_vector(31 downto 0);
+        data_out_right   : out std_logic_vector(31 downto 0)
         );
 end INTERPOLATE_AA;
 
@@ -64,8 +65,9 @@ signal    m_tdata_valid_in_s : std_logic := '0';
 signal    left_valid_cnt : integer := 0;
 signal    right_valid_cnt : integer := 0;
 
-signal    out_data_L_s : std_logic_vector(23 downto 0) := (others => '0');
-signal    out_data_R_s : std_logic_vector(23 downto 0) := (others => '0');
+signal    m_tdata_valid_out_s : std_logic := '0';
+signal    out_data_L_s : std_logic_vector(31 downto 0) := (others => '0');
+signal    out_data_R_s : std_logic_vector(31 downto 0) := (others => '0');
 
 signal    data_in_left_s : std_logic_vector(31 downto 0) := (others => '0');
 signal    data_in_right_s : std_logic_vector(31 downto 0) := (others => '0');
@@ -98,7 +100,7 @@ AA_fir_up_sample_1: fir_compiler_1 port map (
 m_tdata_valid_in_s <= m_tdata_valid_in;
 data_out_left <= out_data_L_s;
 data_out_right <= out_data_R_s;
-
+m_tdata_valid_out <= m_axis_data_tvalid_s;
 data_in_right_s <= data_in_right;
 data_in_left_s <= data_in_left;
 
@@ -149,10 +151,10 @@ process(clk)
                 
                 -- OUTPUT: use the OUTPUT tag (NOT s_axis tag)
                 if (m_axis_data_tvalid_s = '1') and (m_axis_data_tuser_s = "1") then
-                    out_data_l_s <= m_axis_data_tdata_s(24 downto 1);--data out
+                    out_data_l_s <= m_axis_data_tdata_s;--data out
                 end if;
                 if(m_axis_data_tvalid_s = '1') and (m_axis_data_tuser_s = "0") then
-                    out_data_R_s <= m_axis_data_tdata_s(24 downto 1); --data out
+                    out_data_R_s <= m_axis_data_tdata_s; --data out
                 end if;
                 -- end of input channel check
             end if;

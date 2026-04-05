@@ -29,30 +29,33 @@ entity Envelope_Follower is
            env_start: in STD_LOGIC;
            env_clk : in STD_LOGIC;
            env_rst : in STD_LOGIC;
-           env_out : out STD_LOGIC_VECTOR (17 downto 0));
+           env_out : out STD_LOGIC_VECTOR (16 downto 0);
+           out_valid: out STD_LOGIC
+           );
 end Envelope_Follower;
 
 architecture Behavioral of Envelope_Follower is
 signal env_input: STD_LOGIC_VECTOR(17 downto 0);
 signal rectified: STD_LOGIC_VECTOR(17 downto 0);
-signal rectified_fx : sfixed(17 downto 0);
+signal rectified_fx : ufixed(17 downto 0);
 
 signal feedback: STD_LOGIC_VECTOR(17 downto 0);
-signal feedback_fx  : sfixed(17 downto 0);
+signal feedback_fx  : ufixed(17 downto 0);
 
-signal term1: sfixed(17 downto -14);
-signal term2: sfixed(17 downto -14);
+signal term1: ufixed(17 downto -14);
+signal term2: ufixed(17 downto -14);
 
 signal output: STD_LOGIC_VECTOR(17 downto 0);
-signal alpha : sfixed(0 downto -14);
+signal alpha : ufixed(0 downto -14);
 
 signal state_cnt: integer := 0;
 
-constant alpha_attack  : sfixed(0 downto -14):= to_sfixed(0.001111, 0, -14);
-constant alpha_release : sfixed(0 downto -14):= to_sfixed(0.999999999999999, 0, -14);
-constant ADC_offset: signed(17 downto 0) := to_signed(131071, 18);
+signal out_valid_s: std_logic;
+
+constant alpha_attack  : ufixed(0 downto -14):= to_ufixed(0.5, 0, -14);
+constant alpha_release : ufixed(0 downto -14):= to_ufixed(0.9979, 0, -14);
 constant output_hold: integer := 8;
-constant one_fx : sfixed(0 downto -14) := to_sfixed(1.0,0,-14);
+constant one_fx : ufixed(0 downto -14) := to_ufixed(1.0,0,-14);
 
 type IIR_State is (IDLE, SET_TERMS, MULTIPLY, SET_OUTPUT);
 signal curr_state, next_state : IIR_State;
@@ -103,49 +106,42 @@ begin
             term1 <= (others => '0');
             term2 <= (others => '0');
             alpha <= alpha_attack;
+            out_valid_s <= '0';
             curr_state <= IDLE;
         
         --Set Feedback term 
         elsif curr_state = IDLE then
             feedback <= output;
-            feedback_fx <= to_sfixed(signed(feedback),17,0);
-            env_input <= env_in;
+            feedback_fx <= to_ufixed(unsigned(feedback),17,0);
+            env_input(17 downto 0) <= env_in;
             output <= output;          
             state_cnt <= 0;
-
+            out_valid_s <= '0';
         
         elsif curr_state = SET_TERMS then
             feedback <= feedback;
-            feedback_fx  <= to_sfixed(signed(feedback), 17, 0);
+            feedback_fx  <= to_ufixed(unsigned(feedback), 17, 0);
             rectified <= std_logic_vector(abs(signed(env_input))); 
-            rectified_fx <= to_sfixed(signed(rectified), 17, 0);
+            rectified_fx <= to_ufixed(unsigned(rectified), 17, 0);
             state_cnt <= state_cnt + 1;
+            out_valid_s <= '0';
             
         --Set value through filter
         elsif curr_state = MULTIPLY then
-        
             if rectified_fx > feedback_fx then
                 alpha <= alpha_attack;
             else
                 alpha <= alpha_release;
             end if;
---            if rectified_fx > feedback_fx then
---                -- fast attack (not necessarily instant)
---                    --idea
---                  feedback_fx <= resize(feedback_fx + alpha_attack * (rectified_fx - feedback_fx),0, -17);
-----                  feedback_fx <= resize(alpha_attack *(feedback_fx + (rectified_fx - feedback_fx)),0, -17);
--- --                               
---            else
---                -- slow release
---                alpha <= alpha_release; --feedback_fx <= resize(feedback_fx + alpha_release * (rectified_fx - feedback_fx),0,-17);
---            end if;
             term1 <= resize((one_fx - alpha) * rectified_fx,17,-14);
             term2 <= resize(alpha * feedback_fx,17,-14);          
             state_cnt <= state_cnt + 1;
+            out_valid_s <= '0';
             
         elsif curr_state = SET_OUTPUT then
             output <= to_slv(resize(term1 + term2,17,0));
             state_cnt <= state_cnt + 1;
+            out_valid_s <= '1';
             
         else
             feedback <= output;
@@ -153,10 +149,12 @@ begin
             output <= output;
             rectified <= std_logic_vector(abs(signed(env_input)));  
             state_cnt <= 0;
+            out_valid_s <= '0';
         end if;
     end if;
 end process;
 
-env_out <= output;
+env_out <= output(16 downto 0);
+out_valid <= out_valid_s;
 
 end Behavioral;

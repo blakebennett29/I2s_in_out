@@ -77,7 +77,7 @@ signal sum_right_s  : signed(33 downto 0) := (others => '0');
     signal m_tdata_valid_out_s : std_logic := '0';
     signal data_out_left_s : std_logic_vector(31 downto 0) := (others => '0');
     signal data_out_right_s : std_logic_vector(31 downto 0) := (others => '0');
-    
+    signal valid_sum : std_logic := '0';
     
     type State_Add is (Idle, ADD, Assign);
     signal state, next_state : State_Add;
@@ -130,7 +130,8 @@ L_data_in_left_s <= L_data_in_left;
 data_out_left <= data_out_left_s;
 data_out_right <= data_out_right_s;
 
-m_tdata_valid_out_int_aa <= m_tdata_valid_out_s;
+--valid goes high after sum is complete
+m_tdata_valid_out_int_aa <= valid_sum; --m_tdata_valid_out_s;
  --------------------------------------------------------------------------
     -- High-band interpolator
     --------------------------------------------------------------------------
@@ -175,6 +176,7 @@ process(clk)
             state <= next_state;
             case State is
                 when Idle =>
+                    valid_sum <= '0';
                     if m_tdata_valid_out_s = '1' then
                         next_state <= Add;
                     end if;
@@ -185,6 +187,7 @@ process(clk)
                 when Assign =>
                     data_out_left_s <= (std_logic_vector(resize(sum_left_s,32))); --L_data_out_left_s; --
                     data_out_right_s <= (std_logic_vector(resize(sum_right_s,32))); --L_data_out_left_s;--
+                    valid_sum <= '1';
                     next_state <= Idle;
             end case;
             

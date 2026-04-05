@@ -27,10 +27,11 @@ entity Modulator is
         right_input_L1_H  : in  std_logic_vector(31 downto 0);
         left_input_L1_L   : in std_logic_vector(31 downto 0);
         right_input_L1_L  : in std_logic_vector(31 downto 0);
-        Env_fol_in        : in  std_logic_vector(17 downto 0);
+        Env_fol_in        : in  std_logic_vector(16 downto 0);
+        in_valid          : in std_logic;
         m_tvalid_in       : in  std_logic;
         
-
+        Mod_valid_out    : out std_logic;
         left_output_L1_H : out std_logic_vector(31 downto 0);
         right_output_L1_H : out std_logic_vector(31 downto 0);
         left_output_L1_L : out std_logic_vector(31 downto 0);
@@ -40,10 +41,12 @@ end Modulator;
 
 architecture Behavioral of Modulator is
 
-    type state_type is (IDLE, MODULATE, OUTPUT_STATE);
+    type state_type is (IDLE, MODULATE, OUTPUT_STATE, assign_output);
     signal current_state : state_type := IDLE;
-    
-    signal Env_fol_in_s : ufixed(-1 downto -18) := to_ufixed(0, -1, -18);
+    signal reset_s : std_logic := '0';
+    signal Env_fol_in_s : ufixed(-1 downto -17) := to_ufixed(0, -1, -17);
+    signal in_valid_s : std_logic := '0';
+    signal Mod_valid_out_s : std_logic := '0';
     -- input converted to signed/fixed
     signal left_in_L1_H_s      : sfixed(31 downto 0) := (others => '0');
     signal right_in_L1_H_s     : sfixed(31 downto 0) := (others => '0');
@@ -71,9 +74,10 @@ architecture Behavioral of Modulator is
     signal right_output_L1_H_s : std_logic_vector(31 downto 0) := (others => '0');
     signal left_output_L1_L_s  : std_logic_vector(31 downto 0) := (others => '0') ;
     signal right_output_L1_L_s : std_logic_vector(31 downto 0) := (others => '0');
-
+    Constant Test_gain : sfixed(0 downto -17) := to_sfixed(0.9999, 0, -17);
+   
 begin
-
+    reset_s <= reset;
     ------------------------------------------------------------------------------
     -- Output assignments
     ------------------------------------------------------------------------------
@@ -87,8 +91,8 @@ begin
     --assinment for std_logic_vector to ufixed
     --------------------------------------------
     
-    Env_fol_in_s <= to_ufixed(unsigned(Env_fol_in), -1, -18);
-    
+    Env_fol_in_s <= to_ufixed(Env_fol_in, -1, -17);
+    in_valid_s <= in_valid;
     ------------------------------------------------------------------------------
     -- Convert std_logic_vector inputs to ufixed
     ------------------------------------------------------------------------------
@@ -97,18 +101,24 @@ begin
     left_in_L1_L_s  <= to_sfixed(signed(left_input_L1_L), 31, 0);
     right_in_L1_L_s <= to_sfixed(signed(right_input_L1_L), 31, 0);
 
+    Mod_valid_out <= Mod_valid_out_s;
     ------------------------------------------------------------------------------
     -- State register + datapath registers
     ------------------------------------------------------------------------------
     process(clk)
     begin
         if rising_edge(clk) then
-            if reset = '1' then
+            if reset_s = '1' then
                 current_state   <= IDLE;
                 left_mult_L1_H_s     <= (others => '0');
                 right_mult_L1_H_s    <= (others => '0');
                 left_mult_L1_L_s      <= (others => '0');
                 right_mult_L1_L_s     <= (others => '0');
+                
+                sfix_left_output_L1_H_s <= (others => '0');
+                sfix_right_output_L1_H_s <= (others => '0');
+                sfix_left_output_L1_L_s <= (others => '0');
+                sfix_right_output_L1_L_s <= (others => '0');
                 
                 left_output_L1_H_s   <= (others => '0');
                 right_output_L1_H_s  <= (others => '0');
@@ -118,7 +128,8 @@ begin
             else
                 case current_state is
                     when IDLE =>
-                        if m_tvalid_in = '1' then
+                        Mod_valid_out_s     <= '0';
+                        if in_valid = '1' then
                             current_state <= MODULATE;
                         else
                             current_state <= IDLE;
@@ -126,11 +137,11 @@ begin
                     when MODULATE =>
                         -- Multiply input by envelope
                         --high L1 modulation
-                        left_mult_L1_H_s  <= resize(left_in_L1_H_s * to_sfixed(signed('0' & Env_fol_in_s), -1, -18), 31, 0);
-                        right_mult_L1_H_s <= resize(right_in_L1_H_s * to_sfixed(signed('0' & Env_fol_in_s),-1, -18), 31, 0);
+                        left_mult_L1_H_s  <= resize(left_in_L1_H_s * to_sfixed((signed("00" & Env_fol_in_s) sll 1), -1, -19), 31, 0); --to_sfixed(signed('0' & Env_fol_in_s), -1, -18), 31, 0);
+                        right_mult_L1_H_s <= resize(right_in_L1_H_s * to_sfixed((signed("00" & Env_fol_in_s) sll 1), -1, -19), 31, 0);
                         --Low L1 modulation
-                        left_mult_L1_L_s  <= resize(left_in_L1_L_s  * to_sfixed(signed('0' & Env_fol_in_s), -1, -18), 31, 0);
-                        right_mult_L1_L_s   <= resize(right_in_L1_L_s * to_sfixed(signed('0' & Env_fol_in_s), -1, -18), 31, 0);
+                        left_mult_L1_L_s  <= resize(left_in_L1_L_s  * to_sfixed((signed("00" & Env_fol_in_s) sll 1), -1, -19), 31 , 0); --to_sfixed(signed('0' & Env_fol_in_s), -1, -18), 31, 0);
+                        right_mult_L1_L_s   <= resize(right_in_L1_L_s * to_sfixed((signed("00" & Env_fol_in_s) sll 1), -1, -19), 31 , 0); --to_sfixed(signed('0' & Env_fol_in_s), -1, -18), 31, 0);
                         
                         current_state <= OUTPUT_STATE;
                     when OUTPUT_STATE =>
@@ -141,12 +152,14 @@ begin
                         --resize L1 Low side
                         sfix_left_output_L1_L_s  <= resize(left_mult_L1_L_s, 31, 0);
                         sfix_right_output_L1_L_s <= resize(right_mult_L1_L_s, 31, 0);
-                        
+                        current_state <= assign_output;
+                    when assign_output =>
                         -- Convert back to std_logic_vector
                         left_output_L1_H_s  <= std_logic_vector(to_signed((sfix_left_output_L1_H_s), 32));
                         right_output_L1_H_s <= std_logic_vector(to_signed((sfix_right_output_L1_H_s), 32));
                         left_output_L1_L_s  <= std_logic_vector(to_signed((sfix_left_output_L1_L_s), 32));
                         right_output_L1_L_s <= std_logic_vector(to_signed((sfix_right_output_L1_L_s), 32));
+                        Mod_valid_out_s     <= '1';
                         current_state <= IDLE;
                 end case;
             end if;

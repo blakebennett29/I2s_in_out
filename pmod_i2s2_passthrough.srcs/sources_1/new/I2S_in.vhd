@@ -37,8 +37,8 @@ entity I2S_in is
             r_sclk: out std_logic;
             r_mclk: out std_logic;
             r_lrclk: out std_logic;
-            r_data: out std_logic;
-            --r_data: in std_logic; --out for simulation
+            --r_data: out std_logic;
+            r_data: in std_logic; --out for simulation
             
             
             left_reg_output : out std_logic_vector(23 downto 0);
@@ -61,7 +61,7 @@ component blk_mem_gen_0 IS
 END component;
 
 
-
+signal r_data_s : std_logic := '0';
 signal mcnt : integer := 0;
 signal scnt : integer :=0;
 signal lrcnt : integer :=0;
@@ -97,6 +97,8 @@ signal state, next_state : LR_State;
 
 signal left_valid_s : std_logic := '0';
 signal right_valid_s : std_logic := '0';
+signal synced_after_reset : std_logic := '1';
+
 begin
 
 BM1 : blk_mem_gen_0 port map (
@@ -124,23 +126,36 @@ BM1 : blk_mem_gen_0 port map (
     
     right_valid <= right_valid_s;
     left_valid <= left_valid_s;
-    process(clk)
+    r_data_s <= r_data;
+    process(clk, reset_s)
         begin
-            if reset = '1' then
+            if reset_s = '1' then
                 mcnt <= 0;
                 scnt <= 0;
                 lrcnt <= 0;
                 mclk_s  <= '0';
                 sclk_s  <= '0';
                 lrclk_s <= '0';
-                reset_s <= '0';
+                sclk_fall_pulse <= '0';
+                lrclk_rise_pulse <= '0';
+                lrclk_fall_pulse <= '0';
                 shift_Reg_load <= (others => '0');
+                left_reg_output_s <= (others => '0');
+                right_reg_output_s <= (others => '0');
+                left_reg <= (others => '0');
+                right_reg <= (others => '0');
                 shift_cnt <= 0;
                 state <= Idle;
                 next_state <= Idle;
                 left_valid_s <= '0';
                 right_valid_s <= '0';
-            elsif rising_edge(clk) then 
+                synced_after_reset <= '0';
+            elsif rising_edge(clk) then
+                sclk_fall_pulse  <= '0';
+                lrclk_rise_pulse <= '0';
+                lrclk_fall_pulse <= '0';
+                left_valid_s     <= '0';
+                right_valid_s    <= '0';
                 state <= next_state; -- continue if reset isn't high
             --------------------------------------------------------------------
             --master clk generation
@@ -184,13 +199,24 @@ BM1 : blk_mem_gen_0 port map (
                 else
                     lrcnt <= lrcnt + 1;
                 end if;
+                
+                ----------------------------------------------------------------
+                -- re-sync after reset:
+                -- wait for first clean LRCLK edge before shifting data
+                ----------------------------------------------------------------
+--                if synced_after_reset = '0' then
+--                    shift_cnt <= 0;
+        
+--                    if (lrclk_rise_pulse = '1') or (lrclk_fall_pulse = '1') then
+--                        synced_after_reset <= '1';
+--                        shift_cnt <= 0;
+--                        left_reg <= (others => '0');
+--                        right_reg <= (others => '0');
+--                    end if;
+--                end if;
                 ---------------------------------------------------------------------
                 --Shift register logic
-                if reset = '1' then -- could probably move this with the other reset
-                    shift_Reg_load <= (others => '0');
-                    shift_cnt <= 0;
-                    
-                elsif shift_cnt >= 32 then 
+                if (shift_cnt >= 32) then 
                     ena_s <= '1';
                     shift_cnt <= 0;
                     --===========================================
@@ -291,15 +317,15 @@ BM1 : blk_mem_gen_0 port map (
 --                    end case;
                     -- end of new code -----------------------------------------------------------------------------
                 --shift data bit's out (in is how I am looking at it while programing the dac)
-                if sclk_fall_pulse = '1' then 
+                if (sclk_fall_pulse = '1') and (shift_cnt < 32) then 
                     sclk_fall_pulse <= '0';
-                    r_data <= shift_Reg_load(31 - shift_cnt);--comment out for actual data
+                    --r_data_s <= shift_Reg_load(31 - shift_cnt);--comment out for actual data
                     shift_cnt <= shift_cnt +1;
                     --add data_in register to hold data
                     if lrclk_s = '0' then
-                        left_reg(31 - shift_cnt) <=   shift_Reg_load(31 - shift_cnt);   -- r_data; --
+                        left_reg(31 - shift_cnt) <=  r_data_s; -- shift_Reg_load(31 - shift_cnt);   -- 
                     elsif lrclk_s = '1' then
-                        right_reg(31 - shift_cnt) <=   shift_Reg_load(31 - shift_cnt);  --r_data; --
+                        right_reg(31 - shift_cnt) <=  r_data_s; -- shift_Reg_load(31 - shift_cnt);  --
                     else
                         null;
                     end if;

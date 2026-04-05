@@ -41,7 +41,7 @@ architecture Behavioral of TB_Modulator is
             right_input_L1_H  : in  std_logic_vector(31 downto 0);
             left_input_L1_L   : in  std_logic_vector(31 downto 0);
             right_input_L1_L  : in  std_logic_vector(31 downto 0);
-            Env_fol_in        : in  std_logic_vector(17 downto 0);
+            Env_fol_in        : in  std_logic_vector(16 downto 0);
             m_tvalid_in       : in  std_logic;
 
             left_output_L1_H  : out std_logic_vector(31 downto 0);
@@ -61,7 +61,7 @@ architecture Behavioral of TB_Modulator is
     signal right_input_L1_H  : std_logic_vector(31 downto 0) := (others => '0');
     signal left_input_L1_L   : std_logic_vector(31 downto 0) := (others => '0');
     signal right_input_L1_L  : std_logic_vector(31 downto 0) := (others => '0');
-    signal Env_fol_in        : std_logic_vector(17 downto 0) := (others => '0');
+    signal Env_fol_in        : std_logic_vector(16 downto 0) := (others => '0');
     signal m_tvalid_in       : std_logic := '0';
 
     signal left_output_L1_H  : std_logic_vector(31 downto 0);
@@ -139,7 +139,7 @@ begin
         right_input_L1_L <= std_logic_vector(to_signed( 40000, 32));
 
         -- about +0.5 in your 18-bit envelope format
-        Env_fol_in <= "100000000000000000";
+        Env_fol_in <= "10000000000000000";
 
         m_tvalid_in <= '1';
         wait for CLK_PERIOD;
@@ -167,7 +167,7 @@ begin
         right_input_L1_L <= std_logic_vector(to_signed( -50000, 32));
 
         -- about +0.25
-        Env_fol_in <= "010000000000000000";
+        Env_fol_in <= "01000000000000000";
 
         m_tvalid_in <= '1';
         wait for CLK_PERIOD;
@@ -216,7 +216,7 @@ begin
         right_input_L1_H <= std_logic_vector(to_signed(666666, 32));
         left_input_L1_L  <= std_logic_vector(to_signed(555555, 32));
         right_input_L1_L <= std_logic_vector(to_signed(444444, 32));
-        Env_fol_in       <= "100000000000000000";
+        Env_fol_in       <= "10000000000000000";
 
         m_tvalid_in <= '0';
 
@@ -240,7 +240,7 @@ begin
         right_input_L1_L <= std_logic_vector(to_signed(-2000, 32));
 
         -- about +0.75
-        Env_fol_in <= "110000000000000000";
+        Env_fol_in <= "11000000000000000";
 
         m_tvalid_in <= '1';
         wait for CLK_PERIOD;

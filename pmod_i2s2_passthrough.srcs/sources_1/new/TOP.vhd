@@ -42,8 +42,8 @@ entity TOP is
             r_sclk: out std_logic;
             r_mclk: out std_logic;
             r_lrclk: out std_logic;
-            --r_data: in std_logic; --in for actual use
-            r_data: out std_logic;
+            r_data: in std_logic; --in for actual use
+            --r_data: out std_logic;
             
             t_sclk: out std_logic;
             t_mclk: out std_logic;
@@ -55,8 +55,8 @@ entity TOP is
             r2_sclk: out std_logic;
             r2_mclk: out std_logic;
             r2_lrclk: out std_logic;
-            --r2_data: in std_logic --in for actual use
-            r2_data: out std_logic
+            r2_data: in std_logic --in for actual use
+            --r2_data: out std_logic
             
 --            t2_sclk: out std_logic;
 --            t2_mclk: out std_logic;
@@ -80,19 +80,22 @@ architecture Behavioral of TOP is
     signal r2_mclk_s:  std_logic := '0';
     signal  r2_lrclk_s:  std_logic := '0';
     
-    signal Env_fol_out_s : std_logic_vector(17 downto 0);
+    signal Env_fol_out_s : std_logic_vector(16 downto 0);
+    signal out_valid_s : std_logic := '0';
+    
 component Data_line_output is
     Port (
         clk      : in  std_logic;
         reset    : in  std_logic;
         
-        Env_fol_in : in std_logic_vector(17 downto 0);
-
+        Env_fol_in : in std_logic_vector(16 downto 0);
+        in_valid : in std_logic;
+        
         r_sclk   : out std_logic;
         r_mclk   : out std_logic;
         r_lrclk  : out std_logic;
-        --r_data   : in  std_logic;
-        r_data : out std_logic;
+        r_data   : in  std_logic;
+        --r_data : out std_logic;
         
         t_sclk   : out std_logic;
         t_mclk   : out std_logic;
@@ -106,13 +109,14 @@ component Half_Data_line_Env_fol is
         clk      : in  std_logic;
         reset    : in  std_logic;
         
-        Env_fol_out : out std_logic_vector(17 downto 0);
+        Env_fol_out : out std_logic_vector(16 downto 0);
+        out_valid : out std_logic;
         
         r_sclk   : out std_logic;
         r_mclk   : out std_logic;
         r_lrclk  : out std_logic;
-        --r_data   : in  std_logic;
-        r_data : out std_logic;
+        r_data   : in  std_logic;
+        --r_data : out std_logic;
         
         t_sclk   : out std_logic;
         t_mclk   : out std_logic;
@@ -130,15 +134,17 @@ r_lrclk <= lrclk_s;
 t_sclk  <= sclk_s;
 t_mclk  <= mclk_s;
 t_lrclk <= lrclk_s;
---r_data_s <= r_data; --actual use
-r_data <= r_data_s; --simulation
+r_data_s <= r_data; --actual use
+--r_data <= r_data_s; --simulation
 t_data <= t_data_s;
 
 r2_sclk <= sclk_s;
 r2_mclk <= mclk_s;
 r2_lrclk <= lrclk_s;
---r2_data_s <= r2_data; --actual use
-r2_data <= r2_data_s; --simulation use
+r2_data_s <= r2_data; --actual use
+--r2_data <= r2_data_s; --simulation use
+
+
 
     U_Data_line_output : Data_line_output
         port map (
@@ -146,7 +152,7 @@ r2_data <= r2_data_s; --simulation use
             reset    => reset_s,
             
             Env_fol_in => Env_fol_out_s,
-
+            in_valid => out_valid_s,
             r_sclk   => sclk_s,
             r_mclk   => mclk_s,
             r_lrclk  => lrclk_s,
@@ -164,6 +170,8 @@ r2_data <= r2_data_s; --simulation use
             reset    => reset_s,
 
             Env_fol_out => Env_fol_out_s,
+            out_valid => out_valid_s,
+            
             r_sclk   => open,
             r_mclk   => open,
             r_lrclk  => open,

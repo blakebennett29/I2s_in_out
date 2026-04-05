@@ -87,14 +87,15 @@ begin
     left_reg_shift_s <= left_reg_shift(23 downto 0) & (7 downto 0 => '0');
     process(clk)
         begin
-           if reset = '1' then
+           if reset_s = '1' then
                 mcnt <= 0;
                 scnt <= 0;
                 lrcnt <= 0;
+                right_reg_shift_t <= (others => '0');
+                left_reg_shift_t <= (others => '0');
 --                mclk_ss  <= '0';
 --                sclk_ss  <= '0';
 --                lrclk_ss <= '0';
-                reset_s <= '0';
                 shift_Reg_load <= (others => '0');
                 shift_cnt <= 0;
                 state <= Idle;
