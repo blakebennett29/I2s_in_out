@@ -33,7 +33,8 @@ use IEEE.fixed_pkg.ALL;
 --use UNISIM.VComponents.all;
 
 entity Half_Data_line_Env_fol is
-  Port (    clk: in std_logic;
+  Port (    raw_clk: in std_logic;
+            comp_clk: in std_logic;
             reset: in std_logic;
             
             Env_fol_out : out std_logic_vector(16 downto 0);
@@ -240,7 +241,7 @@ out_valid <= out_valid_s;
 --    t_data => t_data_s
 --    );
 I2s_i : I2S_in port map (
-    clk => clk,--assined to top clk
+    clk => raw_clk,--assined to top clk
     reset => reset, --assined to top reset
     
     r_sclk => sclk_s,
@@ -255,7 +256,7 @@ I2s_i : I2S_in port map (
 );
 
 AA_1: AA_filter_1 Port map (
-                clk => clk,
+                clk => comp_clk,
                 reset => reset_s,
                 left_valid_in => left_valid_s,
                 right_valid_in => right_valid_s,
@@ -269,7 +270,7 @@ AA_1: AA_filter_1 Port map (
 
 --AA filter
 AA_2: AA_filter_2 port map(
-    clk             => clk,
+    clk             => comp_clk,
     reset => reset,
     left_valid_in   => left_valid_s,
     right_valid_in  => right_valid_s,
@@ -282,7 +283,7 @@ AA_2: AA_filter_2 port map(
     out_data_right => fir_out_data_right_2_s
 );
 L1: Level_1 port map(  
-           clk => clk,
+           clk => comp_clk,
            L1_input_left => fir_out_data_left_2_s, -- in from AA_filter_2
            L1_input_right => fir_out_data_right_2_s, --in from AA_filter_2
            left_valid_in => left_valid_s, -- this is still valid for 96khz not anything downsampled
@@ -305,7 +306,7 @@ L1: Level_1 port map(
 EV_B: Envlope_Follower_control_Logic Port map(
             env_in => L_L1_output_left_s(23 downto 6),
             env_start => m_tdata_valid_out_L1_s,
-            env_clk => clk,
+            env_clk => comp_clk,
             env_rst => reset,
             env_out => Env_fol_out_s,
             out_valid => out_valid_s

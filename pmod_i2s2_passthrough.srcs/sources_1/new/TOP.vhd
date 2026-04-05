@@ -22,75 +22,74 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
-use IEEE.NUMERIC_STD.ALL;
-use IEEE.fixed_pkg.ALL;
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
 --use IEEE.NUMERIC_STD.ALL;
 
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx leaf cells in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
+library UNISIM;
+use UNISIM.VComponents.all;
 
 entity TOP is
   Port (    clk: in std_logic;
             reset: in std_logic;
-            --=======================
-            --PMod 1 on jA
-            --========================
-            r_sclk: out std_logic;
-            r_mclk: out std_logic;
-            r_lrclk: out std_logic;
-            r_data: in std_logic; --in for actual use
-            --r_data: out std_logic;
+              
+            adc1_r_sclk: out std_logic;
+            adc1_r_mclk: out std_logic;
+            adc1_r_lrclk: out std_logic;
+            adc1_r_data: in std_logic;
             
-            t_sclk: out std_logic;
-            t_mclk: out std_logic;
-            t_lrclk: out std_logic;
-            t_data: out std_logic;
-            --======================
-            --PMod 2 on JB (modulation input)
-            --======================
-            r2_sclk: out std_logic;
-            r2_mclk: out std_logic;
-            r2_lrclk: out std_logic;
-            r2_data: in std_logic --in for actual use
-            --r2_data: out std_logic
+            adc2_r_sclk: out std_logic;
+            adc2_r_mclk: out std_logic;
+            adc2_r_lrclk: out std_logic;
+            adc2_r_data: in std_logic; 
             
---            t2_sclk: out std_logic;
---            t2_mclk: out std_logic;
---            t2_lrclk: out std_logic;
---            t2_data: out std_logic;
+            dac1_t_sclk: out std_logic;
+            dac1_t_mclk: out std_logic;
+            dac1_t_lrclk: out std_logic;
+            dac1_t_data: out std_logic;
+            
+            dac2_t_sclk: out std_logic;
+            dac2_t_mclk: out std_logic;
+            dac2_t_lrclk: out std_logic;
+            dac2_t_data: out std_logic;
+            
+            dac3_t_sclk: out std_logic;
+            dac3_t_mclk: out std_logic;
+            dac3_t_lrclk: out std_logic;
+            dac3_t_data: out std_logic
             );
 end TOP;
 
 architecture Behavioral of TOP is
---data for ouput channel
-    signal r_data_s  : std_logic := '0';
-    signal t_data_s  : std_logic := '0';
-    
-    signal mclk_s    : std_logic := '0';
-    signal sclk_s    : std_logic := '0';
-    signal lrclk_s   : std_logic := '0';
-    signal reset_s   : std_logic := '0';
---data for env fol channel
-    signal r2_data_s : std_logic :='0';
-    signal r2_sclk_s:  std_logic := '0';
-    signal r2_mclk_s:  std_logic := '0';
-    signal  r2_lrclk_s:  std_logic := '0';
-    
-    signal Env_fol_out_s : std_logic_vector(16 downto 0);
-    signal out_valid_s : std_logic := '0';
-    
+
+-------------------------------------------------------------------
+--   ____ ___  __  __ ____   ___  _   _ _____ _   _ _____ ____   --
+--  / ___/ _ \|  \/  |  _ \ / _ \| \ | | ____| \ | |_   _/ ___|  --
+-- | |  | | | | |\/| | |_) | | | |  \| |  _| |  \| | | | \___ \  -- 
+-- | |__| |_| | |  | |  __/| |_| | |\  | |___| |\  | | |  ___) | --
+--  \____\___/|_|  |_|_|    \___/|_| \_|_____|_| \_| |_| |____/  --
+-------------------------------------------------------------------  
+--===============================================================--                                                                                                                                                                                                        
+
+component clk_wiz_0 is
+  Port ( 
+    clk_out1 : out STD_LOGIC;
+    reset : in STD_LOGIC;
+    locked : out STD_LOGIC;
+    clk_in1 : in STD_LOGIC
+  );
+end component clk_wiz_0;
+
 component Data_line_output is
     Port (
-        clk      : in  std_logic;
+        raw_clk : in std_logic;
+        comp_clk      : in  std_logic;
         reset    : in  std_logic;
         
         Env_fol_in : in std_logic_vector(16 downto 0);
-        in_valid : in std_logic;
-        
+
         r_sclk   : out std_logic;
         r_mclk   : out std_logic;
         r_lrclk  : out std_logic;
@@ -106,11 +105,11 @@ end component;
 
 component Half_Data_line_Env_fol is
     Port (
-        clk      : in  std_logic;
+        raw_clk : in std_logic;
+        comp_clk      : in  std_logic;
         reset    : in  std_logic;
         
         Env_fol_out : out std_logic_vector(16 downto 0);
-        out_valid : out std_logic;
         
         r_sclk   : out std_logic;
         r_mclk   : out std_logic;
@@ -125,65 +124,145 @@ component Half_Data_line_Env_fol is
     );
 end component;
 
-begin
-reset_s <= reset;
-r_sclk  <= sclk_s;
-r_mclk  <= mclk_s;
-r_lrclk <= lrclk_s;
+----------------------------------------------
+--  ____ ___ ____ _   _    _    _     ____  --
+-- / ___|_ _/ ___| \ | |  / \  | |   / ___| --
+-- \___ \| | |  _|  \| | / _ \ | |   \___ \ --
+--  ___) | | |_| | |\  |/ ___ \| |___ ___) |--
+-- |____/___\____|_| \_/_/   \_\_____|____/ --
+----------------------------------------------                                    
+--===============================================================--
+--MAIN CLK AND RST
+-------------------------------------------------------------------
+signal raw_clk_s : std_logic;
+signal main_rst : std_logic := '0';
+signal locked_s: std_logic;
+signal comp_clk_s: std_logic;
+-------------------------------------------------------------------
+--DATA SIGNALS
+-------------------------------------------------------------------
+type slv_array_r is array (0 to 1) of std_logic_vector(23 downto 0);
+signal left_reg_shift_c  : slv_array_r;
+signal right_reg_shift_c : slv_array_r;
 
-t_sclk  <= sclk_s;
-t_mclk  <= mclk_s;
-t_lrclk <= lrclk_s;
-r_data_s <= r_data; --actual use
---r_data <= r_data_s; --simulation
-t_data <= t_data_s;
+-- Intermediate signals for DAC input selection
+type slv_array_t is array (0 to 2) of std_logic_vector(23 downto 0);
+signal dac_right_input : slv_array_t;
+signal dac_left_input  : slv_array_t;
 
-r2_sclk <= sclk_s;
-r2_mclk <= mclk_s;
-r2_lrclk <= lrclk_s;
-r2_data_s <= r2_data; --actual use
---r2_data <= r2_data_s; --simulation use
+signal Env_fol_out_S : std_logic_vector(16 downto 0);
 
+-------------------------------------------------------------------
+-- ADC SIGNALS
+-------------------------------------------------------------------
+signal adc_sclk_s        : std_logic_vector(1 downto 0);
+signal adc_mclk_s        : std_logic_vector(1 downto 0);
+signal adc_lrclk_s       : std_logic_vector(1 downto 0);
+signal adc_r_data_s      : std_logic_vector(1 downto 0);
+signal adc_left_valid_s  : std_logic_vector(1 downto 0);
+signal adc_right_valid_s : std_logic_vector(1 downto 0);
+-------------------------------------------------------------------
+-- DAC SIGNALS
+-------------------------------------------------------------------
+signal out_data_s : std_logic;
 
+----------------------------------------------------------
+--  ____   ___  ____ _____   __  __    _    ____  ____  --
+-- |  _ \ / _ \|  _ \_   _| |  \/  |  / \  |  _ \/ ___| --
+-- | |_) | | | | |_) || |   | |\/| | / _ \ | |_) \___ \ --
+-- |  __/| |_| |  _ < | |   | |  | |/ ___ \|  __/ ___) |--
+-- |_|    \___/|_| \_\|_|   |_|  |_/_/   \_\_|   |____/ --
+----------------------------------------------------------    
+--===============================================================--
+begin 
+----------  ==============  ----------                                             
+----------  | TOP MODULE |  ----------
+----------  ==============  ----------
+main_rst <= reset;
 
-    U_Data_line_output : Data_line_output
-        port map (
-            clk      => clk,
-            reset    => reset_s,
-            
-            Env_fol_in => Env_fol_out_s,
-            in_valid => out_valid_s,
-            r_sclk   => sclk_s,
-            r_mclk   => mclk_s,
-            r_lrclk  => lrclk_s,
-            r_data   => r_data_s,
+adc1_r_sclk <= adc_sclk_s(0);
+adc1_r_mclk <= adc_mclk_s(0);
+adc1_r_lrclk <= adc_lrclk_s(0);
+adc_r_data_s(0) <= adc1_r_data;
 
-            t_sclk   => sclk_s,
-            t_mclk   => mclk_s,
-            t_lrclk  => lrclk_s,
-            t_data   => t_data_s
-        );
+adc2_r_sclk <= adc_sclk_s(1);
+adc2_r_mclk <= adc_mclk_s(1);
+adc2_r_lrclk <= adc_lrclk_s(1);
+adc_r_data_s(1) <= adc2_r_data;
 
-    U_Half_Data_line_Env_fol : Half_Data_line_Env_fol
-        port map (
-            clk      => clk,
-            reset    => reset_s,
+dac1_t_sclk <= adc_sclk_s(0);
+dac1_t_mclk <= adc_mclk_s(0);
+dac1_t_lrclk <= adc_lrclk_s(0);
+dac1_t_data <= out_data_s;
 
-            Env_fol_out => Env_fol_out_s,
-            out_valid => out_valid_s,
-            
-            r_sclk   => open,
-            r_mclk   => open,
-            r_lrclk  => open,
-            r_data   => r2_data_s
+dac2_t_sclk <= adc_sclk_s(1);
+dac2_t_mclk <= adc_mclk_s(1);
+dac2_t_lrclk <= adc_lrclk_s(1);
+dac2_t_data <= out_data_s;
+
+dac3_t_sclk <= adc_sclk_s(0);
+dac3_t_mclk <= adc_mclk_s(0);
+dac3_t_lrclk <= adc_lrclk_s(0);
+dac3_t_data <= out_data_s;
+
+----------  ============= ----------                                           
+----------  | CLOCKING  | ----------
+----------  ============= ----------
+-- Input clock buffer
+clk_ibufg_inst : IBUFG
+    port map (
+        I => clk,
+        O => raw_clk_s
+    );
+
+----------  ================= ----------                                           
+----------  | ADC I2S BUSES | ----------
+----------  ================= ----------
+
+COMPUTATION_CLOCK: clk_wiz_0
+  port map (
+    clk_out1 => comp_clk_S,
+    reset => main_rst,
+    locked => locked_s,
+    clk_in1 => raw_clk_s
+  );
+  
+U_Data_line_output : Data_line_output
+    port map (
+        raw_clk  => raw_clk_s,
+        comp_clk => comp_clk_s,
+        reset    => main_rst,
+        
+        Env_fol_in => Env_fol_out_s,
+
+        r_sclk   => adc_sclk_s(0),
+        r_mclk   => adc_mclk_s(0),
+        r_lrclk  => adc_lrclk_s(0),
+        r_data   => adc_r_data_s(0),
+
+--        t_sclk   => sclk_s,
+--        t_mclk   => mclk_s,
+--        t_lrclk  => lrclk_s,
+        t_data   => out_data_s
+    );
+
+U_Half_Data_line_Env_fol : Half_Data_line_Env_fol
+    port map (
+        raw_clk => raw_clk_s,
+        comp_clk => comp_clk_s,
+        reset    => main_rst,
+
+        Env_fol_out => Env_fol_out_s,
+        
+        r_sclk   => adc_sclk_s(1),
+        r_mclk   => adc_mclk_s(1),
+        r_lrclk  => adc_lrclk_s(1),
+        r_data   => adc_r_data_s(1)
 
 --            t_sclk   => sclk_s,
 --            t_mclk   => mclk_s,
 --            t_lrclk  => lrclk_s,
 --            t_data   => t_data_s
-        );
-
-
-
+    );
 
 end Behavioral;

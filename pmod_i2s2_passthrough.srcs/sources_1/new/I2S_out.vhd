@@ -37,9 +37,9 @@ entity I2S_out is
             left_reg_shift : in std_logic_vector(23 downto 0);
             
             
-            t_sclk: in std_logic;
-            t_mclk: in std_logic;
-            t_lrclk: in std_logic;
+--            t_sclk: out std_logic;
+--            t_mclk: out std_logic;
+--            t_lrclk: out std_logic;
             t_data: out std_logic
             );
 end I2S_out;
@@ -80,22 +80,21 @@ begin
 
 --transmitter clks (all counting off of source clk 100mhz)
     reset_s <= reset;
-    mclk_ss <= t_mclk;
-    sclk_ss <= t_sclk;
-    lrclk_ss <= t_lrclk;
+--    t_mclk <= clk;
+--    t_sclk <= sclk_ss;
+--    t_lrclk <= lrclk_ss;
     right_reg_shift_s <= right_reg_shift(23 downto 0) & (7 downto 0 => '0');
     left_reg_shift_s <= left_reg_shift(23 downto 0) & (7 downto 0 => '0');
     process(clk)
         begin
-           if reset_s = '1' then
+           if reset = '1' then
                 mcnt <= 0;
                 scnt <= 0;
                 lrcnt <= 0;
-                right_reg_shift_t <= (others => '0');
-                left_reg_shift_t <= (others => '0');
 --                mclk_ss  <= '0';
 --                sclk_ss  <= '0';
 --                lrclk_ss <= '0';
+                reset_s <= '0';
                 shift_Reg_load <= (others => '0');
                 shift_cnt <= 0;
                 state <= Idle;
@@ -112,19 +111,19 @@ begin
 --                end if;
                 --------------------------------------------------------------------
                 --sclk generation
-                if scnt >= 7 then
-                    scnt <= 0;
+--                if scnt >= 7 then
+--                    scnt <= 0;
                      -- detect the *falling* edge (about to go low 1 -> 0)
                     if sclk_ss = '1' then
                         sclk_fall_pulse <= '1';
                     end if;
-                    --sclk_s <= not sclk_s;
-                else
-                    scnt <= scnt + 1;
-                end if;
+                    sclk_ss <= not sclk_ss;
+--                else
+--                    scnt <= scnt + 1;
+--                end if;
                 --------------------------------------------------------------------
                 --lrclk generation
-                if lrcnt >= 511 then
+                if lrcnt >= 63 then
                     lrcnt <= 0;
                     --not nessisary code------------
                     if lrclk_ss = '0' then   --lr edge detection "rising"

@@ -33,7 +33,8 @@ use IEEE.fixed_pkg.ALL;
 --use UNISIM.VComponents.all;
 
 entity Data_line_output is
-  Port (    clk: in std_logic;
+  Port (    raw_clk: in std_logic;
+            comp_clk: in std_logic;
             reset: in std_logic;
             
             Env_fol_in : in std_logic_vector(16 downto 0);
@@ -287,9 +288,9 @@ component I2S_out is
             right_reg_shift : in std_logic_vector(23 downto 0);
             left_reg_shift : in std_logic_vector(23 downto 0);
             
-            t_sclk: in std_logic;
-            t_mclk: in std_logic;
-            t_lrclk: in std_logic;
+--            t_sclk: in std_logic;
+--            t_mclk: in std_logic;
+--            t_lrclk: in std_logic;
             t_data: out std_logic
             );
 end component;
@@ -315,7 +316,7 @@ Env_fol_value_in_s <= Env_fol_in;
 
 
 I2s_i : I2S_in port map (
-    clk => clk,--assined to top clk
+    clk => raw_clk,--assined to top clk
     reset => reset, --assined to top reset
     
     r_sclk => sclk_s,
@@ -330,7 +331,7 @@ I2s_i : I2S_in port map (
 );
 
 AA_1: AA_filter_1 Port map (
-                clk => clk,
+                clk => comp_clk,
                 reset => reset_s,
                 left_valid_in => left_valid_s,
                 right_valid_in => right_valid_s,
@@ -344,7 +345,7 @@ AA_1: AA_filter_1 Port map (
 
 --AA filter
 AA_2: AA_filter_2 port map(
-    clk             => clk,
+    clk             => comp_clk,
     reset => reset,
     left_valid_in   => left_valid_s,
     right_valid_in  => right_valid_s,
@@ -357,7 +358,7 @@ AA_2: AA_filter_2 port map(
     out_data_right => fir_out_data_right_2_s
 );
 L1: Level_1 port map(  
-           clk => clk,
+           clk => comp_clk,
            L1_input_left => fir_out_data_left_2_s, -- in from AA_filter_2
            L1_input_right => fir_out_data_right_2_s, --in from AA_filter_2
            left_valid_in => left_valid_s, -- this is still valid for 96khz not anything downsampled
@@ -375,7 +376,7 @@ L1: Level_1 port map(
            );
 
 MOD_u: Modulator Port map (
-        clk   => clk,       
+        clk   => comp_clk,       
         reset => reset_s,      
         --input data
         left_input_L1_H => H_L1_output_left_s,
@@ -401,7 +402,7 @@ MOD_u: Modulator Port map (
 
 U_INTERPOLATE_L1 : INTERPOLATE_L1
     port map (
-        clk            => clk,
+        clk            => comp_clk,
         reset          => reset,
         
         H_data_in_left   => H_L1_output_left_M_s, --H_L1_output_left_s, --
@@ -422,7 +423,7 @@ U_INTERPOLATE_L1 : INTERPOLATE_L1
     
 U_INTERPOLATE_AA : INTERPOLATE_AA
 port map (
-    clk            => clk,
+    clk            => comp_clk,
     reset          => reset,
 
     data_in_left   => interpolate_l1_data_out_left_s, --data from AA filter
@@ -439,7 +440,7 @@ port map (
 
 U_INTERPOLATE_AA_2 : AA_interpolation_48khz
 port map (
-    clk            => clk,
+    clk            => comp_clk,
     reset          => reset,
 
     data_in_left   => interpolate_aa_data_out_left_s, --data from AA filter
@@ -457,7 +458,7 @@ port map (
 --left_reg_shift_c <= left_reg_output;
 --right_reg_shift_c <= right_reg_output;
 I2s_o : I2S_out port map (
-    clk => clk,
+    clk => raw_clk,
     reset => reset,
     
     right_reg_shift => left_reg_shift_c, --for right out data  --right_reg_shift_c,
@@ -465,9 +466,9 @@ I2s_o : I2S_out port map (
     --AA_filter_signal  --fir_out_data_left_s,
     left_reg_shift => interpolate_aa_2_data_out_left_s, --env_out_s(17 downto 0) & "000000",--interpolate_aa_data_out_left_s, --fir_out_data_left_s(44 downto 21), --L_L1_test_left_s,-- , --fir_out_data_left_s,   --for left out data  -- right_reg_shift_c,-- --
     
-    t_sclk => sclk_s,
-    t_mclk => mclk_s,
-    t_lrclk => lrclk_s,
+--    t_sclk => sclk_s,
+--    t_mclk => mclk_s,
+--    t_lrclk => lrclk_s,
     t_data => t_data_s
     );
 

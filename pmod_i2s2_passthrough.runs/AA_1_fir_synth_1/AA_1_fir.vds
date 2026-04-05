@@ -3,26 +3,25 @@
 # SW Build 5076996 on Wed May 22 18:37:14 MDT 2024
 # IP Build 5075265 on Wed May 22 21:45:21 MDT 2024
 # SharedData Build 5076995 on Wed May 22 18:29:18 MDT 2024
-# Start of session at: Sat Apr  4 19:19:40 2026
-# Process ID: 75264
-# Current directory: E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.runs/AA_1_fir_synth_1
+# Start of session at: Sat Apr  4 21:58:56 2026
+# Process ID: 256704
+# Current directory: C:/Users/natha/OneDrive/Documents/Senior Project/FPGA Code/I2s_in_out/pmod_i2s2_passthrough.runs/AA_1_fir_synth_1
 # Command line: vivado.exe -log AA_1_fir.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source AA_1_fir.tcl
-# Log file: E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.runs/AA_1_fir_synth_1/AA_1_fir.vds
-# Journal file: E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.runs/AA_1_fir_synth_1\vivado.jou
-# Running On        :Blakes-PC
+# Log file: C:/Users/natha/OneDrive/Documents/Senior Project/FPGA Code/I2s_in_out/pmod_i2s2_passthrough.runs/AA_1_fir_synth_1/AA_1_fir.vds
+# Journal file: C:/Users/natha/OneDrive/Documents/Senior Project/FPGA Code/I2s_in_out/pmod_i2s2_passthrough.runs/AA_1_fir_synth_1\vivado.jou
+# Running On        :Nut-Laptop
 # Platform          :Windows Server 2016 or Windows 10
-# Operating System  :22621
-# Processor Detail  :AMD Ryzen 9 6900HS with Radeon Graphics        
-# CPU Frequency     :3294 MHz
-# CPU Physical cores:8
-# CPU Logical cores :16
-# Host memory       :16363 MB
-# Swap memory       :22548 MB
-# Total Virtual     :38912 MB
-# Available Virtual :20798 MB
+# Operating System  :26200
+# Processor Detail  :13th Gen Intel(R) Core(TM) i9-13900HX
+# CPU Frequency     :2419 MHz
+# CPU Physical cores:24
+# CPU Logical cores :32
+# Host memory       :68393 MB
+# Swap memory       :4294 MB
+# Total Virtual     :72688 MB
+# Available Virtual :39212 MB
 #-----------------------------------------------------------
 source AA_1_fir.tcl -notrace
-create_project: Time (s): cpu = 00:00:04 ; elapsed = 00:00:06 . Memory (MB): peak = 530.984 ; gain = 200.336
 INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: AA_1_fir
 Command: synth_design -top AA_1_fir -part xc7a35tcpg236-1 -incremental_mode off -mode out_of_context
 Starting synth_design
@@ -32,11 +31,11 @@ INFO: [Device 21-403] Loading part xc7a35tcpg236-1
 INFO: [Device 21-9227] Part: xc7a35tcpg236-1 does not have CEAM library.
 INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
 INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
-INFO: [Synth 8-7075] Helper process launched with PID 91580
+INFO: [Synth 8-7075] Helper process launched with PID 233692
 ---------------------------------------------------------------------------------
-Starting RTL Elaboration : Time (s): cpu = 00:00:05 ; elapsed = 00:00:11 . Memory (MB): peak = 1395.184 ; gain = 446.688
+Starting RTL Elaboration : Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 1417.707 ; gain = 447.168
 ---------------------------------------------------------------------------------
-INFO: [Synth 8-638] synthesizing module 'AA_1_fir' [e:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.gen/sources_1/ip/AA_1_fir/synth/AA_1_fir.vhd:73]
+INFO: [Synth 8-638] synthesizing module 'AA_1_fir' [c:/Users/natha/OneDrive/Documents/Senior Project/FPGA Code/I2s_in_out/pmod_i2s2_passthrough.gen/sources_1/ip/AA_1_fir/synth/AA_1_fir.vhd:73]
 	Parameter C_XDEVICEFAMILY bound to: artix7 - type: string 
 	Parameter C_ELABORATION_DIR bound to: ./ - type: string 
 	Parameter C_COMPONENT_NAME bound to: AA_1_fir - type: string 
@@ -107,8 +106,8 @@ INFO: [Synth 8-638] synthesizing module 'AA_1_fir' [e:/School/SeniorProject/pmod
 	Parameter C_CONFIG_PACKET_SIZE bound to: 0 - type: integer 
 	Parameter C_CONFIG_TDATA_WIDTH bound to: 1 - type: integer 
 	Parameter C_RELOAD_TDATA_WIDTH bound to: 1 - type: integer 
-INFO: [Synth 8-3491] module 'fir_compiler_v7_2_22' declared at 'e:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.gen/sources_1/ip/AA_1_fir/hdl/fir_compiler_v7_2_vh_rfs.vhd:67067' bound to instance 'U0' of component 'fir_compiler_v7_2_22' [e:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.gen/sources_1/ip/AA_1_fir/synth/AA_1_fir.vhd:205]
-INFO: [Synth 8-256] done synthesizing module 'AA_1_fir' (0#1) [e:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.gen/sources_1/ip/AA_1_fir/synth/AA_1_fir.vhd:73]
+INFO: [Synth 8-3491] module 'fir_compiler_v7_2_22' declared at 'c:/Users/natha/OneDrive/Documents/Senior Project/FPGA Code/I2s_in_out/pmod_i2s2_passthrough.gen/sources_1/ip/AA_1_fir/hdl/fir_compiler_v7_2_vh_rfs.vhd:67067' bound to instance 'U0' of component 'fir_compiler_v7_2_22' [c:/Users/natha/OneDrive/Documents/Senior Project/FPGA Code/I2s_in_out/pmod_i2s2_passthrough.gen/sources_1/ip/AA_1_fir/synth/AA_1_fir.vhd:205]
+INFO: [Synth 8-256] done synthesizing module 'AA_1_fir' (0#1) [c:/Users/natha/OneDrive/Documents/Senior Project/FPGA Code/I2s_in_out/pmod_i2s2_passthrough.gen/sources_1/ip/AA_1_fir/synth/AA_1_fir.vhd:73]
 WARNING: [Synth 8-7129] Port SCLR in module delay__parameterized31 is either unconnected or has no load
 WARNING: [Synth 8-7129] Port SCLR_ALT in module delay__parameterized31 is either unconnected or has no load
 WARNING: [Synth 8-7129] Port SCLR in module delay__parameterized30 is either unconnected or has no load
@@ -211,60 +210,60 @@ WARNING: [Synth 8-7129] Port PIN[fab][11] in module add_accum is either unconnec
 WARNING: [Synth 8-7129] Port PIN[fab][10] in module add_accum is either unconnected or has no load
 INFO: [Common 17-14] Message 'Synth 8-7129' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
 ---------------------------------------------------------------------------------
-Finished RTL Elaboration : Time (s): cpu = 00:00:15 ; elapsed = 00:00:23 . Memory (MB): peak = 1714.059 ; gain = 765.562
+Finished RTL Elaboration : Time (s): cpu = 00:00:13 ; elapsed = 00:00:13 . Memory (MB): peak = 1732.660 ; gain = 762.121
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:15 ; elapsed = 00:00:23 . Memory (MB): peak = 1714.059 ; gain = 765.562
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:13 ; elapsed = 00:00:13 . Memory (MB): peak = 1732.660 ; gain = 762.121
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:15 ; elapsed = 00:00:23 . Memory (MB): peak = 1714.059 ; gain = 765.562
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:13 ; elapsed = 00:00:13 . Memory (MB): peak = 1732.660 ; gain = 762.121
 ---------------------------------------------------------------------------------
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.044 . Memory (MB): peak = 1714.059 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.029 . Memory (MB): peak = 1732.660 ; gain = 0.000
 INFO: [Netlist 29-17] Analyzing 85 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 INFO: [Project 1-570] Preparing netlist for logic optimization
 
 Processing XDC Constraints
 Initializing timing engine
-Parsing XDC File [e:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.gen/sources_1/ip/AA_1_fir/AA_1_fir_ooc.xdc] for cell 'U0'
-Finished Parsing XDC File [e:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.gen/sources_1/ip/AA_1_fir/AA_1_fir_ooc.xdc] for cell 'U0'
-Parsing XDC File [e:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.gen/sources_1/ip/AA_1_fir/constraints/fir_compiler_v7_2.xdc] for cell 'U0'
-Finished Parsing XDC File [e:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.gen/sources_1/ip/AA_1_fir/constraints/fir_compiler_v7_2.xdc] for cell 'U0'
-Parsing XDC File [E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.runs/AA_1_fir_synth_1/dont_touch.xdc]
-Finished Parsing XDC File [E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.runs/AA_1_fir_synth_1/dont_touch.xdc]
+Parsing XDC File [c:/Users/natha/OneDrive/Documents/Senior Project/FPGA Code/I2s_in_out/pmod_i2s2_passthrough.gen/sources_1/ip/AA_1_fir/AA_1_fir_ooc.xdc] for cell 'U0'
+Finished Parsing XDC File [c:/Users/natha/OneDrive/Documents/Senior Project/FPGA Code/I2s_in_out/pmod_i2s2_passthrough.gen/sources_1/ip/AA_1_fir/AA_1_fir_ooc.xdc] for cell 'U0'
+Parsing XDC File [c:/Users/natha/OneDrive/Documents/Senior Project/FPGA Code/I2s_in_out/pmod_i2s2_passthrough.gen/sources_1/ip/AA_1_fir/constraints/fir_compiler_v7_2.xdc] for cell 'U0'
+Finished Parsing XDC File [c:/Users/natha/OneDrive/Documents/Senior Project/FPGA Code/I2s_in_out/pmod_i2s2_passthrough.gen/sources_1/ip/AA_1_fir/constraints/fir_compiler_v7_2.xdc] for cell 'U0'
+Parsing XDC File [C:/Users/natha/OneDrive/Documents/Senior Project/FPGA Code/I2s_in_out/pmod_i2s2_passthrough.runs/AA_1_fir_synth_1/dont_touch.xdc]
+Finished Parsing XDC File [C:/Users/natha/OneDrive/Documents/Senior Project/FPGA Code/I2s_in_out/pmod_i2s2_passthrough.runs/AA_1_fir_synth_1/dont_touch.xdc]
 Completed Processing XDC Constraints
 
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1714.059 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1732.660 ; gain = 0.000
 INFO: [Project 1-111] Unisim Transformation Summary:
   A total of 54 instances were transformed.
   FDRSE => FDRSE (FDRE, LUT4, VCC): 28 instances
   MUXCY_L => MUXCY: 26 instances
 
-Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.048 . Memory (MB): peak = 1714.059 ; gain = 0.000
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.039 . Memory (MB): peak = 1732.660 ; gain = 0.000
 INFO: [Designutils 20-5008] Incremental synthesis strategy off
 ---------------------------------------------------------------------------------
-Finished Constraint Validation : Time (s): cpu = 00:00:23 ; elapsed = 00:00:32 . Memory (MB): peak = 1714.059 ; gain = 765.562
+Finished Constraint Validation : Time (s): cpu = 00:00:20 ; elapsed = 00:00:20 . Memory (MB): peak = 1732.660 ; gain = 762.121
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Loading Part and Timing Information
 ---------------------------------------------------------------------------------
 Loading part: xc7a35tcpg236-1
 ---------------------------------------------------------------------------------
-Finished Loading Part and Timing Information : Time (s): cpu = 00:00:23 ; elapsed = 00:00:32 . Memory (MB): peak = 1714.059 ; gain = 765.562
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:20 ; elapsed = 00:00:20 . Memory (MB): peak = 1732.660 ; gain = 762.121
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying 'set_property' XDC Constraints
 ---------------------------------------------------------------------------------
-Applied set_property KEEP_HIERARCHY = SOFT for U0. (constraint file  E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.runs/AA_1_fir_synth_1/dont_touch.xdc, line 9).
+Applied set_property KEEP_HIERARCHY = SOFT for U0. (constraint file  {C:/Users/natha/OneDrive/Documents/Senior Project/FPGA Code/I2s_in_out/pmod_i2s2_passthrough.runs/AA_1_fir_synth_1/dont_touch.xdc}, line 9).
 ---------------------------------------------------------------------------------
-Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:23 ; elapsed = 00:00:32 . Memory (MB): peak = 1714.059 ; gain = 765.562
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:20 ; elapsed = 00:00:20 . Memory (MB): peak = 1732.660 ; gain = 762.121
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-3971] The signal "dpt_mem:/gen_bram.gen_write_first.gen_double_reg.ram_reg" was recognized as a true dual port RAM template.
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:23 ; elapsed = 00:00:33 . Memory (MB): peak = 1714.059 ; gain = 765.562
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:20 ; elapsed = 00:00:21 . Memory (MB): peak = 1732.660 ; gain = 762.121
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-223] decloning instance 'U0/i_synth/g_polyphase_decimation.i_polyphase_decimation/g_semi_parallel_and_smac.g_cntrl_signals[0].g_others.i_delay' (delay) to 'U0/i_synth/g_polyphase_decimation.i_polyphase_decimation/g_semi_parallel_and_smac.g_cntrl_signals[1].g_others.i_delay'
 INFO: [Synth 8-223] decloning instance 'U0/i_synth/g_polyphase_decimation.i_polyphase_decimation/g_semi_parallel_and_smac.g_cntrl_signals[4].g_others.i_delay' (delay__parameterized7) to 'U0/i_synth/g_polyphase_decimation.i_polyphase_decimation/g_semi_parallel_and_smac.g_cntrl_signals[5].g_others.i_delay'
@@ -290,25 +289,25 @@ WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
 INFO: [Synth 8-3971] The signal "U0/i_synth/g_polyphase_decimation.i_polyphase_decimation/g_semi_parallel_and_smac.g_paths[0].g_mem_array[0].i_mem/g_packed.g_true_dual_port.i_mem/gen_bram.gen_write_first.gen_double_reg.ram_reg" was recognized as a true dual port RAM template.
 INFO: [Synth 8-3971] The signal "U0/i_synth/g_polyphase_decimation.i_polyphase_decimation/g_semi_parallel_and_smac.g_paths[1].g_mem_array[0].i_mem/g_packed.g_true_dual_port.i_mem/gen_bram.gen_write_first.gen_double_reg.ram_reg" was recognized as a true dual port RAM template.
 ---------------------------------------------------------------------------------
-Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:25 ; elapsed = 00:00:35 . Memory (MB): peak = 1714.059 ; gain = 765.562
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:22 ; elapsed = 00:00:23 . Memory (MB): peak = 1732.660 ; gain = 762.121
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying XDC Timing Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:32 ; elapsed = 00:00:43 . Memory (MB): peak = 1714.059 ; gain = 765.562
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:28 ; elapsed = 00:00:29 . Memory (MB): peak = 1732.660 ; gain = 762.121
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Timing Optimization
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Timing Optimization : Time (s): cpu = 00:00:32 ; elapsed = 00:00:43 . Memory (MB): peak = 1714.059 ; gain = 765.562
+Finished Timing Optimization : Time (s): cpu = 00:00:28 ; elapsed = 00:00:29 . Memory (MB): peak = 1732.660 ; gain = 762.121
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Technology Mapping
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Technology Mapping : Time (s): cpu = 00:00:32 ; elapsed = 00:00:44 . Memory (MB): peak = 1714.059 ; gain = 765.562
+Finished Technology Mapping : Time (s): cpu = 00:00:29 ; elapsed = 00:00:29 . Memory (MB): peak = 1732.660 ; gain = 762.121
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start IO Insertion
@@ -326,37 +325,37 @@ Start Final Netlist Cleanup
 Finished Final Netlist Cleanup
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished IO Insertion : Time (s): cpu = 00:00:36 ; elapsed = 00:00:48 . Memory (MB): peak = 1714.059 ; gain = 765.562
+Finished IO Insertion : Time (s): cpu = 00:00:32 ; elapsed = 00:00:32 . Memory (MB): peak = 1732.660 ; gain = 762.121
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Instances
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Instances : Time (s): cpu = 00:00:36 ; elapsed = 00:00:48 . Memory (MB): peak = 1714.059 ; gain = 765.562
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:32 ; elapsed = 00:00:32 . Memory (MB): peak = 1732.660 ; gain = 762.121
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Rebuilding User Hierarchy
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:36 ; elapsed = 00:00:48 . Memory (MB): peak = 1714.059 ; gain = 765.562
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:32 ; elapsed = 00:00:33 . Memory (MB): peak = 1732.660 ; gain = 762.121
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Ports
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Ports : Time (s): cpu = 00:00:36 ; elapsed = 00:00:48 . Memory (MB): peak = 1714.059 ; gain = 765.562
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:32 ; elapsed = 00:00:33 . Memory (MB): peak = 1732.660 ; gain = 762.121
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:36 ; elapsed = 00:00:48 . Memory (MB): peak = 1714.059 ; gain = 765.562
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:32 ; elapsed = 00:00:33 . Memory (MB): peak = 1732.660 ; gain = 762.121
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Nets
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Nets : Time (s): cpu = 00:00:36 ; elapsed = 00:00:48 . Memory (MB): peak = 1714.059 ; gain = 765.562
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:32 ; elapsed = 00:00:33 . Memory (MB): peak = 1732.660 ; gain = 762.121
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Writing Synthesis Report
@@ -399,18 +398,18 @@ Report Cell Usage:
 |18    |FDSE     |    22|
 +------+---------+------+
 ---------------------------------------------------------------------------------
-Finished Writing Synthesis Report : Time (s): cpu = 00:00:36 ; elapsed = 00:00:48 . Memory (MB): peak = 1714.059 ; gain = 765.562
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:32 ; elapsed = 00:00:33 . Memory (MB): peak = 1732.660 ; gain = 762.121
 ---------------------------------------------------------------------------------
 Synthesis finished with 0 errors, 0 critical warnings and 14 warnings.
-Synthesis Optimization Runtime : Time (s): cpu = 00:00:19 ; elapsed = 00:00:45 . Memory (MB): peak = 1714.059 ; gain = 765.562
-Synthesis Optimization Complete : Time (s): cpu = 00:00:37 ; elapsed = 00:00:49 . Memory (MB): peak = 1714.059 ; gain = 765.562
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:17 ; elapsed = 00:00:30 . Memory (MB): peak = 1732.660 ; gain = 762.121
+Synthesis Optimization Complete : Time (s): cpu = 00:00:32 ; elapsed = 00:00:33 . Memory (MB): peak = 1732.660 ; gain = 762.121
 INFO: [Project 1-571] Translating synthesized netlist
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.021 . Memory (MB): peak = 1714.059 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.014 . Memory (MB): peak = 1732.660 ; gain = 0.000
 INFO: [Netlist 29-17] Analyzing 66 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 INFO: [Project 1-570] Preparing netlist for logic optimization
 INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1714.059 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1732.660 ; gain = 0.000
 INFO: [Project 1-111] Unisim Transformation Summary:
   A total of 12 instances were transformed.
   (MUXCY,XORCY) => CARRY4: 8 instances
@@ -420,12 +419,13 @@ Synth Design complete | Checksum: 5c4ac362
 INFO: [Common 17-83] Releasing license: Synthesis
 28 Infos, 101 Warnings, 0 Critical Warnings and 0 Errors encountered.
 synth_design completed successfully
-synth_design: Time (s): cpu = 00:00:40 ; elapsed = 00:01:05 . Memory (MB): peak = 1714.059 ; gain = 1167.098
-Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 1714.059 ; gain = 0.000
-INFO: [Common 17-1381] The checkpoint 'E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.runs/AA_1_fir_synth_1/AA_1_fir.dcp' has been generated.
+INFO: [Common 17-600] The following parameters have non-default value.
+tcl.statsThreshold
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 1732.660 ; gain = 0.000
+INFO: [Common 17-1381] The checkpoint 'C:/Users/natha/OneDrive/Documents/Senior Project/FPGA Code/I2s_in_out/pmod_i2s2_passthrough.runs/AA_1_fir_synth_1/AA_1_fir.dcp' has been generated.
 INFO: [Coretcl 2-1648] Added synthesis output to IP cache for IP AA_1_fir, cache-ID = 0c11a6688fd68d85
 INFO: [Coretcl 2-1174] Renamed 46 cell refs.
-Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.004 . Memory (MB): peak = 1714.059 ; gain = 0.000
-INFO: [Common 17-1381] The checkpoint 'E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.runs/AA_1_fir_synth_1/AA_1_fir.dcp' has been generated.
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 1732.660 ; gain = 0.000
+INFO: [Common 17-1381] The checkpoint 'C:/Users/natha/OneDrive/Documents/Senior Project/FPGA Code/I2s_in_out/pmod_i2s2_passthrough.runs/AA_1_fir_synth_1/AA_1_fir.dcp' has been generated.
 INFO: [Vivado 12-24828] Executing command : report_utilization -file AA_1_fir_utilization_synth.rpt -pb AA_1_fir_utilization_synth.pb
-INFO: [Common 17-206] Exiting Vivado at Sat Apr  4 19:20:57 2026...
+INFO: [Common 17-206] Exiting Vivado at Sat Apr  4 21:59:46 2026...
