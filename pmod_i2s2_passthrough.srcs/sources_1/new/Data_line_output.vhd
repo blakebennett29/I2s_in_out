@@ -40,6 +40,7 @@ entity Data_line_output is
             Env_fol_in : in std_logic_vector(16 downto 0);
             in_valid : in std_logic;
             
+            locked : in std_logic;
             r_sclk: out std_logic;
             r_mclk: out std_logic;
             r_lrclk: out std_logic;
@@ -123,6 +124,7 @@ signal env_rst_s : std_logic := '0';
 signal env_out_s : std_logic_vector(16 downto 0) := (others => '0');
 signal in_valid_s : std_logic := '0';
 signal Mod_valid_out_s : std_logic := '0';
+signal locked_s : std_logic := '0';
 
 --component Envlope_Follower_control_Logic is
 --    Port (  env_in : in std_logic_vector(17 downto 0);
@@ -135,7 +137,9 @@ signal Mod_valid_out_s : std_logic := '0';
 
 component I2S_in is
   Port (    clk : in std_logic;
+            comp_clk : in std_logic;
             reset : in std_logic;
+            locked : in std_logic;
             
             r_sclk: out std_logic;
             r_mclk: out std_logic;
@@ -310,6 +314,7 @@ r_data_s <= r_data; --actual use
 t_data <= t_data_s;
 in_valid_s <= in_valid;
 
+locked_s <= locked;
 --assinments for Modulator
 Env_fol_value_in_s <= Env_fol_in;
 --assinments for I2S_in
@@ -317,7 +322,10 @@ Env_fol_value_in_s <= Env_fol_in;
 
 I2s_i : I2S_in port map (
     clk => raw_clk,--assined to top clk
+    comp_clk => comp_clk,
     reset => reset, --assined to top reset
+    
+    locked => locked_s,
     
     r_sclk => sclk_s,
     r_mclk => mclk_s,

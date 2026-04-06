@@ -89,7 +89,9 @@ component Data_line_output is
         reset    : in  std_logic;
         
         Env_fol_in : in std_logic_vector(16 downto 0);
-
+        in_valid : in std_logic;
+        
+        locked : in std_logic;
         r_sclk   : out std_logic;
         r_mclk   : out std_logic;
         r_lrclk  : out std_logic;
@@ -108,8 +110,10 @@ component Half_Data_line_Env_fol is
         raw_clk : in std_logic;
         comp_clk      : in  std_logic;
         reset    : in  std_logic;
+        locked : in std_logic;
         
         Env_fol_out : out std_logic_vector(16 downto 0);
+        out_valid : out std_logic;
         
         r_sclk   : out std_logic;
         r_mclk   : out std_logic;
@@ -136,7 +140,7 @@ end component;
 -------------------------------------------------------------------
 signal raw_clk_s : std_logic;
 signal main_rst : std_logic := '0';
-signal locked_s: std_logic;
+signal locked_s: std_logic := '0';
 signal comp_clk_s: std_logic;
 -------------------------------------------------------------------
 --DATA SIGNALS
@@ -151,7 +155,8 @@ signal dac_right_input : slv_array_t;
 signal dac_left_input  : slv_array_t;
 
 signal Env_fol_out_S : std_logic_vector(16 downto 0);
-
+signal out_valid_s : std_logic := '0';
+signal in_valid_s : std_logic := '0';
 -------------------------------------------------------------------
 -- ADC SIGNALS
 -------------------------------------------------------------------
@@ -205,6 +210,9 @@ dac3_t_mclk <= adc_mclk_s(0);
 dac3_t_lrclk <= adc_lrclk_s(0);
 dac3_t_data <= out_data_s;
 
+--out_valid_s <= out_valid;
+
+--in_valid <= in_valid_s;
 ----------  ============= ----------                                           
 ----------  | CLOCKING  | ----------
 ----------  ============= ----------
@@ -232,9 +240,11 @@ U_Data_line_output : Data_line_output
         raw_clk  => raw_clk_s,
         comp_clk => comp_clk_s,
         reset    => main_rst,
+        locked => locked_s,
         
         Env_fol_in => Env_fol_out_s,
-
+        in_valid => in_valid_s,
+        
         r_sclk   => adc_sclk_s(0),
         r_mclk   => adc_mclk_s(0),
         r_lrclk  => adc_lrclk_s(0),
@@ -251,8 +261,10 @@ U_Half_Data_line_Env_fol : Half_Data_line_Env_fol
         raw_clk => raw_clk_s,
         comp_clk => comp_clk_s,
         reset    => main_rst,
-
+        locked => locked_s,
+        
         Env_fol_out => Env_fol_out_s,
+        out_valid => in_valid_s,
         
         r_sclk   => adc_sclk_s(1),
         r_mclk   => adc_mclk_s(1),

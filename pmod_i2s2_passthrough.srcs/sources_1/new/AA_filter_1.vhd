@@ -140,11 +140,11 @@ begin
                 -- choose next sample source
                 -- left has priority if both happen together
                 if left_valid_in = '1' then
-                    next_state <= Load_Left;
+                    state <= Load_Left;
                 elsif right_valid_in = '1' then
-                    next_state <= Load_Right;
+                    state <= Load_Right;
                 else
-                    next_state <= Idle;
+                    state <= Idle;
                 end if;
             when Load_Left =>
                 -- keep your mapping: LEFT = "1"
@@ -155,7 +155,7 @@ begin
                 --s_axis_data_tuser_s  <= "1";
                 s_axis_data_tvalid_s <= '1';
 
-                next_state <= Hold_Valid;
+                state <= Hold_Valid;
 
             when Load_Right =>
                 -- keep your mapping: RIGHT = "0"
@@ -166,7 +166,7 @@ begin
                 --s_axis_data_tuser_s  <= "0";
                 s_axis_data_tvalid_s <= '1';
 
-                next_state <= Hold_Valid;
+                state <= Hold_Valid;
 
             when Hold_Valid =>
                 -- hold data and tag stable until FIR accepts sample
@@ -175,21 +175,26 @@ begin
                 s_axis_data_tvalid_s <= '1';
 
                 if (s_axis_data_tvalid_s = '1') and (s_axis_data_tuser_s = "0") then
-                    s_axis_data_tvalid_s <= '0';
-                    s_axis_data_tuser_s <= "1";
-                    s_axis_data_tlast_s <= '1';
-                    next_state <= Idle;
+                    if s_axis_data_tready_s = '1' then
+                        s_axis_data_tvalid_s <= '0';
+                        s_axis_data_tuser_s <= "1";
+                        s_axis_data_tlast_s <= '1';
+                        state <= Idle;
+                    end if;
                 elsif (s_axis_data_tvalid_s = '1') and (s_axis_data_tuser_s = "1") then
-                     s_axis_data_tvalid_s <= '0';
-                    s_axis_data_tuser_s <= "0";
-                    s_axis_data_tlast_s <= '0';
+                    if s_axis_data_tready_s = '1' then
+                         s_axis_data_tvalid_s <= '0';
+                        s_axis_data_tuser_s <= "0";
+                        s_axis_data_tlast_s <= '0';
+                        state <= Idle;
+                     end if;
                 else
-                    next_state <= Hold_Valid;
+                    state <= Hold_Valid;
                 end if;
 
             when others =>
                 s_axis_data_tvalid_s <= '0';
-                next_state <= Idle;
+                state <= Idle;
 
         end case;
 
@@ -198,8 +203,8 @@ begin
         -- LEFT output when m_axis_data_tuser_s = "1"
         -- RIGHT output when m_axis_data_tuser_s = "0"
         --------------------------------------------------------------------
-        if count_M_valid_out >= 1 then
-            count_M_valid_out <= 2;
+--        if count_M_valid_out >= 1 then
+--            count_M_valid_out <= 2;
             if (m_axis_data_tvalid_s = '1') and (m_axis_data_tuser_s = "0") then
                 out_data_L_s <= m_axis_data_tdata_s;
             end if;
@@ -207,11 +212,11 @@ begin
             if (m_axis_data_tvalid_s = '1') and (m_axis_data_tuser_s = "1") then
                 out_data_R_s <= m_axis_data_tdata_s;
             end if;
-        else
-            if m_axis_data_tvalid_s = '1' then
-                count_M_valid_out <= count_M_valid_out + 1;
-            end if;
-        end if;
+--        else
+--            if m_axis_data_tvalid_s = '1' then
+--                count_M_valid_out <= count_M_valid_out + 1;
+--            end if;
+--        end if;
     end if;
 end process;
 

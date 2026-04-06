@@ -129,7 +129,7 @@ begin
                 case current_state is
                     when IDLE =>
                         Mod_valid_out_s     <= '0';
-                        if in_valid = '1' then
+                        if in_valid_s = '1' then
                             current_state <= MODULATE;
                         else
                             current_state <= IDLE;

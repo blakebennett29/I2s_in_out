@@ -148,13 +148,17 @@ out_data_right <= output_right_s;
                     end if;
                 elsif m_tdata_valid_in_s = '0' then
                     if (s_axis_data_tvalid_s = '1') and (s_axis_data_tuser_s = "1") then
+                        if s_axis_data_tready_s = '1' then
                             s_axis_data_tvalid_s <= '0';
                             s_axis_data_tuser_s <= "0";
-                            --s_axis_data_tlast_s <= '0';
+                            s_axis_data_tlast_s <= '0';
+                        end if;
                     elsif (s_axis_data_tvalid_s = '1') and (s_axis_data_tuser_s = "0") then
+                        if s_axis_data_tready_s = '1' then
                             s_axis_data_tuser_s <= "1";
-                            --s_axis_data_tlast_s <= '1';
+                            s_axis_data_tlast_s <= '1';
                             s_axis_data_tvalid_s <= '0';
+                        end if;
                     end if;
                 end if;
                 

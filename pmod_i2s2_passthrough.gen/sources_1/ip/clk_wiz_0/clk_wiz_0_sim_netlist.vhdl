@@ -2,10 +2,10 @@
 -- Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2024.1 (win64) Build 5076996 Wed May 22 18:37:14 MDT 2024
--- Date        : Sat Apr  4 16:54:56 2026
--- Host        : Nut-Laptop running 64-bit major release  (build 9200)
--- Command     : write_vhdl -force -mode funcsim {c:/Users/natha/OneDrive/Documents/Senior Project/FPGA
---               Code/I2S_Passthrough_FInal/pmod_i2s2_passthrough.gen/sources_1/ip/clk_wiz_0/clk_wiz_0_sim_netlist.vhdl}
+-- Date        : Sat Apr  4 22:59:42 2026
+-- Host        : Blakes-PC running 64-bit major release  (build 9200)
+-- Command     : write_vhdl -force -mode funcsim
+--               e:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.gen/sources_1/ip/clk_wiz_0/clk_wiz_0_sim_netlist.vhdl
 -- Design      : clk_wiz_0
 -- Purpose     : This VHDL netlist is a functional simulation representation of the design and should not be modified or
 --               synthesized. This netlist cannot be used for SDF annotated simulation.
