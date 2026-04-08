@@ -31,7 +31,7 @@ use IEEE.NUMERIC_STD.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 entity I2S_in is
-  Port (    clk : in std_logic;
+  Port (    --clk : in std_logic;
             comp_clk : in std_logic;
             reset : in std_logic;
             locked : in std_logic;
@@ -50,16 +50,16 @@ entity I2S_in is
 end I2S_in;
 
 architecture Behavioral of I2S_in is
-component blk_mem_gen_0 IS
-  PORT (
-    clka : IN STD_LOGIC;
-    ena : IN STD_LOGIC;
-    wea : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
-    addra : IN STD_LOGIC_VECTOR(4 DOWNTO 0);
-    dina : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-    douta : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
-  );
-END component;
+--component blk_mem_gen_0 IS
+--  PORT (
+--    clka : IN STD_LOGIC;
+--    ena : IN STD_LOGIC;
+--    wea : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+--    addra : IN STD_LOGIC_VECTOR(4 DOWNTO 0);
+--    dina : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+--    douta : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+--  );
+--END component;
 
 
 signal r_data_s : std_logic := '0';
@@ -101,17 +101,17 @@ signal left_valid_s : std_logic := '0';
 signal right_valid_s : std_logic := '0';
 signal synced_after_reset : std_logic := '1';
 signal locked_s : std_logic := '0';
-
+signal sclk_rise_pulse : std_logic := '0';
 begin
 
-BM1 : blk_mem_gen_0 port map (
-    clka => clk,
-    ena => ena_s,
-    wea => wea_s,
-    addra => addra_s,
-    dina => dina_s,
-    douta => douta_s
-    );
+--BM1 : blk_mem_gen_0 port map (
+--    clka => clk,
+--    ena => ena_s,
+--    wea => wea_s,
+--    addra => addra_s,
+--    dina => dina_s,
+--    douta => douta_s
+--    );
    
 
     
@@ -121,11 +121,11 @@ BM1 : blk_mem_gen_0 port map (
     r_lrclk <= lrclk_s;
     reset_s <= reset;
     --output registers left and right
-    left_reg_output <= left_reg_output_s(30 downto 7); --(30 downto 7);
-    right_reg_output <= right_reg_output_s(30 downto 7); --(30 downto 7);
+    left_reg_output <= left_reg_output_s(31 downto 8); --(30 downto 7);
+    right_reg_output <= right_reg_output_s(31 downto 8); --(30 downto 7);
     --assined for testing i2s out module with only i2s in at top module
-    left_reg_shift_c <= left_reg_output_s(30 downto 7); --(30 downto 7);
-    right_reg_shift_c <= right_reg_output_s(30 downto 7); --(30 downto 7);
+    left_reg_shift_c <= left_reg_output_s(31 downto 8); --(30 downto 7);
+    right_reg_shift_c <= right_reg_output_s(31 downto 8); --(30 downto 7);
     
     right_valid <= right_valid_s;
     left_valid <= left_valid_s;
@@ -178,6 +178,9 @@ BM1 : blk_mem_gen_0 port map (
                     if sclk_s = '1' then
                         sclk_fall_pulse <= '1';
                     end if;
+                    if sclk_s = '0' then
+                        sclk_rise_pulse <= '1';
+                    end if;
                     sclk_s <= not sclk_s;
                 else
                     scnt <= scnt + 1;
@@ -202,7 +205,7 @@ BM1 : blk_mem_gen_0 port map (
                     --block above not nessassary -------------
                     lrclk_s <= not lrclk_s;
                     wait_first_bit <= '1';   -- skip first SCLK after LRCLK edge
-                    
+                    shift_cnt <= 0;
                 else
                     lrcnt <= lrcnt + 1;
                 end if;
@@ -238,7 +241,7 @@ BM1 : blk_mem_gen_0 port map (
 --                end if;
                 ---------------------------------------------------------------------
                 --Shift register logic
-                if (shift_cnt >= 32) then 
+                if (shift_cnt >= 31) then 
                     ena_s <= '1';
                     shift_cnt <= 0;
                     --===========================================
@@ -339,13 +342,14 @@ BM1 : blk_mem_gen_0 port map (
 --                    end case;
                     -- end of new code -----------------------------------------------------------------------------
                 --shift data bit's out (in is how I am looking at it while programing the dac)
-                  if sclk_fall_pulse = '1' then
-                    sclk_fall_pulse <= '0';
+                  if sclk_rise_pulse = '1' then
+                    sclk_rise_pulse <= '0';
                 
---                    if wait_first_bit = '1' then
---                        wait_first_bit <= '0';   -- skip dummy bit
-                        --shift_cnt <= 1;
-                    if shift_cnt < 32 then
+                    if wait_first_bit = '1' then
+                        wait_first_bit <= '0';   -- skip dummy bit
+                        shift_cnt <= 0;
+--                    end if;
+                    elsif shift_cnt < 31 then
                         if lrclk_s = '0' then
                             left_reg(31 - shift_cnt) <= r_data_s;
                         else
@@ -354,8 +358,8 @@ BM1 : blk_mem_gen_0 port map (
                 
                         shift_cnt <= shift_cnt + 1;
                     end if;
-                end if;                               
-                --end if;
+                                                   
+                end if;
                 
             end if;
             --end if; -- idk where this was missed

@@ -33,6 +33,7 @@ use IEEE.NUMERIC_STD.ALL;
 entity I2S_out is
   Port (    clk : in std_logic;
             reset : in std_logic;
+            locked : in std_logic;
             right_reg_shift : in std_logic_vector(23 downto 0);
             left_reg_shift : in std_logic_vector(23 downto 0);
             
@@ -77,6 +78,9 @@ signal state, next_state : LR_State;
 signal right_reg_shift_t : std_logic_vector(31 downto 0) := (others =>'0');
 signal left_reg_shift_t : std_logic_vector(31 downto 0) := (others =>'0');
 signal t_data_s : std_logic := '0';
+signal sclk_rise_pulse : std_logic := '0';
+signal test_register_shift_t : std_logic_vector(31 downto 0) := (others =>'0');
+signal wait_first_bit : std_logic := '0';
 
 begin
 
@@ -97,6 +101,7 @@ begin
                 lrcnt <= 0;
                 right_reg_shift_t <= (others => '0');
                 left_reg_shift_t <= (others => '0');
+                sclk_fall_pulse <= '0';
 --                mclk_ss  <= '0';
 --                sclk_ss  <= '0';
 --                lrclk_ss <= '0';
@@ -104,8 +109,9 @@ begin
                 shift_cnt <= 0;
                 state <= Idle;
                 next_state <= Idle;
-            elsif rising_edge(clk) then 
+            elsif rising_edge(clk) and (locked = '1') then 
                 state <= next_state; -- continue if reset isn't high
+                sclk_fall_pulse <= '0';
 --            --------------------------------------------------------------------
 --            --master clk generation
 --                if mcnt >= 1 then   --creating that 25mhz clk (divide the clk by 4)
@@ -122,6 +128,9 @@ begin
                     if sclk_ss = '1' then
                         sclk_fall_pulse <= '1';
                     end if;
+                    if sclk_ss = '0' then
+                        sclk_rise_pulse <= '1';
+                    end if;
                     --sclk_s <= not sclk_s;
                 else
                     scnt <= scnt + 1;
@@ -133,24 +142,24 @@ begin
                     --not nessisary code------------
                     if lrclk_ss = '0' then   --lr edge detection "rising"
                         lrclk_rise_pulse <= '1';
+                        wait_first_bit <= '1';
+                        shift_cnt <= 0;
                     end if;
                     if lrclk_ss = '1' then --"falling" edge detection
                         lrclk_fall_pulse <= '1';
+                        wait_first_bit <= '1';
+                        shift_cnt <= 0;
                     end if;
                     
                     --block above not nessassary -------------
                     --lrclk_s <= not lrclk_s;
+                    
                 else
                     lrcnt <= lrcnt + 1;
                 end if;
                 ---------------------------------------------------------------------
                 --Shift register logic
-                if reset = '1' then -- could probably move this with the other reset
-                    shift_Reg_load <= (others => '0');
-                    shift_cnt <= 0;
-                    
-                elsif shift_cnt >= 32 then
-                    shift_cnt <= 0;
+                   
 --                    address <= address + 1;
 --                    addra_s <= std_logic_vector(to_unsigned(address, 5));
 --                    shift_Reg_load <= douta_s; --assine new sample to register
@@ -168,7 +177,7 @@ begin
                     
                     --new code-------------------------------------------------------------
                     
-                else
+
                     case state is
                         when Idle =>
                             if lrclk_ss = '0' then
@@ -176,31 +185,40 @@ begin
                             else
                                 next_state <= Right;
                             end if;
-                        
+                            
                         when Left =>
                             -- shift LEFT data while lrclk = 0
-                            if lrclk_ss = '0' then
-                                if sclk_fall_pulse = '1' then
-                                    sclk_fall_pulse <= '0';
-                                    t_data_s <= left_reg_shift_t(31 - shift_cnt);
-                                    shift_cnt <= shift_cnt + 1;
+                                if lrclk_ss = '0' then
+                                    if sclk_fall_pulse = '1' then
+                                        sclk_fall_pulse <= '0';
+                            
+                                        if wait_first_bit = '1' then
+                                            wait_first_bit <= '0';   -- skip exactly one falling SCLK
+                                        else
+                                            t_data_s <= left_reg_shift_t(31 - shift_cnt);
+                                            test_register_shift_t(31 - shift_cnt) <= left_reg_shift_t(31 - shift_cnt);
+                                            shift_cnt <= shift_cnt + 1;
+                                        end if;
+                                    end if;
+                                    next_state <= Left;
+                                else
+                                    next_state <= Right;
                                 end if;
-                                next_state <= Left;
-                            else
-                                next_state <= Right;
-                            end if;
-                        
                         when Right =>
                             -- shift RIGHT data while lrclk = 1
-                            if lrclk_ss = '1' then
+                            if wait_first_bit = '1' then
+                                wait_first_bit <= '0';
+                            elsif lrclk_ss = '1' then
                                 if sclk_fall_pulse = '1' then
                                     sclk_fall_pulse <= '0';
-                                    t_data_s <= right_reg_shift_t(31 - shift_cnt);
+                                    t_data_s  <= right_reg_shift_t(31 - shift_cnt);
+                                    test_register_shift_t(31 - shift_cnt) <= right_reg_shift_t(31 - shift_cnt);
                                     shift_cnt <= shift_cnt + 1;
                                 end if;
-                                next_state <= Right;
-                            else
+                            elsif lrclk_ss = '0' then
                                 next_state <= Left;
+                            else
+                                next_state <= idle;
                             end if;
                             
                             
@@ -224,7 +242,7 @@ begin
 --                end if;     
                 end if;
                 
-            end if;
+
             --end if; -- idk where this was missed
     end process;
 end Behavioral;

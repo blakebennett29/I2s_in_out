@@ -40,20 +40,20 @@ architecture sim of tb_TOP is
     signal adc2_r_data  : std_logic := '0';
 
     -- DAC outputs
-    signal dac1_t_sclk  : std_logic;
-    signal dac1_t_mclk  : std_logic;
-    signal dac1_t_lrclk : std_logic;
-    signal dac1_t_data  : std_logic;
+--    signal dac1_t_sclk  : std_logic;
+--    signal dac1_t_mclk  : std_logic;
+--    signal dac1_t_lrclk : std_logic;
+--    signal dac1_t_data  : std_logic;
 
     signal dac2_t_sclk  : std_logic;
     signal dac2_t_mclk  : std_logic;
     signal dac2_t_lrclk : std_logic;
     signal dac2_t_data  : std_logic;
 
-    signal dac3_t_sclk  : std_logic;
-    signal dac3_t_mclk  : std_logic;
-    signal dac3_t_lrclk : std_logic;
-    signal dac3_t_data  : std_logic;
+--    signal dac3_t_sclk  : std_logic;
+--    signal dac3_t_mclk  : std_logic;
+--    signal dac3_t_lrclk : std_logic;
+--    signal dac3_t_data  : std_logic;
 
     constant T_CLK : time := 10 ns;  -- 100 MHz
 
@@ -61,7 +61,7 @@ architecture sim of tb_TOP is
     -- stimulus samples
     --------------------------------------------------------------------------
     constant ADC1_LEFT_ONCE  : std_logic_vector(23 downto 0) := x"aaaaaa";
-    constant ADC1_RIGHT_ONCE : std_logic_vector(23 downto 0) := x"000000";
+    constant ADC1_RIGHT_ONCE : std_logic_vector(23 downto 0) := x"bbbbbb";
 
     constant ADC2_LEFT_ONCE  : std_logic_vector(23 downto 0) := x"aaaaaa";
     constant ADC2_RIGHT_ONCE : std_logic_vector(23 downto 0) := x"000000";
@@ -93,20 +93,20 @@ begin
             adc2_r_lrclk => adc2_r_lrclk,
             adc2_r_data  => adc2_r_data,
 
-            dac1_t_sclk  => dac1_t_sclk,
-            dac1_t_mclk  => dac1_t_mclk,
-            dac1_t_lrclk => dac1_t_lrclk,
-            dac1_t_data  => dac1_t_data,
+--            dac1_t_sclk  => dac1_t_sclk,
+--            dac1_t_mclk  => dac1_t_mclk,
+--            dac1_t_lrclk => dac1_t_lrclk,
+--            dac1_t_data  => dac1_t_data,
 
             dac2_t_sclk  => dac2_t_sclk,
             dac2_t_mclk  => dac2_t_mclk,
             dac2_t_lrclk => dac2_t_lrclk,
-            dac2_t_data  => dac2_t_data,
+            dac2_t_data  => dac2_t_data
 
-            dac3_t_sclk  => dac3_t_sclk,
-            dac3_t_mclk  => dac3_t_mclk,
-            dac3_t_lrclk => dac3_t_lrclk,
-            dac3_t_data  => dac3_t_data
+--            dac3_t_sclk  => dac3_t_sclk,
+--            dac3_t_mclk  => dac3_t_mclk,
+--            dac3_t_lrclk => dac3_t_lrclk,
+--            dac3_t_data  => dac3_t_data
         );
 
     --------------------------------------------------------------------------

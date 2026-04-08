@@ -33,13 +33,15 @@ use IEEE.fixed_pkg.ALL;
 --use UNISIM.VComponents.all;
 
 entity Data_line_output is
-  Port (    raw_clk: in std_logic;
+  Port (    --raw_clk: in std_logic;
             comp_clk: in std_logic;
             reset: in std_logic;
             
-            Env_fol_in : in std_logic_vector(16 downto 0);
-            in_valid : in std_logic;
-            
+            Env_fol_in_L_L_1 : in std_logic_vector(16 downto 0);
+            Env_fol_in_H_L_1 : in std_logic_vector(16 downto 0);
+            --in_valid_h : in std_logic;
+            in_valid_L : in std_logic;
+    
             locked : in std_logic;
             r_sclk: out std_logic;
             r_mclk: out std_logic;
@@ -47,9 +49,9 @@ entity Data_line_output is
             r_data: in std_logic; --in for actual use
             --r_data: out std_logic;
             
-            t_sclk: out std_logic;
-            t_mclk: out std_logic;
-            t_lrclk: out std_logic;
+--            t_sclk: out std_logic;
+--            t_mclk: out std_logic;
+--            t_lrclk: out std_logic;
             t_data: out std_logic
             );
 end Data_line_output;
@@ -116,13 +118,16 @@ signal L_L1_output_right_M_s : std_logic_vector(31 downto 0);
 signal L_L1_output_left_M_s : std_logic_vector(31 downto 0);
 
 signal Env_fol_value_in_s : std_logic_vector(16 downto 0);
+signal Env_fol_in_L_s : std_logic_vector(16 downto 0) := (others => '0');
+signal Env_fol_in_H_s : std_logic_vector(16 downto 0) := (others => '0');
 --Envlope Follower passthrough signials
 signal env_in_s : std_logic_vector(17 downto 0) := (others => '0');
 signal env_start_s : std_logic := '0';
 signal env_clk_s : std_logic := '0';
 signal env_rst_s : std_logic := '0';
 signal env_out_s : std_logic_vector(16 downto 0) := (others => '0');
-signal in_valid_s : std_logic := '0';
+signal in_valid_h_s : std_logic := '0';
+signal in_valid_l_s : std_logic := '0';
 signal Mod_valid_out_s : std_logic := '0';
 signal locked_s : std_logic := '0';
 
@@ -136,7 +141,7 @@ signal locked_s : std_logic := '0';
 --end component;
 
 component I2S_in is
-  Port (    clk : in std_logic;
+  Port (    --clk : in std_logic;
             comp_clk : in std_logic;
             reset : in std_logic;
             locked : in std_logic;
@@ -215,8 +220,11 @@ component Modulator is
         right_input_L1_H  : in  std_logic_vector(31 downto 0);
         left_input_L1_L   : in std_logic_vector(31 downto 0);
         right_input_L1_L  : in std_logic_vector(31 downto 0);
-        Env_fol_in   : in  std_logic_vector(16 downto 0);
-        in_valid     : in std_logic;
+        
+        Env_fol_in_H_L_1   : in  std_logic_vector(16 downto 0);
+        Env_fol_in_L_L_1   : in  std_logic_vector(16 downto 0);
+        --in_valid_h     : in std_logic;
+        in_valid_l     : in std_logic;
         m_tvalid_in  : in  std_logic;
         
         Mod_valid_out : out std_logic;
@@ -289,6 +297,8 @@ end component;
 component I2S_out is
   Port (    clk : in std_logic;
             reset : in std_logic;
+            locked : in std_logic;
+            
             right_reg_shift : in std_logic_vector(23 downto 0);
             left_reg_shift : in std_logic_vector(23 downto 0);
             
@@ -306,22 +316,25 @@ r_sclk  <= sclk_s;
 r_mclk  <= mclk_s;
 r_lrclk <= lrclk_s;
 
-t_sclk  <= sclk_s;
-t_mclk  <= mclk_s;
-t_lrclk <= lrclk_s;
+--t_sclk  <= sclk_s;
+--t_mclk  <= mclk_s;
+--t_lrclk <= lrclk_s;
 r_data_s <= r_data; --actual use
 --r_data <= r_data_s; --simulation
 t_data <= t_data_s;
-in_valid_s <= in_valid;
+--in_valid_H_s <= in_valid_h;
+in_valid_L_s <= in_valid_L;
+
 
 locked_s <= locked;
 --assinments for Modulator
-Env_fol_value_in_s <= Env_fol_in;
+Env_fol_in_H_s <= Env_fol_in_H_L_1;
+Env_fol_in_L_s <= Env_fol_in_L_L_1;
 --assinments for I2S_in
 
 
 I2s_i : I2S_in port map (
-    clk => raw_clk,--assined to top clk
+    --clk => raw_clk,--assined to top clk
     comp_clk => comp_clk,
     reset => reset, --assined to top reset
     
@@ -392,8 +405,11 @@ MOD_u: Modulator Port map (
         left_input_L1_L => L_L1_output_left_s,
         right_input_L1_L => L_L1_output_right_s,
         --modulator and valid signials
-        Env_fol_in =>  Env_fol_value_in_s,
-        in_valid => in_valid_s,
+        Env_fol_in_H_L_1 =>  Env_fol_in_H_s,
+        Env_fol_in_L_L_1 => Env_fol_in_L_s,
+        
+        --in_valid_h => in_valid_h_s,
+        in_valid_l => in_valid_L_s,
         m_tvalid_in => m_tdata_valid_out_H1_s,
         
         Mod_valid_out => Mod_valid_out_s,
@@ -413,11 +429,11 @@ U_INTERPOLATE_L1 : INTERPOLATE_L1
         clk            => comp_clk,
         reset          => reset,
         
-        H_data_in_left   => H_L1_output_left_s, --H_L1_output_left_M_s, --
-        H_data_in_right  => H_L1_output_right_s, --H_L1_output_right_M_s, --
+        H_data_in_left   => H_L1_output_left_M_s, --H_L1_output_left_s, --
+        H_data_in_right  => H_L1_output_right_M_s, --H_L1_output_right_s, --
         
-        L_data_in_left   => L_L1_output_left_s, --L_L1_output_left_M_s, --
-        L_data_in_right  => L_L1_output_right_s, --L_L1_output_right_M_s, --
+        L_data_in_left   => L_L1_output_left_M_s, --L_L1_output_left_s, --
+        L_data_in_right  => L_L1_output_right_M_s, --L_L1_output_right_s, --
         
         left_valid_in    => left_valid_s,
         right_valid_in   => right_valid_s,
@@ -468,6 +484,7 @@ port map (
 I2s_o : I2S_out port map (
     clk => comp_clk,
     reset => reset,
+    locked => locked_s,
     
     right_reg_shift => interpolate_aa_2_data_out_right_s, --for right out data  --right_reg_shift_c,
     --passthrough_signal --left_reg_shift_c,

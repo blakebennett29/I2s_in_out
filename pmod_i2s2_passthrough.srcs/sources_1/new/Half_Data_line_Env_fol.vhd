@@ -33,24 +33,26 @@ use IEEE.fixed_pkg.ALL;
 --use UNISIM.VComponents.all;
 
 entity Half_Data_line_Env_fol is
-  Port (    raw_clk: in std_logic;
+  Port (    --raw_clk: in std_logic;
             comp_clk: in std_logic;
             reset: in std_logic;
             locked : in std_logic;
             
-            Env_fol_out : out std_logic_vector(16 downto 0);
-            out_valid : out std_logic;
+            Env_fol_out_L_L : out std_logic_vector(16 downto 0);
+            Env_fol_out_H_L : out std_logic_vector(16 downto 0);
+            out_valid_h : out std_logic;
+            out_valid_L : out std_logic;
             
-            r_sclk: out std_logic;
-            r_mclk: out std_logic;
-            r_lrclk: out std_logic;
-            r_data: in std_logic; --in for actual use
+--            r_sclk: out std_logic;
+--            r_mclk: out std_logic;
+--            r_lrclk: out std_logic;
+            r_data: in std_logic --in for actual use
             --r_data: out std_logic;
             
-            t_sclk: out std_logic;
-            t_mclk: out std_logic;
-            t_lrclk: out std_logic;
-            t_data: out std_logic
+--            t_sclk: out std_logic;
+--            t_mclk: out std_logic;
+--            t_lrclk: out std_logic;
+--            t_data: out std_logic
             );
 end Half_Data_line_Env_fol;
 
@@ -110,11 +112,14 @@ signal m_tdata_valid_out_int_aa_s : std_logic := '0';
 
 signal Env_fol_out_s : std_logic_vector(16 downto 0); -- needs
 signal env_out_s : std_logic_vector(16 downto 0) := (others => '0');
-signal out_valid_s : std_logic := '0';
+signal out_valid_L_s : std_logic := '0';
+signal out_valid_H_s : std_logic := '0';
+signal Env_fol_out_L_s : std_logic_vector(16 downto 0) := (others => '0');
+signal Env_fol_out_H_s : std_logic_vector(16 downto 0) := (others => '0');
 signal locked_s : std_logic :='0';
 
 component I2S_in is
-  Port (    clk : in std_logic;
+  Port (    --clk : in std_logic;
             comp_clk : in std_logic;
             reset : in std_logic;
             locked : in std_logic;
@@ -212,20 +217,22 @@ end component;
 begin
 -- assnments make these avalible to see on top level module
 reset_s <= reset;
-r_sclk  <= sclk_s;
-r_mclk  <= mclk_s;
-r_lrclk <= lrclk_s;
+--r_sclk  <= sclk_s;
+--r_mclk  <= mclk_s;
+--r_lrclk <= lrclk_s;
 
-t_sclk  <= sclk_s;
-t_mclk  <= mclk_s;
-t_lrclk <= lrclk_s;
+--t_sclk  <= sclk_s;
+--t_mclk  <= mclk_s;
+--t_lrclk <= lrclk_s;
 r_data_s <= r_data; --actual use
 --r_data <= r_data_s; --simulation
-t_data <= t_data_s;
+--t_data <= t_data_s;
 --assinments for modulator
-Env_fol_out <= Env_fol_out_s;
+Env_fol_out_L_L <= Env_fol_out_L_s; --  H_L1_output_left_s(23 downto 7);--Env_fol_out_L_s;
+Env_fol_out_H_L <= Env_fol_out_H_s;   --L_L1_output_left_s(23 downto 7);
 
-out_valid <= out_valid_s;
+out_valid_l <= out_valid_L_s;
+out_valid_h <= out_valid_H_s;
 locked_s <= locked;
 --assinments for I2S_in
 
@@ -247,7 +254,7 @@ locked_s <= locked;
 --    t_data => t_data_s
 --    );
 I2s_i : I2S_in port map (
-    clk => raw_clk,--assined to top clk
+    --clk => raw_clk,--assined to top clk
     comp_clk => comp_clk,
     reset => reset, --assined to top reset
     locked => locked_s,
@@ -311,14 +318,24 @@ L1: Level_1 port map(
 --==================
 --EV follower passthrough test
 --====================
-EV_B: Envlope_Follower_control_Logic Port map(
+EV_L_L_1: Envlope_Follower_control_Logic Port map(
             env_in => L_L1_output_left_s(23 downto 6),
             env_start => m_tdata_valid_out_L1_s,
             env_clk => comp_clk,
             env_rst => reset,
-            env_out => Env_fol_out_s,
-            out_valid => out_valid_s
+            env_out => Env_fol_out_L_s,
+            out_valid => out_valid_L_s
              );
 
-
+--==================
+--EV follower passthrough test
+--====================
+EV_H_L_1: Envlope_Follower_control_Logic Port map(
+            env_in => H_L1_output_left_s(23 downto 6),
+            env_start => m_tdata_valid_out_H1_s,
+            env_clk => comp_clk,
+            env_rst => reset,
+            env_out => Env_fol_out_H_s,
+            out_valid => out_valid_H_s
+             );
 end Behavioral;

@@ -45,20 +45,20 @@ entity TOP is
             adc2_r_lrclk: out std_logic;
             adc2_r_data: in std_logic; 
             
-            dac1_t_sclk: out std_logic;
-            dac1_t_mclk: out std_logic;
-            dac1_t_lrclk: out std_logic;
-            dac1_t_data: out std_logic;
+--            dac1_t_sclk: out std_logic;
+--            dac1_t_mclk: out std_logic;
+--            dac1_t_lrclk: out std_logic;
+--            dac1_t_data: out std_logic;
             
             dac2_t_sclk: out std_logic;
             dac2_t_mclk: out std_logic;
             dac2_t_lrclk: out std_logic;
-            dac2_t_data: out std_logic;
+            dac2_t_data: out std_logic
             
-            dac3_t_sclk: out std_logic;
-            dac3_t_mclk: out std_logic;
-            dac3_t_lrclk: out std_logic;
-            dac3_t_data: out std_logic
+--            dac3_t_sclk: out std_logic;
+--            dac3_t_mclk: out std_logic;
+--            dac3_t_lrclk: out std_logic;
+--            dac3_t_data: out std_logic
             );
 end TOP;
 
@@ -84,12 +84,14 @@ end component clk_wiz_0;
 
 component Data_line_output is
     Port (
-        raw_clk : in std_logic;
+        --raw_clk : in std_logic;
         comp_clk      : in  std_logic;
         reset    : in  std_logic;
         
-        Env_fol_in : in std_logic_vector(16 downto 0);
-        in_valid : in std_logic;
+        Env_fol_in_L_L_1 : in std_logic_vector(16 downto 0);
+        Env_fol_in_H_L_1 : in std_logic_vector(16 downto 0);
+        --in_valid_h : in std_logic;
+        in_valid_L : in std_logic;
         
         locked : in std_logic;
         r_sclk   : out std_logic;
@@ -98,33 +100,35 @@ component Data_line_output is
         r_data   : in  std_logic;
         --r_data : out std_logic;
         
-        t_sclk   : out std_logic;
-        t_mclk   : out std_logic;
-        t_lrclk  : out std_logic;
+--        t_sclk   : out std_logic;
+--        t_mclk   : out std_logic;
+--        t_lrclk  : out std_logic;
         t_data   : out std_logic
     );
 end component;
 
 component Half_Data_line_Env_fol is
     Port (
-        raw_clk : in std_logic;
+        --raw_clk : in std_logic;
         comp_clk      : in  std_logic;
         reset    : in  std_logic;
         locked : in std_logic;
         
-        Env_fol_out : out std_logic_vector(16 downto 0);
-        out_valid : out std_logic;
+        Env_fol_out_L_L : out std_logic_vector(16 downto 0);
+        Env_fol_out_H_L : out std_logic_vector(16 downto 0);
+        --out_valid_h : out std_logic;
+        out_valid_L : out std_logic;
         
-        r_sclk   : out std_logic;
-        r_mclk   : out std_logic;
-        r_lrclk  : out std_logic;
-        r_data   : in  std_logic;
+--        r_sclk   : out std_logic;
+--        r_mclk   : out std_logic;
+--        r_lrclk  : out std_logic;
+        r_data   : in  std_logic
         --r_data : out std_logic;
         
-        t_sclk   : out std_logic;
-        t_mclk   : out std_logic;
-        t_lrclk  : out std_logic;
-        t_data   : out std_logic
+--        t_sclk   : out std_logic;
+--        t_mclk   : out std_logic;
+--        t_lrclk  : out std_logic;
+        --t_data   : out std_logic
     );
 end component;
 
@@ -155,8 +159,12 @@ signal dac_right_input : slv_array_t;
 signal dac_left_input  : slv_array_t;
 
 signal Env_fol_out_S : std_logic_vector(16 downto 0);
-signal out_valid_s : std_logic := '0';
-signal in_valid_s : std_logic := '0';
+signal out_valid_h_s : std_logic := '0';
+signal in_valid_h_s : std_logic := '0';
+signal out_valid_l_s : std_logic := '0';
+signal in_valid_l_s : std_logic := '0';
+signal Env_fol_out_L_s : std_logic_vector(16 downto 0) := (others => '0');
+signal Env_fol_out_H_s : std_logic_vector(16 downto 0) := (others => '0');
 -------------------------------------------------------------------
 -- ADC SIGNALS
 -------------------------------------------------------------------
@@ -237,13 +245,15 @@ COMPUTATION_CLOCK: clk_wiz_0
   
 U_Data_line_output : Data_line_output
     port map (
-        raw_clk  => raw_clk_s,
+        --raw_clk  => raw_clk_s,
         comp_clk => comp_clk_s,
         reset    => main_rst,
         locked => locked_s,
         
-        Env_fol_in => Env_fol_out_s,
-        in_valid => in_valid_s,
+        Env_fol_in_L_L_1 => Env_fol_out_L_s,
+        Env_fol_in_H_L_1 => Env_fol_out_H_s,
+        --in_valid_h => out_valid_H_s,
+        in_valid_L => out_valid_L_s,
         
         r_sclk   => adc_sclk_s(0),
         r_mclk   => adc_mclk_s(0),
@@ -253,19 +263,20 @@ U_Data_line_output : Data_line_output
 --        t_sclk   => sclk_s,
 --        t_mclk   => mclk_s,
 --        t_lrclk  => lrclk_s,
-        t_data   => out_data_s
+       t_data   => out_data_s
     );
 
 U_Half_Data_line_Env_fol : Half_Data_line_Env_fol
     port map (
-        raw_clk => raw_clk_s,
+        --raw_clk => raw_clk_s,
         comp_clk => comp_clk_s,
         reset    => main_rst,
         locked => locked_s,
         
-        Env_fol_out => Env_fol_out_s,
-        out_valid => in_valid_s,
-        
+        Env_fol_out_L_L  => Env_fol_out_L_s,
+        Env_fol_out_H_L  => Env_fol_out_H_s,
+        --out_valid_h => out_valid_h_s,
+        out_valid_l => out_valid_l_s,
 --        r_sclk   => adc_sclk_s(0),
 --        r_mclk   => adc_mclk_s(0),
 --        r_lrclk  => adc_lrclk_s(0),
