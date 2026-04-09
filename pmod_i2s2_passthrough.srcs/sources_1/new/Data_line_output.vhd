@@ -131,14 +131,16 @@ signal in_valid_l_s : std_logic := '0';
 signal Mod_valid_out_s : std_logic := '0';
 signal locked_s : std_logic := '0';
 
---component Envlope_Follower_control_Logic is
---    Port (  env_in : in std_logic_vector(17 downto 0);
---            env_start: in STD_LOGIC;
---            env_clk : in STD_LOGIC;
---            env_rst : in STD_LOGIC;
---            env_out : out std_logic_vector(17 downto 0)
---             );
---end component;
+signal DC_offset_test : std_logic_vector(16 downto 0) := "01111111111111111";
+
+component Envlope_Follower_control_Logic is
+    Port (  env_in : in std_logic_vector(17 downto 0);
+            env_start: in STD_LOGIC;
+            env_clk : in STD_LOGIC;
+            env_rst : in STD_LOGIC;
+            env_out : out std_logic_vector(16 downto 0)
+             );
+end component;
 
 component I2S_in is
   Port (    --clk : in std_logic;
@@ -331,7 +333,11 @@ locked_s <= locked;
 Env_fol_in_H_s <= Env_fol_in_H_L_1;
 Env_fol_in_L_s <= Env_fol_in_L_L_1;
 --assinments for I2S_in
-
+--Assinments for envlope follower test
+env_in_s <= fir_out_data_left_2_s(28 downto 11);--Env_fol_in_L_L_1;
+env_start_s <= m_tdata_valid_in_AA_2;
+env_clk_s <= comp_clk;
+env_rst_s <= reset_s;
 
 I2s_i : I2S_in port map (
     --clk => raw_clk,--assined to top clk
@@ -350,7 +356,13 @@ I2s_i : I2S_in port map (
     left_reg_output => left_reg_shift_c, --maps to FIR core inputs
     right_reg_output => right_reg_shift_c
 );
-
+--EV_test : Envlope_Follower_control_Logic Port map(
+--            env_in  => env_in_s,
+--            env_start => env_start_s,
+--            env_clk => env_clk_s,
+--            env_rst => env_rst_s,
+--            env_out => env_out_s
+--            );
 AA_1: AA_filter_1 Port map (
                 clk => comp_clk,
                 reset => reset_s,
@@ -437,8 +449,8 @@ U_INTERPOLATE_L1 : INTERPOLATE_L1
         
         left_valid_in    => left_valid_s,
         right_valid_in   => right_valid_s,
-        m_tdata_valid_in_L1 => Mod_valid_out_s,     --m_tdata_valid_out_L1_s, 
-        m_tdata_valid_in_H1 => Mod_valid_out_s,     --m_tdata_valid_out_H1_s,
+        m_tdata_valid_in_L1 => Mod_valid_out_s,     --m_tdata_valid_out_L1_s, --
+        m_tdata_valid_in_H1 => Mod_valid_out_s,     --m_tdata_valid_out_H1_s, --
         
         m_tdata_valid_out_int_aa => m_tdata_valid_out_int_aa_s,
         data_out_left    => interpolate_l1_data_out_left_s,
@@ -486,10 +498,10 @@ I2s_o : I2S_out port map (
     reset => reset,
     locked => locked_s,
     
-    right_reg_shift => interpolate_aa_2_data_out_right_s, --for right out data  --right_reg_shift_c,
+    right_reg_shift => interpolate_aa_2_data_out_right_s, --fir_out_data_right_2_s(27 downto 4), --for right out data  --right_reg_shift_c,
     --passthrough_signal --left_reg_shift_c,
     --AA_filter_signal  --fir_out_data_left_s,
-    left_reg_shift => interpolate_aa_2_data_out_left_s,--interpolate_aa_2_data_out_left_s, --env_out_s(17 downto 0) & "000000",--interpolate_aa_data_out_left_s, --fir_out_data_left_s(44 downto 21), --L_L1_test_left_s,-- , --fir_out_data_left_s,   --for left out data  -- right_reg_shift_c,-- --
+    left_reg_shift => interpolate_aa_2_data_out_left_s, -- env_out_s(16 downto 0) & "0000000",----interpolate_aa_2_data_out_left_s, ----interpolate_aa_data_out_left_s, --fir_out_data_left_s(44 downto 21), --L_L1_test_left_s,-- , --fir_out_data_left_s,   --for left out data  -- right_reg_shift_c,-- --
     
     t_sclk => sclk_s,
     t_mclk => mclk_s,

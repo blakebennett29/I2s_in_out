@@ -1,4 +1,4 @@
-xpm_memory.sv,systemverilog,xpm,../../../../../../3610_digital_systems/Vivado/2024.1/data/ip/xpm/xpm_memory/hdl/xpm_memory.sv,
+xpm_cdc.sv,systemverilog,xpm,../../../../../../3610_digital_systems/Vivado/2024.1/data/ip/xpm/xpm_cdc/hdl/xpm_cdc.sv,
 xpm_VCOMP.vhd,vhdl,xpm,../../../../../../3610_digital_systems/Vivado/2024.1/data/ip/xpm/xpm_VCOMP.vhd,
 xbip_utils_v3_0_vh_rfs.vhd,vhdl,xbip_utils_v3_0_13,../../../ipstatic/hdl/xbip_utils_v3_0_vh_rfs.vhd,
 axi_utils_v2_0_vh_rfs.vhd,vhdl,axi_utils_v2_0_9,../../../ipstatic/hdl/axi_utils_v2_0_vh_rfs.vhd,

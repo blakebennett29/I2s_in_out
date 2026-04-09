@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="impl_1" LaunchPart="xc7a35tcpg236-1" LaunchTime="1775690969">
+<GenRun Id="impl_1" LaunchPart="xc7a35tcpg236-1" LaunchTime="1775710936">
   <File Type="ROUTE-PWR" Name="TOP_power_routed.rpt"/>
   <File Type="PA-TCL" Name="TOP.tcl"/>
   <File Type="ROUTE-PWR-SUM" Name="TOP_power_summary_routed.pb"/>
@@ -220,18 +220,6 @@
         <Attr Name="UsedIn" Val="simulation"/>
       </FileInfo>
     </File>
-    <File Path="$PSRCDIR/sources_1/ip/L_L1_fir_compiler_1/low_2x.coe">
-      <FileInfo>
-        <Attr Name="UsedIn" Val="synthesis"/>
-        <Attr Name="UsedIn" Val="simulation"/>
-      </FileInfo>
-    </File>
-    <File Path="$PSRCDIR/sources_1/ip/H_L1_fir_compiler_2/high_2x.coe">
-      <FileInfo>
-        <Attr Name="UsedIn" Val="synthesis"/>
-        <Attr Name="UsedIn" Val="simulation"/>
-      </FileInfo>
-    </File>
     <File Path="$PSRCDIR/sources_1/ip/fir_compiler_1/AA.coe">
       <FileInfo>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -263,6 +251,18 @@
       </FileInfo>
     </File>
     <File Path="$PSRCDIR/sources_1/ip/aa_filter_127tap_48kcutoff_fs196k_q23.coe">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/ip/L_L1_fir_compiler_1/low_2x_new.coe">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/ip/H_L1_fir_compiler_2/high_2x_new.coe">
       <FileInfo>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="simulation"/>
