@@ -58,7 +58,7 @@ if {$::dispatch::connected} {
 OPTRACE "synth_1" START { ROLLUP_AUTO }
 set_param chipscope.maxJobs 4
 set_param checkpoint.writeSynthRtdsInDcp 1
-set_param synth.incrementalSynthesisCache C:/Users/20bbe/AppData/Roaming/Xilinx/Vivado/.Xil/Vivado-23708-Blakes-PC/incrSyn
+set_param synth.incrementalSynthesisCache C:/Users/20bbe/AppData/Roaming/Xilinx/Vivado/.Xil/Vivado-87440-Blakes-PC/incrSyn
 set_param xicom.use_bs_reader 1
 set_msg_config -id {Synth 8-256} -limit 10000
 set_msg_config -id {Synth 8-638} -limit 10000
@@ -88,8 +88,8 @@ add_files E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.sr
 add_files E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/ip/blk_mem_gen_0/sine02.coe
 add_files E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/ip/aa_filter_127tap_48kcutoff_fs196k_gain2x_q23.coe
 add_files E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/ip/aa_filter_127tap_48kcutoff_fs196k_q23.coe
-add_files e:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/ip/L_L1_fir_compiler_1/low_2x_new.coe
-add_files e:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/ip/H_L1_fir_compiler_2/high_2x_new.coe
+add_files E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/ip/L_L1_fir_compiler_1/low_2x_new.coe
+add_files E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/ip/H_L1_fir_compiler_2/high_2x_new.coe
 read_vhdl -library xil_defaultlib E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/AA_Interpolation_48khz.vhd
 read_vhdl -vhdl2008 -library xil_defaultlib {
   E:/School/SeniorProject/pmod_i2s2_passthrough/pmod_i2s2_passthrough.srcs/sources_1/new/AA_filter_1.vhd

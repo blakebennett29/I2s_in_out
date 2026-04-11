@@ -17,7 +17,7 @@
 -- Additional Comments:
 -- 
 ----------------------------------------------------------------------------------
-
+ 
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
@@ -39,6 +39,8 @@ entity Data_line_output is
             
             Env_fol_in_L_L_1 : in std_logic_vector(16 downto 0);
             Env_fol_in_H_L_1 : in std_logic_vector(16 downto 0);
+            Env_fol_in_L_R : in std_logic_vector(16 downto 0);
+            Env_fol_in_H_R : in std_logic_vector(16 downto 0);
             --in_valid_h : in std_logic;
             in_valid_L : in std_logic;
     
@@ -130,6 +132,9 @@ signal in_valid_h_s : std_logic := '0';
 signal in_valid_l_s : std_logic := '0';
 signal Mod_valid_out_s : std_logic := '0';
 signal locked_s : std_logic := '0';
+signal Env_fol_in_L_R_s : std_logic_vector(16 downto 0);
+signal Env_fol_in_H_R_s : std_logic_vector(16 downto 0);
+
 
 signal DC_offset_test : std_logic_vector(16 downto 0) := "01111111111111111";
 
@@ -225,6 +230,9 @@ component Modulator is
         
         Env_fol_in_H_L_1   : in  std_logic_vector(16 downto 0);
         Env_fol_in_L_L_1   : in  std_logic_vector(16 downto 0);
+        Env_fol_in_L_R : in  std_logic_vector(16 downto 0);
+        Env_fol_in_H_R : in  std_logic_vector(16 downto 0);
+        
         --in_valid_h     : in std_logic;
         in_valid_l     : in std_logic;
         m_tvalid_in  : in  std_logic;
@@ -327,6 +335,8 @@ t_data <= t_data_s;
 --in_valid_H_s <= in_valid_h;
 in_valid_L_s <= in_valid_L;
 
+Env_fol_in_L_R_s <=Env_fol_in_L_R;
+Env_fol_in_H_R_s <= Env_fol_in_H_R;
 
 locked_s <= locked;
 --assinments for Modulator
@@ -419,6 +429,8 @@ MOD_u: Modulator Port map (
         --modulator and valid signials
         Env_fol_in_H_L_1 =>  Env_fol_in_H_s,
         Env_fol_in_L_L_1 => Env_fol_in_L_s,
+        Env_fol_in_L_R   => Env_fol_in_L_R_s,
+        Env_fol_in_H_R  => Env_fol_in_H_R_s,
         
         --in_valid_h => in_valid_h_s,
         in_valid_l => in_valid_L_s,

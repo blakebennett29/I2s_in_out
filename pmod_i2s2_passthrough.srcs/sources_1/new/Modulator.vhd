@@ -30,6 +30,8 @@ entity Modulator is
         
         Env_fol_in_H_L_1   : in  std_logic_vector(16 downto 0);
         Env_fol_in_L_L_1   : in  std_logic_vector(16 downto 0);
+        Env_fol_in_L_R : in  std_logic_vector(16 downto 0);
+        Env_fol_in_H_R : in  std_logic_vector(16 downto 0);
        -- in_valid_h          : in std_logic;
         in_valid_l          : in std_logic;
         m_tvalid_in       : in  std_logic;
@@ -47,8 +49,8 @@ architecture Behavioral of Modulator is
     type state_type is (IDLE, MODULATE, OUTPUT_STATE, assign_output);
     signal current_state : state_type := IDLE;
     signal reset_s : std_logic := '0';
-    signal Env_fol_in_L_L_1_s : ufixed(-1 downto -17) := to_ufixed(0, -1, -17);
-    signal Env_fol_in_H_L_1_s : ufixed(-1 downto -17) := to_ufixed(0, -1, -17);
+    signal Env_fol_in_L_L_1_s : ufixed(0 downto -17) := to_ufixed(0, 0, -17);
+    signal Env_fol_in_H_L_1_s : ufixed(0 downto -17) := to_ufixed(0, 0, -17);
     signal in_valid_h_s : std_logic := '0';
     signal in_valid_l_s : std_logic := '0';
     signal Mod_valid_out_s : std_logic := '0';
@@ -62,10 +64,10 @@ architecture Behavioral of Modulator is
     -- left_in_s  = ufixed(31 downto 0)
     -- Env_fol_in = ufixed(0 downto -18)
     -- result     = ufixed(31 downto -18)
-    signal left_mult_L1_H_s    : sfixed(31 downto 0) := (others => '0');
-    signal right_mult_L1_H_s   : sfixed(31 downto 0) := (others => '0');
-    signal left_mult_L1_L_s    : sfixed(31 downto 0) := (others => '0');
-    signal right_mult_L1_L_s   : sfixed(31 downto 0) := (others => '0');
+    signal left_mult_L1_H_s    : sfixed(31 downto -17) := (others => '0');
+    signal right_mult_L1_H_s   : sfixed(31 downto -17) := (others => '0');
+    signal left_mult_L1_L_s    : sfixed(31 downto -17) := (others => '0');
+    signal right_mult_L1_L_s   : sfixed(31 downto -17) := (others => '0');
     
     -- resized back to output width
 --    signal left_out_s     : ufixed(31 downto 0) := (others => '0');
@@ -81,6 +83,8 @@ architecture Behavioral of Modulator is
     signal right_output_L1_L_s : std_logic_vector(31 downto 0) := (others => '0');
     Constant Test_gain : sfixed(0 downto -17) := to_sfixed(0.9999, 0, -17);
    
+   signal Env_fol_in_L_R_1_s : ufixed(0 downto -17) := to_ufixed(0, 0, -17);
+   signal Env_fol_in_H_R_1_s : ufixed(0 downto -17) := to_ufixed(0, 0, -17);
 begin
     reset_s <= reset;
     ------------------------------------------------------------------------------
@@ -96,8 +100,10 @@ begin
     --assinment for std_logic_vector to ufixed
     --------------------------------------------
     
-    Env_fol_in_L_L_1_s <= to_ufixed(Env_fol_in_L_L_1, -1, -17);
-    Env_fol_in_H_L_1_s <= to_ufixed(Env_fol_in_H_L_1, -1, -17);
+    Env_fol_in_L_L_1_s <= to_ufixed( "0" & Env_fol_in_L_L_1, 0, -17);
+    Env_fol_in_H_L_1_s <= to_ufixed( "0" & Env_fol_in_H_L_1, 0, -17);
+    Env_fol_in_L_R_1_s <= to_ufixed( "0" & Env_fol_in_L_R, 0, -17);
+    Env_fol_in_H_R_1_s <= to_ufixed( "0" & Env_fol_in_H_R, 0, -17);
     --in_valid_h_s <= in_valid_h;
     in_valid_l_s <= in_valid_l;
     ------------------------------------------------------------------------------
@@ -144,12 +150,12 @@ begin
                     when MODULATE =>
                         -- Multiply input by envelope
                         --high L1 modulation
-                        left_mult_L1_H_s  <= resize(left_in_L1_H_s  * to_sfixed(Env_fol_in_H_L_1_s), 31, 0);   --Env_fol_in_H_L_1_s    --to_sfixed(signed('0' & Env_fol_in_s), -1, -18), 31, 0);
-                        right_mult_L1_H_s <= resize(right_in_L1_H_s,31,0);-- * to_sfixed((signed("00" & Env_fol_in_H_L_1_s) sll 1), 0, -18), 31, 0);  --Env_fol_in_H_L_1_s
+                        left_mult_L1_H_s  <= resize(left_in_L1_H_s  * to_sfixed(Env_fol_in_H_L_1_s), 31, -17);   --Env_fol_in_H_L_1_s    --to_sfixed(signed('0' & Env_fol_in_s), -1, -18), 31, 0);
+                        right_mult_L1_H_s <= resize(right_in_L1_H_s * to_sfixed(Env_fol_in_H_R_1_s), 31, -17);-- * to_sfixed((signed("00" & Env_fol_in_H_L_1_s) sll 1), 0, -18), 31, 0);  --Env_fol_in_H_L_1_s
                         
                         --Low L1 modulation
-                        left_mult_L1_L_s  <= resize(left_in_L1_L_s  * to_sfixed(Env_fol_in_L_L_1_s), 31, 0);    --left_mult_L1_L_s  <= resize(left_in_L1_L_s  * to_sfixed((signed("00" & Env_fol_in_L_L_1_s) sll 1), 0, -18), 31 , 0); --Env_fol_in_L_L_1_s    --to_sfixed(signed('0' & Env_fol_in_s), -1, -18), 31, 0);
-                        right_mult_L1_L_s   <= resize(right_in_L1_L_s,31,0);    -- * to_sfixed((signed("00" & Env_fol_in_L_L_1_s) sll 1), 0, -18), 31 , 0); --Env_fol_in_L_L_1_s  --to_sfixed(signed('0' & Env_fol_in_s), -1, -18), 31, 0);
+                        left_mult_L1_L_s  <= resize(left_in_L1_L_s  * to_sfixed(Env_fol_in_L_L_1_s), 31, -17);    --left_mult_L1_L_s  <= resize(left_in_L1_L_s  * to_sfixed((signed("00" & Env_fol_in_L_L_1_s) sll 1), 0, -18), 31 , 0); --Env_fol_in_L_L_1_s    --to_sfixed(signed('0' & Env_fol_in_s), -1, -18), 31, 0);
+                        right_mult_L1_L_s   <= resize(right_in_L1_L_s * to_sfixed(Env_fol_in_L_R_1_s), 31, -17);    -- * to_sfixed((signed("00" & Env_fol_in_L_L_1_s) sll 1), 0, -18), 31 , 0); --Env_fol_in_L_L_1_s  --to_sfixed(signed('0' & Env_fol_in_s), -1, -18), 31, 0);
                         
                         current_state <= OUTPUT_STATE;
                     when OUTPUT_STATE =>

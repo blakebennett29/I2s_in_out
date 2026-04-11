@@ -40,6 +40,8 @@ entity Half_Data_line_Env_fol is
             
             Env_fol_out_L_L : out std_logic_vector(16 downto 0);
             Env_fol_out_H_L : out std_logic_vector(16 downto 0);
+            Env_fol_out_L_R : out std_logic_vector(16 downto 0);
+            Env_fol_out_H_R : out std_logic_vector(16 downto 0);
             out_valid_h : out std_logic;
             out_valid_L : out std_logic;
             
@@ -116,6 +118,11 @@ signal out_valid_L_s : std_logic := '0';
 signal out_valid_H_s : std_logic := '0';
 signal Env_fol_out_L_s : std_logic_vector(16 downto 0) := (others => '0');
 signal Env_fol_out_H_s : std_logic_vector(16 downto 0) := (others => '0');
+signal Env_fol_out_L_R_s : std_logic_vector(16 downto 0) := (others => '0');
+signal Env_fol_out_H_R_s : std_logic_vector(16 downto 0) := (others => '0');
+
+signal out_valid_L_R_s : std_logic := '0';
+signal out_valid_H_R_s : std_logic := '0';
 signal locked_s : std_logic :='0';
 
 component I2S_in is
@@ -230,7 +237,11 @@ r_data_s <= r_data; --actual use
 --assinments for modulator
 Env_fol_out_L_L <= Env_fol_out_L_s; --  H_L1_output_left_s(23 downto 7);--Env_fol_out_L_s;
 Env_fol_out_H_L <= Env_fol_out_H_s;   --L_L1_output_left_s(23 downto 7);
+Env_fol_out_L_R <= Env_fol_out_L_R_s;
+Env_fol_out_H_R <= Env_fol_out_H_R_s;
 
+--    <= out_valid_L_R_s;
+--    <= out_valid_H_R_s;
 out_valid_l <= out_valid_L_s;
 out_valid_h <= out_valid_H_s;
 locked_s <= locked;
@@ -319,7 +330,7 @@ L1: Level_1 port map(
 --EV follower passthrough test
 --====================
 EV_L_L_1: Envlope_Follower_control_Logic Port map(
-            env_in => L_L1_output_left_s(23 downto 6),
+            env_in => L_L1_output_left_s(26 downto 9),
             env_start => m_tdata_valid_out_L1_s,
             env_clk => comp_clk,
             env_rst => reset,
@@ -331,11 +342,35 @@ EV_L_L_1: Envlope_Follower_control_Logic Port map(
 --EV follower passthrough test
 --====================
 EV_H_L_1: Envlope_Follower_control_Logic Port map(
-            env_in => H_L1_output_left_s(23 downto 6),
+            env_in => H_L1_output_left_s(26 downto 9),
             env_start => m_tdata_valid_out_H1_s,
             env_clk => comp_clk,
             env_rst => reset,
             env_out => Env_fol_out_H_s,
             out_valid => out_valid_H_s
              );
+----==================
+----EV follower passthrough test
+----====================
+--EV_L_R_1: Envlope_Follower_control_Logic Port map(
+--            env_in => L_L1_output_right_s(26 downto 9),
+--            env_start => m_tdata_valid_out_L1_s,
+--            env_clk => comp_clk,
+--            env_rst => reset,
+--            env_out => Env_fol_out_L_R_s,
+--            out_valid => out_valid_L_R_s
+--             );
+
+----==================
+----EV follower passthrough test
+----====================
+--EV_H_R_1: Envlope_Follower_control_Logic Port map(
+--            env_in => H_L1_output_right_s(26 downto 9),
+--            env_start => m_tdata_valid_out_H1_s,
+--            env_clk => comp_clk,
+--            env_rst => reset,
+--            env_out => Env_fol_out_H_R_s,
+--            out_valid => out_valid_H_R_s
+--             );          
+         
 end Behavioral;

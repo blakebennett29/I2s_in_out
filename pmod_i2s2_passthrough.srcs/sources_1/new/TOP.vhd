@@ -90,6 +90,8 @@ component Data_line_output is
         
         Env_fol_in_L_L_1 : in std_logic_vector(16 downto 0);
         Env_fol_in_H_L_1 : in std_logic_vector(16 downto 0);
+        Env_fol_in_L_R : in std_logic_vector(16 downto 0);
+        Env_fol_in_H_R : in std_logic_vector(16 downto 0);
         --in_valid_h : in std_logic;
         in_valid_L : in std_logic;
         
@@ -108,30 +110,30 @@ component Data_line_output is
 end component;
 
 component Half_Data_line_Env_fol is
-    Port (
-        --raw_clk : in std_logic;
-        comp_clk      : in  std_logic;
-        reset    : in  std_logic;
-        locked : in std_logic;
-        
-        Env_fol_out_L_L : out std_logic_vector(16 downto 0);
-        Env_fol_out_H_L : out std_logic_vector(16 downto 0);
-        --out_valid_h : out std_logic;
-        out_valid_L : out std_logic;
-        
---        r_sclk   : out std_logic;
---        r_mclk   : out std_logic;
---        r_lrclk  : out std_logic;
-        r_data   : in  std_logic
-        --r_data : out std_logic;
-        
---        t_sclk   : out std_logic;
---        t_mclk   : out std_logic;
---        t_lrclk  : out std_logic;
-        --t_data   : out std_logic
-    );
+  Port (    --raw_clk: in std_logic;
+            comp_clk: in std_logic;
+            reset: in std_logic;
+            locked : in std_logic;
+            
+            Env_fol_out_L_L : out std_logic_vector(16 downto 0);
+            Env_fol_out_H_L : out std_logic_vector(16 downto 0);
+            Env_fol_out_L_R : out std_logic_vector(16 downto 0);
+            Env_fol_out_H_R : out std_logic_vector(16 downto 0);
+            --out_valid_h : out std_logic;
+            out_valid_L : out std_logic;
+            
+--            r_sclk: out std_logic;
+--            r_mclk: out std_logic;
+--            r_lrclk: out std_logic;
+            r_data: in std_logic --in for actual use
+            --r_data: out std_logic;
+            
+--            t_sclk: out std_logic;
+--            t_mclk: out std_logic;
+--            t_lrclk: out std_logic;
+--            t_data: out std_logic
+            );
 end component;
-
 ----------------------------------------------
 --  ____ ___ ____ _   _    _    _     ____  --
 -- / ___|_ _/ ___| \ | |  / \  | |   / ___| --
@@ -178,7 +180,8 @@ signal adc_right_valid_s : std_logic_vector(1 downto 0);
 -- DAC SIGNALS
 -------------------------------------------------------------------
 signal out_data_s : std_logic;
-
+signal Env_fol_out_L_R_s : std_logic_vector(16 downto 0);
+signal Env_fol_out_H_R_s : std_logic_vector(16 downto 0);
 ----------------------------------------------------------
 --  ____   ___  ____ _____   __  __    _    ____  ____  --
 -- |  _ \ / _ \|  _ \_   _| |  \/  |  / \  |  _ \/ ___| --
@@ -252,6 +255,9 @@ U_Data_line_output : Data_line_output
         
         Env_fol_in_L_L_1 => Env_fol_out_L_s,
         Env_fol_in_H_L_1 => Env_fol_out_H_s,
+        Env_fol_in_L_R => Env_fol_out_L_R_s,
+        Env_fol_in_H_R => Env_fol_out_H_R_s,
+        
         --in_valid_h => out_valid_H_s,
         in_valid_L => out_valid_L_s,
         
@@ -275,6 +281,8 @@ U_Half_Data_line_Env_fol : Half_Data_line_Env_fol
         
         Env_fol_out_L_L  => Env_fol_out_L_s,
         Env_fol_out_H_L  => Env_fol_out_H_s,
+        Env_fol_out_L_R => Env_fol_out_L_R_s,
+        Env_fol_out_H_R => Env_fol_out_H_R_s,
         --out_valid_h => out_valid_h_s,
         out_valid_l => out_valid_l_s,
 --        r_sclk   => adc_sclk_s(0),
