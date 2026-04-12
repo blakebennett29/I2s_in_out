@@ -1,7 +1,7 @@
 -------------------------------------
 | Tool Version : Vivado v.2024.1
-| Date         : Sat Apr 11 21:40:58 2026
-| Host         : Blakes-PC
+| Date         : Sun Apr 12 00:51:41 2026
+| Host         : Nut-Laptop
 | Design       : design_1
 | Device       : xc7a35t-cpg236-1--
 -------------------------------------

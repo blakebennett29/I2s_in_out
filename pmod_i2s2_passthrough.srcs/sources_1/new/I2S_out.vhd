@@ -101,8 +101,8 @@ begin
     lrclk_ss <= t_lrclk;
     t_data <= t_data_s;
 
-    right_reg_shift_s <= right_reg_shift(23 downto 0) & (7 downto 0 => '0');
-    left_reg_shift_s <= left_reg_shift(23 downto 0) & (7 downto 0 => '0');
+    right_reg_shift_s <= right_reg_shift(19 downto 0) & (11 downto 0 => '0');
+    left_reg_shift_s <= left_reg_shift(19 downto 0) & (11 downto 0 => '0');
     
     lrclk_rise_pulse_s <= lrclk_rise_pulse_t;
     lrclk_fall_pulse_s <= lrclk_fall_pulse_t;

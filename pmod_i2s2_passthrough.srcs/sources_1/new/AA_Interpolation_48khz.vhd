@@ -158,7 +158,7 @@ process(clk)
                     M_tdata_valid_out_L <= '0';
                 end if;
                 if(m_axis_data_tvalid_s = '1') and (m_axis_data_tuser_s = "0") then
-                    out_data_R_s <= m_axis_data_tdata_s(31 downto 8); --data out 24 downto 1
+                    out_data_R_s <= m_axis_data_tdata_s(30 downto 7); --data out 24 downto 1
                     M_tdata_valid_out_R <= '1';
                 else
                     M_tdata_valid_out_R <= '0';
