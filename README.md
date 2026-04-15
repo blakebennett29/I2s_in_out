@@ -38,12 +38,20 @@ This creates a foundation for features such as:
 * Future DSP experimentation in hardware
 
 ---
-# Hardware Box
-![Full_product](docs/Board_in_Box.jpg)          
+<h1>Hardware Box and Circuit Board</h1>
 
-#circuit Board
-
-![circuit_Board](docs/Curcit_Board.jpg)
+<table>
+  <tr>
+    <td align="center">
+      <img src="docs/Board_in_Box.jpg" alt="Hardware Box" width="400"><br>
+      <b>Hardware Box</b>
+    </td>
+    <td align="center">
+      <img src="docs/Curcit_Board.jpg" alt="Circuit Board" width="400"><br>
+      <b>Circuit Board</b>
+    </td>
+  </tr>
+</table>
 ## Hardware Platform
 
 This design is built around:
