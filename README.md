@@ -18,7 +18,7 @@ At a high level, the project demonstrates:
 ---
 System Block Diagram
 
-![System block diagram](docs/Screenshot 2026-04-15%20171355.png)
+![System block diagram](docs/Block_Diagram.png)
 
 
 Figure: Current multirate multiband signal path, showing I2S input, anti-alias filtering, decimation, QMF splits, modulation/envelope stages, interpolation, reconstruction filtering, and I2S output.
