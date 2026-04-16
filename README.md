@@ -54,6 +54,8 @@ This creates a foundation for features such as:
     </td>
   </tr>
 </table>
+
+
 ## Hardware Platform
 
 This design is built around:
