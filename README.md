@@ -96,6 +96,241 @@ The receiver:
 
 Because I2S is serial, one of the most important parts of the design is correct **bit alignment** and **word timing**. The design follows the standard I2S convention, where the data is delayed by one bit clock relative to the LRCLK transition. This is consistent with the Philips protocol.
 
+
+## Filter Design Method
+
+The FIR filters used in this project were generated with a Python script that builds lowpass anti-alias filters and split-band filters, then quantizes the coefficients into **Q1.23 fixed-point** and writes them to `.coe` files for Vivado FIR Compiler use. The script sets the main design choices up front: the number of taps, the window type, the radix for `.coe` output, the sample-rate tree, and the cutoff frequencies for each stage.
+
+In this version, the design starts at **192 kHz**, then steps down to **96 kHz** and **48 kHz**, with cutoff targets of **48 kHz**, **24 kHz**, and a **12 kHz split** for the low/high bands.
+
+### 1. Filter specifications
+
+The script first defines the sample-rate tree and the cutoff frequencies for each stage. That means each filter is designed in the sample-rate domain where it will actually operate:
+
+- **192 kHz to 96 kHz anti-alias filter** with `fc = 48 kHz`
+- **96 kHz to 48 kHz anti-alias filter** with `fc = 24 kHz`
+- **48 kHz split filter** with `fc = 12 kHz`
+
+This is important because the normalized cutoff depends on the local sample rate, not just the absolute frequency. In the Python code, that normalized cutoff is computed as:
+
+`fc_norm = fc / fs`
+
+So the same FIR design function can be reused at each stage just by changing `fs` and `fc`.
+
+### 2. Ideal lowpass equation
+
+The lowpass filter is built from the ideal sinc-form FIR equation. In the code, the ideal impulse response is:
+
+`h_ideal = 2.0 * fc_norm * np.sinc(2.0 * fc_norm * (n - m))`
+
+where:
+
+- `n` is the tap index
+- `m = (num_taps - 1) / 2` is the center tap location
+- `fc_norm = fc / fs` is the normalized cutoff frequency
+
+This is the standard finite-length form of the ideal lowpass impulse response:
+
+`h_ideal[n] = 2 f_c(norm) * sinc(2 f_c(norm) * (n - m))`
+
+The sinc equation creates the desired lowpass behavior in frequency, and centering it at `m` makes the filter symmetric. That symmetry gives a **linear-phase FIR**, which is useful here because it preserves waveform shape aside from delay. Since the design uses `127` taps, the center tap is:
+
+`m = (127 - 1) / 2 = 63`
+
+So the impulse response is symmetric around tap 63.
+
+### 3. Why taps matter
+
+A **tap** is one coefficient in the FIR filter. If a filter has 127 taps, it means the output sample is formed from 127 delayed input samples multiplied by 127 coefficients and summed together.
+
+More taps generally mean:
+
+- a narrower transition band
+- better stopband rejection
+- higher hardware cost
+- more latency
+
+So in this project, `127` taps is the tradeoff point chosen between frequency selectivity and FPGA resource usage. The script uses the same tap count across the anti-alias and split filters so the system stays more consistent and easier to compare.
+
+### 4. Windowing and why it is needed
+
+An ideal sinc lowpass is infinitely long, but real FIR filters must have a finite number of taps. Truncating the sinc directly causes ripple and unwanted frequency artifacts. To reduce those effects, the script multiplies the ideal impulse response by a window:
+
+`h = h_ideal * window_fn(window, num_taps)`
+
+The available windows in the script are:
+
+- `hamming`
+- `hann`
+- `blackman`
+- `rect`
+
+A rectangular window is just raw truncation. Hamming, Hann, and Blackman taper the sinc toward zero at the ends, which reduces sidelobes and improves stopband behavior at the cost of a wider transition band. In this script, the selected window is `hamming`, so each ideal sinc response is shaped by a Hamming window before normalization.
+
+### 5. How the window translates to taps
+
+The window does not change the number of taps. Instead, it changes the values of those taps.
+
+So the process is:
+
+1. Choose the tap count, here `127`
+2. Compute the 127 ideal sinc samples
+3. Compute 127 window values
+4. Multiply them point-by-point
+
+That means each final coefficient is:
+
+`h[n] = h_ideal[n] * w[n]`
+
+where `w[n]` is the chosen window. The result is still a 127-tap FIR, but now the outer taps are softened by the window shape instead of ending abruptly. This improves practical filter behavior and is one of the most important steps in real FIR design.
+
+### 6. Gain normalization
+
+After windowing, the script normalizes the filter so the DC gain is 1 and then optionally applies extra gain:
+
+`h /= np.sum(h)`
+
+`h *= gain`
+
+For a lowpass filter, dividing by the sum of the coefficients forces the gain at DC to be 1. After that, the script can optionally scale the filter by `gain = 2.0` for versions where extra passband gain is desired.
+
+This is why the script generates both `g1` and `g2` versions of the filters:
+
+- `g1` = unity-gain version
+- `g2` = 2x-gain version
+
+### 7. Creating the high-pass split from the low-pass design
+
+For the 12 kHz split at `fs = 48 kHz`, the Python code first designs a lowpass split filter and then creates the complementary high-pass branch using spectral shifting:
+
+`h_high[n] = h_low[n] * (-1)^n`
+
+This moves the spectrum of the lowpass prototype to the high-frequency side, producing the high-band branch from the same base design.
+
+That is why the code generates both low-pass and high-pass split filters from one prototype. This is a practical way to create matched low/high split filters.
+
+### 8. Fixed-point conversion to Q1.23
+
+Once the floating-point filter is designed, the script converts it to **Q1.23**, which means:
+
+- 1 sign/integer bit region
+- 23 fractional bits
+- total signed 24-bit coefficient storage
+
+The scaling constant is:
+
+`Q_SCALE = 2 ** 23`
+
+The script checks coefficient headroom, applies a safety scale if needed, rounds the values, and clips them to the valid Q1.23 integer range. This step is what converts the mathematically designed filter into something the FPGA FIR core can actually store and use. It also protects against coefficient overflow if a gain-scaled version would otherwise exceed the allowed range.
+
+### 9. Writing the `.coe` file
+
+After quantization, the script writes the coefficients into Vivado-compatible `.coe` format using the selected radix. For hexadecimal output it converts signed values into 24-bit two’s complement form. This makes the output directly usable for FIR Compiler coefficient loading.
+
+### 10. Plotting and verification
+
+For each filter, the script also plots:
+
+- the floating-point coefficients
+- the quantized Q1.23 coefficients
+- the frequency response in dB
+- a vertical marker at the intended cutoff
+
+The frequency response is computed with an FFT, which allows the designed filter to be checked before exporting it to hardware. The comparison between float and Q1.23 versions is especially useful for seeing whether quantization changed the response in any meaningful way.
+
+### 11. Filters generated by the script
+
+The script produces three main groups of filters:
+
+1. **Anti-alias filter for 192 kHz to 96 kHz**
+2. **Anti-alias filter for 96 kHz to 48 kHz**
+3. **12 kHz low/high split filters at 48 kHz**
+
+For each of these, it generates both unity-gain and 2x-gain versions. This matches the multirate structure used in the project: anti-alias before decimation, then complementary split filters at the lower-rate stage.
+
+### 12. How to change the transition band for a better noise floor with the same number of taps
+
+If the goal is to get a **less aggressive cutoff** and a **cleaner practical noise floor** while keeping the same `127` taps, the main change is to **widen the transition band** instead of trying to hold such a sharp edge.
+
+With a fixed tap count, a very sharp transition forces the filter to spend more of its available degrees of freedom on edge sharpness. That usually means:
+
+- more ripple near the band edge
+- worse stopband behavior away from the cutoff
+- more ringing in time domain
+- a harsher-looking floor in the plotted response
+
+To make the filter easier on the same hardware budget, I would change two things:
+
+#### A. Move the cutoff farther away from Nyquist
+
+For example, instead of designing right up near the folding boundary, move the cutoff down slightly so the filter has more room to roll off.
+
+That means using a lower `fc` such as:
+
+- slightly below `48 kHz` for the 192 kHz to 96 kHz stage
+- slightly below `24 kHz` for the 96 kHz to 48 kHz stage
+- slightly below `12 kHz` for the 48 kHz split
+
+Doing this widens the transition region without increasing the number of taps. The result is usually lower sidelobes and smoother attenuation behavior.
+
+#### B. Use a stronger window if stopband floor matters more than edge sharpness
+
+If the current Hamming window is not giving enough stopband suppression, I would try **Blackman** first. Blackman gives a wider transition band than Hamming, but usually improves sidelobe suppression. That can make the effective stopband floor look cleaner, which is often what people mean when they want a better noise floor from the filter.
+
+So the change would be:
+
+- keep `NUM_TAPS = 127`
+- change `WINDOW = "hamming"` to `WINDOW = "blackman"`
+- reduce `fc` slightly to give more transition room
+
+#### Why this works
+
+With the same number of taps, you cannot usually get all three of these at once:
+
+- very sharp cutoff
+- very low stopband floor
+- low ripple
+
+So if you want a better floor, the normal trade is to accept a broader transition. That is the cleaner design choice than forcing the edge to stay too sharp.
+
+#### Practical example
+
+For the split filter at `fs = 48 kHz`, instead of targeting exactly `12 kHz` with an aggressive edge, you could design the lowpass to begin rolling off earlier, such as around `10.5 to 11.5 kHz`, depending on how much overlap you want. That gives the filter more room to decay before Nyquist-related constraints become dominant.
+
+For the AA stages, the same idea applies: do not place the effective passband edge right up against the decimation boundary if the same tap count must be preserved.
+
+#### Summary of the change
+
+To get a better noise floor and a less aggressive cutoff with the same number of taps:
+
+1. lower the cutoff slightly
+2. widen the transition band
+3. switch from Hamming to Blackman if stopband suppression matters more than transition sharpness
+4. accept a softer crossover edge in exchange for cleaner rejection
+
+That is the most realistic improvement path without increasing filter length.
+
+### Summary
+
+The filter design flow is:
+
+1. Choose the operating sample rate and cutoff
+2. Choose the number of taps
+3. Build the ideal sinc lowpass equation
+4. Apply a window to make the FIR finite and practical
+5. Normalize the gain
+6. Derive the high-pass split where needed using spectral shifting
+7. Check Q1.23 headroom
+8. Quantize to 24-bit fixed-point
+9. Export to `.coe`
+10. Plot and verify the response
+
+This makes the Python script the bridge between DSP theory and FPGA implementation: it defines the filter mathematically, shapes it with a window, translates that design into a fixed number of taps, and then converts those taps into a hardware-ready coefficient file.
+
+
+
+
+
 ## 2. Internal Processing Path
 
 Once samples are captured, they are routed through a multirate DSP chain made from FIR filters.
