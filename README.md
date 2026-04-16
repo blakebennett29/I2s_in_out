@@ -40,14 +40,16 @@ This creates a foundation for features such as:
 ---
 <h1>Hardware Box and Circuit Board</h1>
 
-<table>
+<h1>Hardware Overview</h1>
+
+<table cellspacing="20">
   <tr>
     <td align="center">
-      <img src="docs/Board_in_Box.jpg" alt="Hardware Box" width="400"><br>
+      <img src="docs/Board_in_Box.jpg" alt="Hardware Box" width="500"><br>
       <b>Hardware Box</b>
     </td>
     <td align="center">
-      <img src="docs/Curcit_Board.jpg" alt="Circuit Board" width="400"><br>
+      <img src="docs/Curcit_Board.jpg" alt="Circuit Board" width="500"><br>
       <b>Circuit Board</b>
     </td>
   </tr>
